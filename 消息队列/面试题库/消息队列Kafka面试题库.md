@@ -2,11 +2,7 @@
 
 ## 1.1 消息队列常见应用场景有哪些？
 
-**分析** 
-
-基础问题，简单说一下应用，不用过度扩展，面试官感兴趣会继续追问的。
-
-**回答** 
+**回答**
 
 **示例1（概括性问题）：**
 
@@ -21,27 +17,27 @@
 - 异步处理：通过异步处理机制，可以把一个消息放入队列中，但不立即处理它，在需要的时候再进行处理
 - 消息分发：比如一条消息需要传递给多个服务，这时候就可以用Kafka进行分发
 
-**参考** 
+**参考**
 
 [ 消息队列解决什么问题](https://ls8sck0zrg.feishu.cn/wiki/L9IFwVLufiQQG5kUIBjcv1yBnFb)
 
 ## 1.2 什么情况下需要解耦？
 
-**分析** 
+**分析**
 
 解耦是一个比较抽象的词，用一个例子来讲述会比较容易。
 
-**回答** 
+**回答**
 
 比如发送短信场景，模块A发送消息给B，模块B发送短信给客户，A不需要得到回应，对于A而言只需要触达B就行了，这时候就可以引入消息队列，A将消息投递到了消息队列，B自己去处理，A不用再关心。这样可以收获更强的稳定性以及接口性能。
 
-**参考** 
+**参考**
 
 [ 实践1：消息队列解耦](https://ls8sck0zrg.feishu.cn/wiki/K7uVwUJlCiGrIxk4zYNcIyDznWf?fromScene=spaceOverview)
 
 ## 1.3 什么情况下需要削峰？
 
-**分析** 
+**分析**
 
 要点：压力过大扛不住、接入消息队列后可按需消费
 
@@ -249,7 +245,7 @@ Kafka消息会分发到不同Topic，这样既解决了消息混乱的问题，�
 - 发送消息时可以根据分区分配的原则落在不同的Kafka服务器节点上，提升了并发写消息的性能，消费消息的时候又和消费者绑定了关系，可以从不同节点的不同分区消费消息，提高了读消息的能力。
 - 另外一个就是分区又引入了副本，冗余的副本保证了Kafka的高可用和高持久性。
 
-**参考** 
+**参考**
 
 [ 开门见山，从Topic开始讲起](https://ls8sck0zrg.feishu.cn/wiki/AUN5wnNzqixiz5kuUaRcuEnfnme?fromScene=spaceOverview)
 
@@ -367,17 +363,17 @@ Topic 中的多个 Partition 以文件夹的形式保存到 Broker，每个分�
 
 ## 2.10 Kafka如何清理数据/Kafka数据越积越多怎么办
 
-**分析** 
+**分析**
 
 对Kafka的原理进行一些考察，无论是任何组件，其实都会遇到控制存储空间的问题，即数据满了怎么清理，像Redis是有对应的内存淘汰算法，而Kafka也有特定的保留策略。
 
-**回答** 
+**回答**
 
 可以用基于时间的保留策略，这种策略允许用户指定消息的保留时间（如 7 天）。超过指定时间的消息将被自动删除。
 
 也可以用基于大小的保留策略，Kafka 允许用户指定日志的最大尺寸。一旦日志的大小超过了配置的值，Kafka 将开始删除最早的消息。
 
-**参考** 
+**参考**
 
 [ Kafka消息保留策略](https://ls8sck0zrg.feishu.cn/wiki/CFaSwBux8imVlekeST5cnEe7nhe?fromScene=spaceOverview)
 
@@ -468,7 +464,7 @@ Topic 中的多个 Partition 以文件夹的形式保存到 Broker，每个分�
 
 ## 3.5 生产者发送消息的模式有几种（Java）
 
-**分析** 
+**分析**
 
 Java的SDK支持三种发送模式
 
@@ -500,7 +496,7 @@ future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {@
 });
 ```
 
-**回答** 
+**回答**
 
 有三种模式，同步发送、发送即忘、异步发送。
 
@@ -512,7 +508,7 @@ future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {@
 
 其中异步发送模式因为兼顾（折中）了可靠性和性能，所以是最被广泛使用的，我在实习/工作中参与的xxx项目、xxx项目，都是用的异步发送模式。
 
-**参考** 
+**参考**
 
 [ 辛勤创造，生产者Producer](https://ls8sck0zrg.feishu.cn/wiki/OVE3wagUaii4A6k4X7Pcyw0Ynfb?fromScene=spaceOverview)
 
@@ -548,7 +544,7 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 
 可以使用最大拉取间隔这个参数来解决活锁问题，即max.poll.interval.ms，如果消费者轮询间隔大于了这个值，消费者就会离开分区，这样其它消费者就可以接管对应分区。
 
-> 对于消息处理时间不可预测的情况，还有个办法就是将消息处理移到另一个线程中，也就是说轮询一个线程，处理单独开线程，不影响轮询节奏。 
+> 对于消息处理时间不可预测的情况，还有个办法就是将消息处理移到另一个线程中，也就是说轮询一个线程，处理单独开线程，不影响轮询节奏。
 >
 > 用这个方式要注意确保已提交的 offset 不超过实际处理到的位置。 另外，你必须禁用自动提交，并只有在线程完成处理后才为记录手动提交偏移量。
 
@@ -638,7 +634,7 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 
 ## 4.7 介绍一下重平衡的具体执行流程？
 
-**分析** 
+**分析**
 
 问流程也就是问发生重平衡时要做哪几件事情。
 
@@ -652,19 +648,19 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 
 回答时候可以相对精炼点。
 
-**回答** 
+**回答**
 
 我理解有如下几个步骤。
 
 首先是暂停消费，其作用是防止在重新分配期间发生数据丢失或重复，接着由消费组协调器触发再平衡，进而重新分配分区，最后就是开启消费，简单来说就是通知消费者，然后消费者就可以恢复消费了。
 
-**参考** 
+**参考**
 
 [ 拥抱变化，消费组再平衡机制](https://ls8sck0zrg.feishu.cn/wiki/HDMvwzerfiqMZ0ktTAdcFQjnnDg?fromScene=spaceOverview)
 
 ## 4.8 介绍一下重平衡时的分区策略
 
-**分析** 
+**分析**
 
 分区策略（也被叫做分区协议）由partition.assignment.strategy这个参数配置，回顾一下，它有如下几种选择：
 
@@ -675,7 +671,7 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 
 从再平衡的视角，这几种分区策略大的来说其实可以分为两个“阵营”，一个叫Eager Rebalance，一个叫Incremental Rebalance，我们回答也按这两大阵容来展开，显得有层次感。
 
-**回答** 
+**回答**
 
 大的方向分两类。
 
@@ -689,7 +685,7 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 
 相比于急切重平衡，优点在于消费不会全部暂停，且消费者的分配关系变动较小，当然付出的代价就是完成再平衡的时间可能会更久一些。
 
-**参考** 
+**参考**
 
 [ 拥抱变化，消费组再平衡机制](https://ls8sck0zrg.feishu.cn/wiki/HDMvwzerfiqMZ0ktTAdcFQjnnDg)
 
@@ -867,7 +863,7 @@ func main() {
 
 ## 4.13Kafka消费消息是推还是拉？
 
-**分析** 
+**分析**
 
 很重要、也很常规的问题，回答这个问题可以按先结论后论述的范式：
 
@@ -875,29 +871,29 @@ func main() {
 
 2.分析一下为什么Kafka选择拉模式而不是推模式，也就是说一下拉模式的优势
 
-**回答** 
+**回答**
 
 Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者是发消息到Kafka的Broker来获取信息，而不是由Kafka的Broker主动推送。
 
 选择拉模式的主要原因还是为了让消费者可以按自身情况来控制消费速度，根据系统资源利用情况（如 CPU、内存等）、业务需要等因素合理拉取消息，避免因消息处理速度不合理带来的资源浪费或过载。
 
-**参考** 
+**参考**
 
 [ 努力承接，消费者Consumer](https://ls8sck0zrg.feishu.cn/wiki/QTLdwzoXFiX39lkZDPhcGsUqnHe?fromScene=spaceOverview)
 
 ## 4.14 Kafka消费者提交之后就会清理掉数据吗
 
-**分析** 
+**分析**
 
 这个问题是说消息生产到Broker之后，如果被消费者消费了，消费者正常提交了偏移，这条数据作为被处理过的数据是不是就会在Broker被删掉？
 
 典型的钓鱼性问题，如果回答说是，基本就可以认为你对Kafka毫无理解了。
 
-**回答** 
+**回答**
 
 在Kafka中，如果消息被消费者消费并提交了对应偏移，这条消息不会被删除，可以通过更改该消费者的偏移再次消费，也可以被其它消费者消费（只要消费者消费偏移不超过该消息对应的偏移）。
 
-**参考** 
+**参考**
 
 [ 努力承接，消费者Consumer](https://ls8sck0zrg.feishu.cn/wiki/QTLdwzoXFiX39lkZDPhcGsUqnHe?fromScene=spaceOverview)
 
@@ -1094,7 +1090,7 @@ Kafka的分片流入规则是这样的：
 
 ## 6.6 高可用机制是怎么实现的
 
-**分析** 
+**分析**
 
 Kafka受欢迎有一个很大的原因是它天然提供了容灾解决方案，可以应对机器故障等各种异常，这些异常我们很多是无法预防的，比如机房断电，机器硬盘损坏，甚至之前出现过的天津机房爆炸事故。
 
@@ -1102,17 +1098,17 @@ Kafka高可用机制主要就体现在多副本上，说直白点，副本横跨
 
 这里回答的要点包括：1.多副本，相当于数据有了多个备份 2.多副本是横跨多Broker的，这样在机器级别也有了容灾能力。
 
-**回答** 
+**回答**
 
 Kafka天然支持多副本机制，每个副本都有完整的数据，这些副本分散在不同的Broker上，就算主副本所在Broker的磁盘损坏了，其它Broker也能把数据找回来并升级为主副本，通过这种方式Kafka就实现了高可用。
 
-**参考** 
+**参考**
 
 [ 多副本机制介绍（重要）](https://ls8sck0zrg.feishu.cn/wiki/OaZQwIOSFi4NCYk4zaicFsHfnpd?fromScene=spaceOverview)
 
 ## 6.7 Kafka是怎么为分片选择主副本的
 
-**分析** 
+**分析**
 
 关键知识点是ISR，一个分区会有多个副本，为了实现更好的管理，可以将Kafka中的副本划分成不同的集合：
 
@@ -1122,17 +1118,17 @@ Kafka天然支持多副本机制，每个副本都有完整的数据，这些副
 
 我们重点看第2点，ISR副本的解释，不难发现，Kafka是从ISR选择 主/Leader 副本的。
 
-**回答** 
+**回答**
 
 Kafka维护了一个叫ISR的列表，ISR里的副本都是包含完整数据的，当没有Leader，或原有Leader挂掉了，Kafka就会从ISR列表中选择第一个副本升级为Leader。
 
-**参考** 
+**参考**
 
 [ 多副本下的写入机制（重要，需要掌握）](https://ls8sck0zrg.feishu.cn/wiki/X36YwG7nmixB1pkEnnscg5NWnPd?fromScene=spaceOverview)
 
 ## 6.8 Kafka怎么知道Leader挂了
 
-**分析** 
+**分析**
 
 Kafka比较早期就直接让分片副本抢写Zookeeper，谁先写入谁就是Leader，但是这样有个潜在问题：当分区和副本数量比较多的时候，所有的副本都直接参与选举，对ZooKeeper的压力会比较大。
 
@@ -1144,7 +1140,7 @@ Kafka比较早期就直接让分片副本抢写Zookeeper，谁先写入谁就是
 
 所以，是由Controller来持续监测Leader，如果发现Leader挂掉了再由Controller从ISR中选择新的Leader。
 
-**回答** 
+**回答**
 
 Broker中会选出一个来担任Controller，选Controller负责监测Leader的状态，这样Leader挂掉之后Controller就能感知到，并从ISR选择出新的Leader。
 
@@ -1154,7 +1150,7 @@ Broker中会选出一个来担任Controller，选Controller负责监测Leader的
 
 注意，这是个临时数据，如果当前的Controller挂掉或者网络掉线，这个数据就会消失。其它Broker通过Watch感知到这件事之后，就会再次抢写。
 
-**参考** 
+**参考**
 
 [ 多副本机制介绍（重要）](https://ls8sck0zrg.feishu.cn/wiki/OaZQwIOSFi4NCYk4zaicFsHfnpd?fromScene=spaceOverview)
 
@@ -1351,7 +1347,7 @@ Zookeeper拥有分布式协调能力，Kafka主要是用Zookeeper来管理Broker
 
 ## 8.2 Kafka你用的是哪个版本？
 
-**分析** 
+**分析**
 
 这个问题的目的有两个：
 
@@ -1365,6 +1361,6 @@ Zookeeper拥有分布式协调能力，Kafka主要是用Zookeeper来管理Broker
 
 我们团队/我们实验室 在xxx项目中用的是Kafka 2.5.0版本，主要原因是这个版本团队用了很多年都是非常稳定的，所以新老项目都一直延用这个版本。
 
-**参考** 
+**参考**
 
 [ Kafka版本演进（稍微了解）](https://ls8sck0zrg.feishu.cn/wiki/Zd1AwPDT6ibGgYkyexYczSGfnId?fromScene=spaceOverview)
