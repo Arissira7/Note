@@ -869,7 +869,7 @@ Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者
 
 [ 如何保证消息不丢失](https://ls8sck0zrg.feishu.cn/wiki/GnrnwtEJEiM8qqkmEOkc7arinBb?fromScene=spaceOverview)
 
-## 5.2 Kafka 如何保证消息不丢失
+## 5.2 Kafka 如何保证消息不丢失（可靠性）
 
 **分析**
 
@@ -903,7 +903,7 @@ Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者
 
 [ 消息积压怎么办](https://ls8sck0zrg.feishu.cn/wiki/MYzZw8MtUiLJIOkS9PSc7X4Ancc?fromScene=spaceOverview)
 
-## 5.4 Kafka 如何保证消息不重复消费
+## 5.4 （幂等性）如何保证消息不重复消费
 
 **分析**
 
@@ -940,7 +940,7 @@ Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者
 
 [ 如何让消息不重复](https://ls8sck0zrg.feishu.cn/wiki/KrNGwaj5oi3P9vk7MxocvAWWnOO?fromScene=spaceOverview)
 
-## 5.6 假设你有个业务希望进入Kafka的消息都是有序的，你会怎么做？
+## 5.6 希望进入Kafka的消息是有序的，你会怎么做？
 
 **分析**
 

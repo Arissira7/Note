@@ -7,7 +7,7 @@
 
 ### 1. 什么是Redis？
 
-**分析** 
+**分析**
 
 Redis 是一个基于内存、支持多种数据结构的存储系统，可以作为数据库、缓存和消息中间件。它支持的数据结构有字符串（strings）、哈希（hashes）、列表（lists）、集合（sets）、有序集合（sorted sets）等，除此之外还支持 bitmaps、hyperloglogs 和地理空间（ geospatial ）索引半径查询等功能。
 
@@ -15,17 +15,13 @@ Redis 是一个基于内存、支持多种数据结构的存储系统，可以�
 
 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">回答时候简洁明了，不用面面俱到。</span>
 
-**回答** 
+**回答**
 
 Redis是一个开源的内存数据结构存储系统，支持多种数据结构（如字符串、哈希、列表、集合等），常用于缓存、分布式锁。它通过将数据存储在内存中实现高速读写，并支持持久化到磁盘，确保数据安全。Redis还提供主从复制、事务和Lua脚本等功能，适用于高并发场景。
 
-**推荐学习**
-
-[ Redis是什么](https://ls8sck0zrg.feishu.cn/wiki/wikcnDup0Owgla6IVd0xfokiInf)
-
 ### 2. **使用 Redis 有哪些好处？**
 
-**分析** 
+**分析**
 
 使用 Redis 有以下几个显著好处：
 
@@ -39,7 +35,7 @@ Redis是一个开源的内存数据结构存储系统，支持多种数据结构
 
 这些优势使 Redis 成为高性能数据存储和缓存的理想选择，回答时候选几个点来说就行，高性能和持久化一定要提到。
 
-**回答** 
+**回答**
 
 具有以下好处：
 
@@ -49,7 +45,7 @@ Redis是一个开源的内存数据结构存储系统，支持多种数据结构
 
 ### 3. **为什么MySQL做存储，Redis做缓存？**
 
-**分析** 
+**分析**
 
 使用 Redis 作为 MySQL 的缓存有以下几个主要原因：
 
@@ -62,17 +58,17 @@ Redis是一个开源的内存数据结构存储系统，支持多种数据结构
 
 综上，Redis 作为 MySQL 缓存能显著提升系统性能、降低数据库负载，并支持高并发场景。
 
-**回答** 
+**回答**
 
 MySQL是数据库系统，对于数据的操作需要访问磁盘，而将数据放在Redis中，需要访问就可以直接从内存获取，避免磁盘I/O，提高操作的速度，使用Redis+MySQL结合的方式可以有效提高系统QPS。
 
-**推荐学习** 
+**推荐学习**
 
 [ 缓存基础](https://ls8sck0zrg.feishu.cn/wiki/wikcno9vxy6cFFA8VrI7uL1Kjtc)
 
 ### 4. **Redis 常用的业务场景有哪些？**
 
-**分析** 
+**分析**
 
 主要常用的业务场景有：
 
@@ -83,11 +79,11 @@ MySQL是数据库系统，对于数据的操作需要访问磁盘，而将数据
 - 分布式锁实现；可以利用 Redis 的 setnx 命令进行。
 - 队列机制实现；Redis 提供了 `list push` 和 `list pop` 这样的命令，所以能够很方便的执行队列操作。
 
-**回答** 
+**回答**
 
 Redis常用业务场景包括缓存、计数器、分布式锁、排行榜等，其中缓存和分布式锁是最核心和广泛的应用场景。
 
-**推荐学习** 
+**推荐学习**
 
 [ 场景应用（重点是缓存和分布式锁）](https://ls8sck0zrg.feishu.cn/wiki/wikcnqC72vEd1geIyJjitu3Ks7c)
 
@@ -103,7 +99,7 @@ Redis 提供了丰富的数据类型，常见的有五种数据类型：String�
 
 随着 Redis 版本的更新，后面又支持了四种数据类型： BitMap（2.2 版新增）、HyperLogLog（2.8 版新增）、GEO（3.2 版新增）、Stream（5.0 版新增）。
 
- Redis 五种数据类型的应用场景：
+Redis 五种数据类型的应用场景：
 
 - String 类型的应用场景：缓存对象、常规计数、分布式锁、共享 session 信息等。
 - List 类型的应用场景：消息队列（但是有两个问题：1. 生产者需要自行实现全局唯一 ID；2. 不能以消费组形式消费数据）等。
@@ -130,7 +126,7 @@ Redis 支持的数据类型有：
 
 ### 6. **Redis有哪些底层数据结构？**
 
-**分析** 
+**分析**
 
 数据对象通常指String、List、Set、Hash、ZSet这些，它们是用户直接能操作的数据类型，而他们具体实现还依托于底层数据结构，包括SDS、链表、压缩列表等，回答时候可以列举，如果特别熟悉某一种可以专门提出来，引导面试官追问。
 
@@ -138,11 +134,11 @@ Redis 支持的数据类型有：
 
 数据对象String、List、Set、Hash、ZSet的实现都依托于底层数据结构，这些结构包括SDS、链表、压缩列表、哈希表、跳表等，比如ZSet就是利用跳表高效实现了有序集合的能力。
 
-**推荐学习** 
+**推荐学习**
 
-[ ZSet](https://ls8sck0zrg.feishu.cn/wiki/wikcnuFV22J9yTEo4N1dha3RlNf) 
+[ ZSet](https://ls8sck0zrg.feishu.cn/wiki/wikcnuFV22J9yTEo4N1dha3RlNf)
 
-[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af) 
+[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af)
 
 ## String
 
@@ -176,7 +172,7 @@ String基本操作命令，重点熟悉[ String](https://ls8sck0zrg.feishu.cn/wi
 
 **推荐学习**
 
-《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of) 
+《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of)
 
 ### 9. String可以有多大？
 
@@ -192,7 +188,7 @@ String基本操作命令，重点熟悉[ String](https://ls8sck0zrg.feishu.cn/wi
 
 **推荐学习**
 
-《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of) 
+《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of)
 
 ### 10. Redis字符串是怎么实现的？
 
@@ -210,7 +206,7 @@ Redis字符串底层是String对象，String对象有三种编码方式：INT型
 
 **推荐学习**
 
-《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of) 
+《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of)
 
 ### 11. 为什么EMBSTR的阈值是44？（几乎不考）
 
@@ -243,7 +239,7 @@ redisObject占用的内存大小由redisObject和sdshdr这两部分组成，redi
 
 **推荐学习**
 
-《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of) 
+《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of)
 
 ### 12. 你知道为什么EMBSTR曾经的阈值是39吗？（几乎不考）
 
@@ -259,7 +255,7 @@ redisObject占用的内存大小由redisObject和sdshdr这两部分组成，redi
 
 **推荐学习**
 
-《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of) 
+《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of)
 
 ### 13. SDS有什么用？
 
@@ -279,7 +275,7 @@ Redis是用C语言写的，SDS可以说是对C字符串的封装，一般对比�
 
 **推荐学习**
 
-《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of) 
+《Redis学习与面试》[ String](https://ls8sck0zrg.feishu.cn/wiki/wikcnV6H6aeW9QdbIdSvC0NG1of)
 
 ## List
 
@@ -309,7 +305,7 @@ List是双端操作对象，所以不是完全的先入先出，List也可以后
 
 **推荐学习**
 
-《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb) 
+《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb)
 
 ### 16. ZIPLIST是怎么压缩数据的？
 
@@ -336,7 +332,7 @@ List是双端操作对象，所以不是完全的先入先出，List也可以后
 
 **推荐学习**
 
-《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb) 
+《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb)
 
 ### 17. ZIPLIST下List可以从后往前遍历吗？
 
@@ -354,7 +350,7 @@ ZIPLIST下entry的结构包含了上一个节点的长度，所以可以通过�
 
 **推荐学习**
 
-《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb) 
+《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb)
 
 ### 18. 在ZIPLIST数据结构下，查询节点个数的时间复杂度是多少？
 
@@ -368,7 +364,7 @@ ZIPLIST下entry的结构包含了上一个节点的长度，所以可以通过�
 
 **推荐学习**
 
-《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb) 
+《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb)
 
 ### 19. LINKEDLIST编码下，查询节点个数的时间复杂度是多少？
 
@@ -384,41 +380,41 @@ LINKEDLIST编码下，查询节点个数的时间复杂度是O(1)。因为LINKED
 
 **推荐学习**
 
-《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb) 
+《Redis学习与面试》[ List](https://ls8sck0zrg.feishu.cn/wiki/wikcnNp0afwpoQIzvpbWTKLYPpb)
 
 ## Set
 
 ### 20. Set编码方式？
 
-**分析** 
+**分析**
 
 Set底层使用了两种编码，一种是整数集合，另一种是字典。成员的数据结构和成员数量会触发Set更改底层编码，当Set同时满足元素都是整数 且 元素个数不超过512这两个条件，会使用整数集合编码，否则使用字典编码。
 
-**回答** 
+**回答**
 
 Set使用整数集合和字典作为底层编码，当元素都是整数同时元素个数不超过512个，会使用整数集合编码，否则使用字典编码。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Set](https://ls8sck0zrg.feishu.cn/wiki/wikcn2xQ19Lq8RNLIkS2ddynIhe?appStyle=UI4&domain=www.feishu.cn&locale=zh-CN&refresh=1&tabName=space&theme=light&userId=7172816008439414785) 
+《Redis学习与面试》[ Set](https://ls8sck0zrg.feishu.cn/wiki/wikcn2xQ19Lq8RNLIkS2ddynIhe?appStyle=UI4&domain=www.feishu.cn&locale=zh-CN&refresh=1&tabName=space&theme=light&userId=7172816008439414785)
 
 ### 21. Set是有序的吗？
 
-**分析** 
+**分析**
 
 Set的底层实现是整数集合或字典，前者是有序的，后者是无序的。
 
-**回答** 
+**回答**
 
 Set的底层实现是整数集合或字典，前者是有序的，后者是无序的。整体来看，但是不应该依赖SET的顺序，业务使用适合始终应该按无序来用
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Set](https://ls8sck0zrg.feishu.cn/wiki/wikcn2xQ19Lq8RNLIkS2ddynIhe?appStyle=UI4&domain=www.feishu.cn&locale=zh-CN&refresh=1&tabName=space&theme=light&userId=7172816008439414785) 
+《Redis学习与面试》[ Set](https://ls8sck0zrg.feishu.cn/wiki/wikcn2xQ19Lq8RNLIkS2ddynIhe?appStyle=UI4&domain=www.feishu.cn&locale=zh-CN&refresh=1&tabName=space&theme=light&userId=7172816008439414785)
 
 ### 22. Set为什么要用两种编码方式?
 
-**分析** 
+**分析**
 
 我们可以从编码转换的条件来进行思考，Set的底层编码从INTSET到HASHTABLE的条件是元素个数或者元素类型的变化。所以采用两种编码方式的原因是INTSET更节约内存，所以在小数据量时使用，而数据多起来了，需要HASHTABLE的查找性能。
 
@@ -428,43 +424,43 @@ intset用来保存元素的数组默认情况下是int16编码，后续如果插
 
 但是升级也有弊端，升级之后，整个数组的编码会变成与最大元素的类型一致。假如这个时候，元素的数量非常多，就不那么节约内存了，而且数组查找的平均时间复杂度是`O(logn)`，不如使用字典编码。
 
-**回答** 
+**回答**
 
 Set的底层编码是整数集合和字典，当元素数量小并且全部是整数的时候，会使用整数集合编码，更加的节约内存。元素数量变大会使用字典编码，查找元素的速度会更快。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Set](https://ls8sck0zrg.feishu.cn/wiki/wikcn2xQ19Lq8RNLIkS2ddynIhe?appStyle=UI4&domain=www.feishu.cn&locale=zh-CN&refresh=1&tabName=space&theme=light&userId=7172816008439414785) 
+《Redis学习与面试》[ Set](https://ls8sck0zrg.feishu.cn/wiki/wikcn2xQ19Lq8RNLIkS2ddynIhe?appStyle=UI4&domain=www.feishu.cn&locale=zh-CN&refresh=1&tabName=space&theme=light&userId=7172816008439414785)
 
 ## Hash
 
 ### 23. Hash的编码方式是什么？
 
-**分析** 
+**分析**
 
 Hash底层有两种编码结构，一个是ZIPLIST，一个是HashTable。ZIPLIST适用于元素较少且单个元素长度较小的情况，这里的阈值分别是元素个数少于512个，值和键长度都小于64字节。
 
-**回答** 
+**回答**
 
 一个是ZIPLIST，一个是HashTable。ZIPLIST适用于元素较少且单个元素长度较小的情况，其它情况使用HashTable。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Hash](https://ls8sck0zrg.feishu.cn/wiki/wikcnMYGXA9PcGMk6QODiYZPbwg) 
+《Redis学习与面试》[ Hash](https://ls8sck0zrg.feishu.cn/wiki/wikcnMYGXA9PcGMk6QODiYZPbwg)
 
 ### 24. Hash查找某个key的平均时间复杂度是多少？
 
-**分析** 
+**分析**
 
 这种问对象复杂度的，要考虑多种底层编码。ZIPLIST需要遍历，平均复杂度为O(N)，HashTable是字典，可以O(1)找到对应key。
 
-**回答** 
+**回答**
 
 Hash有两种底层结构，ZIPLIST时是O(N)，HashTable则是O(1)
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Hash](https://ls8sck0zrg.feishu.cn/wiki/wikcnMYGXA9PcGMk6QODiYZPbwg) 
+《Redis学习与面试》[ Hash](https://ls8sck0zrg.feishu.cn/wiki/wikcnMYGXA9PcGMk6QODiYZPbwg)
 
 ### 25. Redis中HashTable查找元素总数的平均时间复杂度是多少?
 
@@ -480,41 +476,41 @@ Hash有两种底层结构，ZIPLIST时是O(N)，HashTable则是O(1)
 
 HashTable查找元素总数的平均时间复杂度是O(1)，因为HashTable的表头结构中有储存键值对数量的字段，这个字段我记得叫used。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc) 
+《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc)
 
 ### 26. 一个数据在HashTable中的存储位置，是怎么计算的?
 
-**分析** 
+**分析**
 
 当一个新的键值对要插入到HashTable中时，首先会使用哈希函数计算这个key的哈希值，Redis使用的哈希算法是MurmurHash2哈希算法，然后把哈希值和哈希掩码做与运算得到索引值，哈希掩码其实就是哈希表数组的大小减去1。然后程序会根据索引值把键值对插入到相应的位置。
 
-**回答** 
+**回答**
 
 首先会通过哈希函数计算出key的哈希值，然后与哈希掩码做与运算得到索引值，索引值就是这个数据在HashTable中的存储位置。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc) 
+《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc)
 
 ### 27. HashTable怎么扩容?
 
-**分析** 
+**分析**
 
 HashTable的扩容通过渐进式rehash操作来完成。
 
-**回答** 
+**回答**
 
 首先程序会为HashTable的1号表分配空间，空间大小是第一个大于等于0号表大小*2的2 ^ n。在rehash进行期间，标记位rehashidx从0开始，每次对字典的键值对执行增删改查操作后，都会将rehashidx位置的数据迁移到1号表，然后将rehashidx加1，随着字典操作的不断执行，最终0号表的所有键值对都会被rehash到1号表上。之后，1号表会被设置成0号表，接着在1号表的位置创建一个新的空白表。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc) 
+《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc)
 
 ### 28. HashTable怎么缩容?
 
-**分析** 
+**分析**
 
 HashTable的缩容也通过渐进式rehash操作来完成。
 
@@ -522,13 +518,13 @@ HashTable的缩容也通过渐进式rehash操作来完成。
 
 首先程序会为HashTable的1号表分配空间，新表大小为第一个大于等于原表used的2次方幂。在rehash进行期间，标记位rehashidx从0开始，每次对字典的键值对执行增删改查操作后，都会将rehashidx位置的数据迁移到1号表，然后将rehashidx加1，随着字典操作的不断执行，最终0号表的所有键值对都会被rehash到1号表上。之后，1号表会被设置成0号表，接着在1号表的位置创建一个新的空白表。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc) 
+《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc)
 
 ### 29. HashTable什么时候扩容，什么时候缩容
 
-**分析** 
+**分析**
 
 这是问扩容时机，HashTable的扩容与缩容由哈希表的负载因子决定，负载因子 = 键值对数量 / 哈希表大小。
 
@@ -542,15 +538,15 @@ HashTable的缩容也通过渐进式rehash操作来完成。
 
 缩容的话也是负载因子影响，当哈希表的负载因子小于0.1时，程序会自动开始对哈希表进行收缩操作。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc) 
+《Redis学习与面试》[ 底层结构HASHTABLE](https://ls8sck0zrg.feishu.cn/wiki/wikcnf09sLEEIaQb4IU6VptnxEc)
 
 ## ZSet
 
 ### 30. ZSet底层有几种编码方式？
 
-**分析** 
+**分析**
 
 ZSet即有序列表，这个问题是基础知识考查，ZSet的底层编码可以是 ziplist 或者 skiplist+字典 ，需要分情况说出不同的编码类型。
 
@@ -563,19 +559,19 @@ ziplist 和 skiplist + 字典 编码的选择阈值不一定可以记得清，�
 
 不能满足以上两个条件的有序集合对象将使用 skiplist + 字典 编码。
 
-**回答** 
+**回答**
 
 ZSet就是有序集合对象，ZSet对象的底层有两种编码方式：ziplist 或者 skiplist+字典。
 
 如果一个ZSet对象中的所有元素同时满足：元素数量小于128个 以及 所有元素成员的长度都小于64字节，那么会使用ziplist编码，否则使用 skiplist+字典 编码。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ ZSet](https://ls8sck0zrg.feishu.cn/wiki/wikcnuFV22J9yTEo4N1dha3RlNf) 
+《Redis学习与面试》[ ZSet](https://ls8sck0zrg.feishu.cn/wiki/wikcnuFV22J9yTEo4N1dha3RlNf)
 
 ### 31. 跳表编码模式下，查询节点总数的平均时间复杂度是多少？
 
-**分析** 
+**分析**
 
 这个问题是对Redis跳表数据结构的考察，首先我们可以想想跳表的表头结构：
 
@@ -583,65 +579,65 @@ ZSet就是有序集合对象，ZSet对象的底层有两种编码方式：ziplis
 
 查询有序集合成员总数的API是`zsetLength`，而当编码模式是`REDIS_ENCODING_SKIPLIST`，源码中会直接返回跳表表头结构的length字段，平均时间复杂度是`O(1)`。
 
-**回答** 
+**回答**
 
 跳表编码模式下，查询节点总数的平均时间复杂度是`O(1)`，因为跳表的表头结构中定义了一个保存节点数量的字段length，源码中调用查询节点总数的API时会直接返回这个字段。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af) 
+《Redis学习与面试》[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af)
 
 ### 32. 跳表插入一条数据的平均时间复杂度是多少
 
-**分析** 
+**分析**
 
 这个问题同样是对跳表这种数据结构本身的考察，跳表实际上就是在一维链表上建立多层索引的二维链表，多出来的层数可以让跳表实现类似二分查找的算法。所以跳表的插入平均时间复杂度是`O(logn)`。
 
-**回答** 
+**回答**
 
 跳跃表是一种支持多级索引的结构，查询效率可以媲美二分查找，它插入一条数据也是需要先查找，找到之后会进行索引的重建，整体平均时间复杂度是`O(logN)`。
 
-**推荐学习** 
+**推荐学习**
 
-[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af) 
+[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af)
 
 [数据结构与算法——跳表](https://zhuanlan.zhihu.com/p/68516038)
 
 ### 33. 为什么跳表和HashTable要配合使用
 
-**分析** 
+**分析**
 
 使用了两种数据结构来实现自然是，为了让有序集合拥有这两种数据结构的优势。可以结合跳表和字典相较于各自的优势来进行回答。
 
-**回答** 
+**回答**
 
 为了结合这两种数据结构各自的优势，当ZSet要根据成员来查找分值的时候，将使用字典来实现，时间复杂度为`O(1)`。而当ZSet要执行范围操作时，比如`ZRANK`、`ZRANGE`等命令时，将使用原本就有序的跳跃表来实现。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af) 
+《Redis学习与面试》[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af)
 
 ### 34. 跳表中一个节点的层高是怎么决定的？
 
-**分析** 
+**分析**
 
 这个问题是对跳表这种数据结构本身的考察，跳表中插入一个节点之前会选择一个随机化的层数，因为如果跳表的层数从下至上呈一定的比例关系，那么后期插入和删除的时候就又需要去维护这种比例关系，会使时间复杂度退化。所以跳表选择在插入节点的时候，选择一个随机化的层数。
 
 但是生成的随机层数得遵循一个算法，使得生成小数值层数的概率很大，而生成大数值层数的概率很小，这个算法就是幂次定律。跳表在插入新节点之前，会利用这个幂次定律算法生成一个随机层数。
 
-**回答** 
+**回答**
 
 跳表在插入新节点之前会计算一个随机的层高，具体来说，跳表的每一个节点一开始默认都是1层，然后每增加一层的概率都是 25%，最高为32层
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af) 
+《Redis学习与面试》[ 底层数据结构跳表](https://ls8sck0zrg.feishu.cn/wiki/wikcnSYLsLh7kMET8oBSAZLv0af)
 
-25%源码：<https://github.com/redis/redis/blob/7.0/src/t_zset.c> 
+25%源码：<https://github.com/redis/redis/blob/7.0/src/t_zset.c>
 
 ### 35. zset**为什么用跳表而不用平衡树？**
 
-**分析** 
+**分析**
 
 对于[这个问题](https://news.ycombinator.com/item?id=1171423)，Redis的作者 @antirez 是怎么说的：
 
@@ -693,7 +689,7 @@ Redis核心处理是单线程的，在6.0中使用了多线程进行I/O解包、
 
 **推荐学习**
 
-《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb) 
+《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb)
 
 ### 37. Redis为什么选择单线程做核心处理
 
@@ -715,9 +711,9 @@ Redis核心处理是单线程的，在6.0中使用了多线程进行I/O解包、
 
 我们从投入产出来看。首先如果引入多线程，主要是希望充分利用多核的性能，但Redis的定位，是内存k-v存储，是做短平快的热点数据处理，一般来说执行会很快，执行本身不应该成为瓶颈，而瓶颈通常在网络I/O，处理逻辑多线程并不会有太大收益。同时，支持多线程的话，我们需要付出更大的复杂度、以及多线程上下文切换、同步机制的开销等成本。这样综合来看，成本高且收益不大，所以最终选择了不做，事实也证明，单线程的Redis也确实足够高效
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb) 
+《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb)
 
 ### 38. Redis单线程性能如何？
 
@@ -729,11 +725,11 @@ Redis核心处理是单线程的，在6.0中使用了多线程进行I/O解包、
 
 Redis单线程的性能是很好的，在普通机器每秒能10多万的读性能、几万的写性能。我在我自己的mac上也用redis-benchmark来测试过，写性能高达11万，读性能高达15万。
 
-**推荐学习** 
+**推荐学习**
 
 [Redis 性能测试 | 菜鸟教程](https://www.runoob.com/redis/redis-benchmarks.html)
 
-《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb) 
+《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb)
 
 ### 39. 为什么单线程还能这么快
 
@@ -750,9 +746,9 @@ Redis单线程的性能是很好的，在普通机器每秒能10多万的读性�
 
 我认为有三点，一个是内存存储，这是Redis的定位也是快的前提，一个是高效的数据结构，Redis的数据结构可以说是追求极致，持续调优，最后一个是I/O多路复用，Redis的瓶颈在I/O而不是CPU，那I/O复用正好能对症下药。
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb) 
+《Redis学习与面试》[ Redis是单线程，还是多线程？（重点理解）](https://ls8sck0zrg.feishu.cn/wiki/wikcnF8yKiMzoD38GR6fpaElhlb)
 
 ### 40. Redis6.0之后引入了多线程，你知道为什么吗？
 
@@ -766,7 +762,7 @@ Redis单线程的性能是很好的，在普通机器每秒能10多万的读性�
 
 Redis主要瓶颈是I/O而不是CPU，但随着互联网的高速发展，在部分高并发场景，单核CPU也不见得处理得过来了，所以针对核心处理流程中的解包、发包这两个CPU耗时操作，进行了多线程优化，充分发挥多核优势
 
-**推荐学习** 
+**推荐学习**
 
 [Redis 6.0 多线程IO处理过程详解](https://www.zhihu.com/tardis/zm/art/144805500?source_id=1003)
 
@@ -782,7 +778,7 @@ Redis主要瓶颈是I/O而不是CPU，但随着互联网的高速发展，在部
 
 默认是关闭的，如果想要开启需要用户在 redis.conf 配置文件中修改。默认关闭1是为了兼容以前的，毕竟很多用户的认知中，Redis是单线程的，第二可能也是认为多线程并不是必要的，在大多数场景不开启也是完全够用的。
 
-**推荐学习** 
+**推荐学习**
 
 [开启Redis多线程](https://www.jianshu.com/p/556ed216e525)（重点看配置怎么打开）
 
@@ -796,9 +792,9 @@ Redis主要瓶颈是I/O而不是CPU，但随着互联网的高速发展，在部
 
 原来核心流程中的I/O处理，包括解包和回包，也就是读写客户端socket的I/O，这两部分都消耗CPU时间，多线程的引入主要也是为了解决单核CPU在大数据下还是不够用的问题。
 
-**推荐学习** 
+**推荐学习**
 
-[ 多线程是怎么回事](https://ls8sck0zrg.feishu.cn/wiki/wikcniustSxgJNYcpCQZnjsiEUf) 
+[ 多线程是怎么回事](https://ls8sck0zrg.feishu.cn/wiki/wikcniustSxgJNYcpCQZnjsiEUf)
 
 # Redis持久化
 
@@ -849,7 +845,7 @@ Redis主要瓶颈是I/O而不是CPU，但随着互联网的高速发展，在部
 
 ### 45. 介绍一下**AOF的三种写回策略？**
 
-**分析** 
+**分析**
 
 当我们设置的appendfsync策略不同，刷盘的情况也是不同的
 
@@ -859,12 +855,12 @@ Redis在每个事件循环都会将 aof_buf 缓冲区里的所有内容通过 wr
 
 - everysec
 
-   服务器在每个事件循环都要将 aof_buf 缓冲区的所有内容通过 write 写入到 AOF 文件描述符，并且每隔超过一秒就要在子线程中对 AOF 文件进行一次 fsync 同步（注意是在子线程中异步刷盘的，如果主线程发现子线程还在 fsync，会推迟本秒的 fsync）。从效率上来讲，everysec 足够快（后台线程进行fsync，主线程只进行write），并且就算出现故障停机，也只会丢失一秒钟的数据（实际上看源码是最多会丢失两秒多的数据）everysec 是一种折中的取舍，也是默认值，也是推荐值
+  服务器在每个事件循环都要将 aof_buf 缓冲区的所有内容通过 write 写入到 AOF 文件描述符，并且每隔超过一秒就要在子线程中对 AOF 文件进行一次 fsync 同步（注意是在子线程中异步刷盘的，如果主线程发现子线程还在 fsync，会推迟本秒的 fsync）。从效率上来讲，everysec 足够快（后台线程进行fsync，主线程只进行write），并且就算出现故障停机，也只会丢失一秒钟的数据（实际上看源码是最多会丢失两秒多的数据）everysec 是一种折中的取舍，也是默认值，也是推荐值
 - no
 
   no 策略下 redis 不会进行任何主动的 fsync aof 刷盘操作，所以它的效率对于 redis 来说也是最高的，不过因为把同步权交由给操作系统，所以 no 模式下的单次同步时长也是最长的，它会在系统缓冲区中积累一段时间的写入数据，然后才会真的被『落盘』。从平摊操作的角度来讲，no 跟 everysec 的效率应该都是差不多的，但是从安全性来讲，如果出现故障停机，使用 no 会丢失上次同步 AOF 文件之后的所有命令数据。通常情况下如果使用 no 策略 Linux 会每隔 30s 刷盘，不过这取决于内核的具体配置
 
-**回答** 
+**回答**
 
 Always、Everysec 和 No，这三种策略在可靠性上是从高到低，而在性能上从低到高。
 
@@ -872,7 +868,7 @@ Always、Everysec 和 No，这三种策略在可靠性上是从高到低，而�
 
 ### 46. **为什么先执行Redis命令，再把数据写入AOF日志呢？**
 
-**分析** 
+**分析**
 
 好处：
 
@@ -886,13 +882,13 @@ Always、Everysec 和 No，这三种策略在可靠性上是从高到低，而�
 
 针对这个问题，我们主要强调好处。
 
-**回答** 
+**回答**
 
 有2点好处。1.**保证正确写入**：如果当前的命令语法有问题，错误的命令记录到 AOF 日志里后可能还会进行语法检查。先执行Redis命令，再把数据写入AOF日志可以保证写入的都是正确可执行的命令。2.**不阻塞当前写操作**：因为当写操作命令执行成功后才会将命令记录到AOF日志，避免写入阻塞。
 
 ### 47. **AOF子进程的内存数据跟主进程的内存数据不一致怎么办？**
 
-**分析** 
+**分析**
 
 Redis 的重写 AOF 过程是由后台子进程 bgrewriteaof 来完成的，这有两个好处：
 
@@ -901,13 +897,13 @@ Redis 的重写 AOF 过程是由后台子进程 bgrewriteaof 来完成的，这�
 
 AOF子进程产生的时刻，数据和主进程是一致的，这里面试官是想问重写过程中主进程数据增加了，如何保持最后结果一致，回答的关键在AOF重写缓冲区。
 
-**回答** 
+**回答**
 
 Redis设置了一个 **AOF 重写缓冲区**，这个缓冲区在创建 bgrewriteaof 子进程之后开始使用。在重写 AOF 期间，当 Redis 执行完一个写命令之后，它会**同时将这个写命令写入到AOF 缓冲区和AOF 重写缓冲区**。当子进程完成 AOF 重写工作后，会向主进程发送一条信号。主进程收到该信号后，会调用一个信号处理函数，将 AOF 重写缓冲区中的所有内容追加到新的 AOF 的文件中，使得新旧两个 AOF 文件所保存的数据库状态一致；新的 AOF 的文件进行改名，覆盖现有的 AOF 文件。
 
 ### 48. **RDB 在执行快照的时候，数据能修改吗？**
 
-**分析** 
+**分析**
 
 推荐学习官网对RDB行为的说明
 
@@ -917,30 +913,30 @@ Redis设置了一个 **AOF 重写缓冲区**，这个缓冲区在创建 bgrewrit
 
 就是说这种方式让Redis从写时复制技术受益，Redis官方文档基本没废话，这句话看似无关轻重，实际上说明了：执行 RDB持久化过程中，Redis 依然可以继续处理操作命令的，也就是数据是能被修改的，这就是通过写时复制技术实现的。
 
-**回答** 
+**回答**
 
 可以。执行 bgsave 过程中，Redis 依然**可以继续处理操作命令**的，数据是能被修改的，采用的是写时复制技术（Copy-On-Write, COW）。执行 bgsave 命令的时候，会通过 fork（）创建子进程，此时子进程和父进程是共享同一片内存数据的，因为创建子进程的时候，会复制父进程的页表，但是页表指向的物理内存还是一个，由于共享父进程的所有数据，可以直接读取主线程里的内存数据，并将数据写入到 RDB 文件。此时如果主线程执行读操作，则主线程和 bgsave 子进程互相不影响。如果主线程要修改共享数据里的某一块数据，就会发生写时复制，数据的物理内存就会被复制一份，主线程在这个数据副本进行修改操作。与此同时，子进程可以继续把原来的数据写入到 RDB 文件。
 
-**推荐学习** 
+**推荐学习**
 
-[ RDB详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnXHrfrVrApXogya3rL81cQf) 
+[ RDB详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnXHrfrVrApXogya3rL81cQf)
 
 ### 49. **Redis用RDB持久化时对过期键会如何处理的？**
 
-**分析** 
+**分析**
 
 在 Redis 使用 **RDB（Redis Database Backup）持久化** 时，**过期键** 的处理方式取决于 **RDB 生成和恢复的阶段**，具体情况如下：
 
 - Redis 在 生成 RDB 快照时，不会 直接删除过期的键，而是检查每个 key 的 TTL，如果某个 key 已经过期，则 不会写入 RDB 文件；如果 key 未过期，则会 连同其 TTL 一起写入 RDB。这样，生成的 RDB 文件中 不会包含已过期的键，避免存储无用数据。
 - 当 Redis 重启并加载 RDB 文件 时：Redis 会 正常加载所有 key 及其 TTL，但不会立即清理所有过期 key，而是由数据清理机制来保证（在客户端访问 key 时，Redis 发现 key 已过期，则立即删除。Redis 运行时的定期清理机制 可能也会被触发，主动删除过期 key）
 
-**回答** 
+**回答**
 
 RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查，过期的key不会保存到RDB文件中；加载阶段在载入 RDB 文件时，Redis 会 正常加载所有 key 及其 TTL，而过期Key的删除，是由专门的数据清理机制来保证，和RDB无关。
 
 ### 50. **Redis用AOF持久化时对过期键会如何处理的？**
 
-**分析** 
+**分析**
 
 总结为下表：
 
@@ -956,11 +952,11 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 
 ### 51. AOF模式下，**Redis主从模式中，对过期键会如何处理？**
 
-**分析** 
+**分析**
 
 主库会记录一条del指令到AOF文件，从库也会同步这条指令
 
-**回答** 
+**回答**
 
 从库不会进行过期扫描，从库的过期键处理依靠主服务器控制，**主库在 key 到期时，会在 AOF 文件里增加一条 del 指令，同步到所有的从库**，从库通过执行这条 del 指令来删除过期的 key。
 
@@ -991,11 +987,11 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 
 主要有这么几个地方，一个是调用save或者bgsave命令，一个是根据我们配置周期进行，一个是Redis关闭之前，这三个是比较常见的，其它边缘一点的还有主从全量复制发送RDB文件等。（如果追问可以再说还有客户端执行数据库清空命令FLUSHALL）
 
-**推荐学习** 
+**推荐学习**
 
 分析中比较全面了
 
-部分细节还可以看看[ RDB详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnXHrfrVrApXogya3rL81cQf) 
+部分细节还可以看看[ RDB详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnXHrfrVrApXogya3rL81cQf)
 
 ### 53. AOF刷盘的触发时机（几乎不考）
 
@@ -1012,7 +1008,7 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
     Redis在每个事件循环都会将 aof_buf 缓冲区里的所有内容通过 write 写入 AOF 文件描述符，并且调用 fsync 同步它（是在主线程中进行同步刷盘的），所以 always 的效率也是最慢的（主线程直接跟磁盘 IO 打交道，单线程的 redis 会被阻塞，有个慢速的落盘操作），但是从安全性角度来讲它也是最安全的。因为即使出现故障停机，AOF 持久化也只会丢失一个事件循环中所产生的命令数据（可以很多也可以很少，always 将变更都写入文件和同步，才能回复客户端响应成功）
   - everysec
 
-     服务器在每个事件循环都要将 aof_buf 缓冲区的所有内容通过 write 写入到 AOF 文件描述符，并且每隔超过一秒就要在子线程中对 AOF 文件进行一次 fsync 同步（注意是在子线程中异步刷盘的，如果主线程发现子线程还在 fsync，会推迟本秒的 fsync）。从效率上来讲，everysec 足够快（后台线程进行fsync，主线程只进行write），并且就算出现故障停机，也只会丢失一秒钟的数据（实际上看源码是最多会丢失两秒多的数据）everysec 是一种折中的取舍，也是默认值，也是推荐值
+    服务器在每个事件循环都要将 aof_buf 缓冲区的所有内容通过 write 写入到 AOF 文件描述符，并且每隔超过一秒就要在子线程中对 AOF 文件进行一次 fsync 同步（注意是在子线程中异步刷盘的，如果主线程发现子线程还在 fsync，会推迟本秒的 fsync）。从效率上来讲，everysec 足够快（后台线程进行fsync，主线程只进行write），并且就算出现故障停机，也只会丢失一秒钟的数据（实际上看源码是最多会丢失两秒多的数据）everysec 是一种折中的取舍，也是默认值，也是推荐值
   - no
 
     no 策略下 redis 不会进行任何主动的 fsync aof 刷盘操作，所以它的效率对于 redis 来说也是最高的，不过因为把同步权交由给操作系统，所以 no 模式下的单次同步时长也是最长的，它会在系统缓冲区中积累一段时间的写入数据，然后才会真的被『落盘』。从平摊操作的角度来讲，no 跟 everysec 的效率应该都是差不多的，但是从安全性来讲，如果出现故障停机，使用 no 会丢失上次同步 AOF 文件之后的所有命令数据。通常情况下如果使用 no 策略 Linux 会每隔 30s 刷盘，不过这取决于内核的具体配置
@@ -1021,26 +1017,26 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 
 - AOF触发流程主要有3个，一个是Redis关闭的时候，另一个是每一次事件循环钩子函数 beforeSleep()，最后一个是每一次事件循环函数servercron里面（这个问题比较复杂，如果追问需要根据分析 理清楚AOF流程是怎样的，不同appendfsync策略是如何执行的，酌情回答）
 
-**推荐学习** 
+**推荐学习**
 
-[ AOF详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnzIaD8C0QLJ4Ld6zEjmBN7f) 
+[ AOF详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnzIaD8C0QLJ4Ld6zEjmBN7f)
 
 ### 54. RDB对主流程有什么影响？（几乎不考）
 
 **分析**
 
-主要从RDB的整个流程来寻找一些明显 或 潜在 的风险 
+主要从RDB的整个流程来寻找一些明显 或 潜在 的风险
 
 **回答**
 
 - 当执行阻塞式持久化的时候，由主进程进行 RDB快照保存，会阻塞主进程
-- 当执行后台持久化时，由fork出的子进程来进行RDB快照保存 
+- 当执行后台持久化时，由fork出的子进程来进行RDB快照保存
   - 如果数据量比较大的时候，会导致fork子进程 这个操作比较耗时，从而阻塞主进程
   - 由于采用了 写时复制技术，如果在进行RDB快照保存的时候，有大量的写入操作执行，会导致主进程多拷贝一份数据，消耗大量额外的内存
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ RDB详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnXHrfrVrApXogya3rL81cQf) 
+《Redis学习与面试》[ RDB详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnXHrfrVrApXogya3rL81cQf)
 
 ### 55. AOF对主流程有什么影响？(几乎不考)
 
@@ -1057,7 +1053,7 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 - 当appendfsync使用everysec，如果后台线程上一轮的fsync没有完成，会导致我们本轮主线程执行write被阻塞（直到fsync完成）
 - 当AOF重写发生时，如果数据量比较大，会导致fork子进程 这个操作比较耗时，从而阻塞主进程
 
-**推荐学习** 
+**推荐学习**
 
 《Redis学习与面试》[ AOF详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnzIaD8C0QLJ4Ld6zEjmBN7f)  策略部分
 
@@ -1073,9 +1069,9 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 - 而重写期间 新的写入命令 追加到  新的AOF文件 仍然是AOF格式
 - 此时新的AOF文件 就是 由 RDB格式 和 AOF格式组成的 日志文件
 
-**推荐学习** 
+**推荐学习**
 
-《Redis学习与面试》[ AOF优化-混合持久化](https://ls8sck0zrg.feishu.cn/wiki/wikcnXWt88S4lrl0pSVmBlG9I8b) 
+《Redis学习与面试》[ AOF优化-混合持久化](https://ls8sck0zrg.feishu.cn/wiki/wikcnXWt88S4lrl0pSVmBlG9I8b)
 
 ### 57. 简单描述AOF重写流程
 
@@ -1094,7 +1090,7 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 
 在子进程将数据都写入到新AOF文件后，主进程会通过管道将AOF重写缓冲区里面的数据发送给子进程，子进程再将这一份数据追加到新AOF文件中，保证新AOF文件的完整性
 
-**推荐学习** 
+**推荐学习**
 
 《Redis学习与面试》[ AOF详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnzIaD8C0QLJ4Ld6zEjmBN7f) 重写部分
 
@@ -1120,7 +1116,7 @@ RDB分为生成阶段和加载阶段，生成阶段会对key进行过期检查�
 
 Redis在7.0版本也做了对应的优化，我可以讲一下吗？（如果可以跳到下道题）
 
-**推荐学习** 
+**推荐学习**
 
 《Redis学习与面试》[ AOF详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnzIaD8C0QLJ4Ld6zEjmBN7f) 重写部分
 
@@ -1128,7 +1124,7 @@ Redis在7.0版本也做了对应的优化，我可以讲一下吗？（如果可
 
 ### 59. 针对AOF重写的不足，你有什么优化思路呢？
 
-**分析** 
+**分析**
 
 改进之处：
 
@@ -1139,21 +1135,21 @@ Redis在7.0版本也做了对应的优化，我可以讲一下吗？（如果可
 - 当重写发生时，主进程fork出一个 子进程，对Base AOF日志 进行重写（将当前内存数据写入到新的Base AOF日志）；如果此时有新的写入命令，会由主进程 写入到aof_buf，再将缓冲数据刷入 新的Incr AOF日志。这样 新的Incr AOF日志 + 新的Base AOF日志 就构成了完整的新的AOF日志
 - 子进程重写 结束时，主进程会负责更新 manifest 文件，将新生成的 BASE AOF 和 INCR AOF 信息加进清单，并将之前的 BASE AOF 和 INCR AOF 标记为 HISTORY。
 
->  mianfest 用于追踪管理AOF文件
+> mianfest 用于追踪管理AOF文件
 
 - 这些 HISTORY 文件默认会被 Redis 异步删除（unlink），一旦 manifest 文件更新完成，就代表着整个 AOFRW 流程结束
 
-**回答** 
+**回答**
 
 其实在Redis 7.0版本，就使用MP-AOF 方案对AOF重写做了优化，核心其实就是去掉原来的重写缓冲，同时将AOF日志拆分为 Base AOF日志 ，Incr AOF日志，由manifest来管理。重写时，还是开一个子进程，对Base AOF日志 进行重写，但是新命令会往 新的Incr AOF日志写，Incr AOF日志 + 新的Base AOF日志 就构成了完整的新的AOF日志。
 
-**推荐学习** 
+**推荐学习**
 
 《Redis学习与面试》[ AOF详解](https://ls8sck0zrg.feishu.cn/wiki/wikcnzIaD8C0QLJ4Ld6zEjmBN7f)  重写部分
 
 [Redis持久化 · 语雀](https://www.yuque.com/enjoy-binbin/blog/ggm40d)
 
-《Redis学习与面试》[ AOF优化-MP方案(不要求看，但面试可以吹)](https://ls8sck0zrg.feishu.cn/wiki/wikcnN0BRkgwBVhqvcN2V9YmVJh) 
+《Redis学习与面试》[ AOF优化-MP方案(不要求看，但面试可以吹)](https://ls8sck0zrg.feishu.cn/wiki/wikcnN0BRkgwBVhqvcN2V9YmVJh)
 
 # Redis过期删除策略和内存淘汰策略
 
@@ -1305,7 +1301,7 @@ LFU，即将访问频率也加入到影响因素中，具体而言，LFU下同�
 
 有在实习中/工作中/实验室中涉及过Redis缓存场景、Redis分布式锁场景
 
-**推荐学习** 
+**推荐学习**
 
 《Redis学习与面试》[ 场景应用（重点是缓存和分布式锁）](https://ls8sck0zrg.feishu.cn/wiki/wikcnqC72vEd1geIyJjitu3Ks7c)
 
@@ -1321,11 +1317,11 @@ LFU，即将访问频率也加入到影响因素中，具体而言，LFU下同�
 
 **推荐学习**
 
-《Redis学习与面试》[ 缓存基础](https://ls8sck0zrg.feishu.cn/wiki/wikcno9vxy6cFFA8VrI7uL1Kjtc) 
+《Redis学习与面试》[ 缓存基础](https://ls8sck0zrg.feishu.cn/wiki/wikcno9vxy6cFFA8VrI7uL1Kjtc)
 
 ### 68. **Redis经常作为MySQL的缓存来使用，为什么？**
 
-**分析** 
+**分析**
 
 有几个要点：
 
@@ -1335,17 +1331,17 @@ LFU，即将访问频率也加入到影响因素中，具体而言，LFU下同�
 
 3.缓存本质是高速存储临时存储低速存储的数据
 
-**回答** 
+**回答**
 
 MySQL是关系型数据库系统，操作数据需要访问磁盘，性能不高，通常就几千QPS，而Redis基于内存并做了很多优化，性能高达10W QPS，一些热点数据就可以缓存到Redis，查询时先查Redis，不存在才查MySQL，这种Redis+MySQL结合的方式可以有效提高系统QPS。
 
-**推荐学习** 
+**推荐学习**
 
-[ 缓存基础](https://ls8sck0zrg.feishu.cn/wiki/wikcno9vxy6cFFA8VrI7uL1Kjtc) 
+[ 缓存基础](https://ls8sck0zrg.feishu.cn/wiki/wikcno9vxy6cFFA8VrI7uL1Kjtc)
 
 ### 69. **Redis和Memcached有哪些共同点和不同点**
 
-**分析** 
+**分析**
 
 两者都是缓存中常用组件，所以容易拿来比较。
 
@@ -1364,7 +1360,7 @@ MySQL是关系型数据库系统，操作数据需要访问磁盘，性能不高
 
 **不同点**
 
-**回答** 
+**回答**
 
 Memcached适合 纯字符串缓存场景，数据结构只支持字符串，超高并发下性能较优，适用于 CDN、页面缓存、数据库查询结果缓存等。
 
@@ -1404,35 +1400,35 @@ Redis适合更广泛的场景，支持持久化、多数据结构、事务、分
 
 **推荐学习**
 
-《Redis学习与面试》[ 缓存一致性怎么保证](https://ls8sck0zrg.feishu.cn/wiki/wikcnEJdzUmS3CgUHXUCjJY5Iad) 
+《Redis学习与面试》[ 缓存一致性怎么保证](https://ls8sck0zrg.feishu.cn/wiki/wikcnEJdzUmS3CgUHXUCjJY5Iad)
 
 ### 71. **如何保证删除缓存操作一定能成功？**
 
-**分析** 
+**分析**
 
 缓存删除是一次Redis操作，可能因为网络波动等原因执行失败，提高删除成功率有2种思路，一个是失败就扔入重试队列，但是扔入队列这步也可能失败，所以只能说是提高，第二种就是绕过这个问题，缓存删除一般是为了数据同步，可以使用订阅MySQL BinLog的方式来同步数据。
 
-**回答** 
+**回答**
 
 可以引入消息队列，删除缓存的操作由消费者来做，删除失败的话重新去消息队列拉取相应的操作，超过一定次数没有删除成功就像业务层报错。
 
 如果是MySQL、Redis缓存同步场景，为了保证成功率，可以用一个消费服务订阅 MySQL binlog 日志，拿到具体要操作的数据，然后再向Redis执行缓存同步操作。
 
-**推荐学习** 
+**推荐学习**
 
 [ 缓存一致性怎么保证](https://ls8sck0zrg.feishu.cn/wiki/wikcnEJdzUmS3CgUHXUCjJY5Iad)
 
 ### 72. **业务缓存一致性要求高怎么办？**
 
-**分析** 
+**分析**
 
 既然用了缓存，就始终存在不一致性的时间，只能说尽可能减少这个时间，不可能完全一致，如果需要完全一致就不应该用缓存。
 
-**回答** 
+**回答**
 
 延迟双删是提高一致性的方案，先删除缓存，然后更新数据库，等待一段时间再删除缓存。保证第一个操作再睡眠之后，第二个操作完成更新缓存操作。但是具体睡眠多久其实是个**玄学**，很难评估出来，这个方案也只是**尽可能**保证一致性而已，依然也会出现缓存不一致的现象。
 
-**推荐学习** 
+**推荐学习**
 
 [ 缓存一致性怎么保证](https://ls8sck0zrg.feishu.cn/wiki/wikcnEJdzUmS3CgUHXUCjJY5Iad)
 
@@ -1442,7 +1438,7 @@ Redis适合更广泛的场景，支持持久化、多数据结构、事务、分
 
 缓存正常来说都是有过期时间的，过期时间到了，这时候缓存就会被删除，对于MySQL（或其它数据源）而言也就是缓存失效了
 
-**回答** 
+**回答**
 
 首先业务发现缓存失效，是会去读MySQL数据重新加载进去的，但是为了尽可能避免缓存失效，我们
 
@@ -1466,11 +1462,11 @@ Redis可以用来记录库存，利用Redis的高性能进行库存的扣减，�
 
 **推荐学习**
 
-《Redis学习与面试》[ 秒杀](https://ls8sck0zrg.feishu.cn/wiki/wikcnMjrBLhw661kReWXuLYDJJh) 
+《Redis学习与面试》[ 秒杀](https://ls8sck0zrg.feishu.cn/wiki/wikcnMjrBLhw661kReWXuLYDJJh)
 
 ### 75. **Redis管道有什么用？**
 
-**分析** 
+**分析**
 
 Redis管道（Pipeline）是一种优化客户端与Redis服务器之间通信的机制，主要用于减少网络往返时间（RTT，Round-Trip Time），从而提升性能。
 
@@ -1500,7 +1496,7 @@ Redis管道（Pipeline）是一种优化客户端与Redis服务器之间通信�
 - **事务优化**：
   - 在事务（`MULTI/EXEC`）中，使用管道可以避免多次网络往返。
 
-**回答** 
+**回答**
 
 管道技术是客户端提供的一种批处理技术，用于一次处理多个 Redis 命令，从而提高整个交互的性能。
 
@@ -1508,7 +1504,7 @@ Pipeline的本质，是将请求在客户端打包，然后一次发送给服务
 
 但使用管道技术也要注意避免发送的命令过大，或管道内的数据太多而导致的网络阻塞。
 
-**推荐学习** 
+**推荐学习**
 
 [ Pipeline](https://ls8sck0zrg.feishu.cn/wiki/wikcnnivZurWCheIioVXzZTH6fh?fromScene=spaceOverview)
 
@@ -1575,7 +1571,7 @@ Pipeline的本质，是将请求在客户端打包，然后一次发送给服务
 
 - 粉丝列表：ZSet存储千万级用户ID
 - 用户行为记录 ：将某个用户的长时间行为记录存储在一个Key中。
--  缓存大对象：比如直接用String来存储图片/视频元数据
+- 缓存大对象：比如直接用String来存储图片/视频元数据
 
 **推荐学习**
 
@@ -1616,7 +1612,7 @@ Pipeline的本质，是将请求在客户端打包，然后一次发送给服务
 
 ### 80. **Redis如何处理大key？**
 
-**分析** 
+**分析**
 
 一般而言String 类型的值大于 10 KB；Hash、List、Set、ZSet 类型的元素的个数超过5000个；
 
@@ -1636,21 +1632,21 @@ Pipeline的本质，是将请求在客户端打包，然后一次发送给服务
 
 ### 81. **Redis支持事务回滚吗？**
 
-**分析** 
+**分析**
 
 Redis不具备完整的ACID特性，执行的命令都没有回滚之说，无论是事务还是LUA脚本中的命令，都是一样的。
 
-**回答** 
+**回答**
 
 不支持，Redis不具备完整的ACID特性，执行的命令都没有回滚之说，Redis 提供的 DISCARD 命令只能用来主动放弃事务执行，把暂存的命令队列清空，起不到回滚的效果。至于LUA脚本也是一样，比如LUA里面有2个写操作，执行了第一个如果Redis挂掉，那么第二个不会执行，第一个也不回撤回。
 
-**推荐学习** 
+**推荐学习**
 
 [ 事务(不是很重要，但Lua要知道怎么用)](https://ls8sck0zrg.feishu.cn/wiki/wikcnMmCIJ56EHTFmX7W9LKfWhd?fromScene=spaceOverview)
 
 ### 82. Redis**如何实现延迟队列？**
 
-**分析** 
+**分析**
 
 首先要指什么什么是延迟队列：
 
@@ -1662,7 +1658,7 @@ Redis不具备完整的ACID特性，执行的命令都没有回滚之说，无�
 
 知道延迟队列是什么之后，不难发现Redis中ZSet最适合模拟这个功能
 
-**回答** 
+**回答**
 
 使用ZSet，ZSet 有一个 Score 属性可以用来存储延迟执行的时间。使用 zadd score1 value1 命令，再利用 zrangebysocre 查询符合条件的所有待处理的任务，通过循环执行队列任务。
 
@@ -1680,7 +1676,7 @@ Redis可以作为轻量级消息队列。如果是本身业务轻量级，且团
 
 **推荐学习**
 
-《Redis学习与面试》[ 消息队列](https://ls8sck0zrg.feishu.cn/wiki/wikcnWjrJFp9tkJ3DC6oMaPXB7f) 
+《Redis学习与面试》[ 消息队列](https://ls8sck0zrg.feishu.cn/wiki/wikcnWjrJFp9tkJ3DC6oMaPXB7f)
 
 ## Redis 分布式锁
 
@@ -1698,13 +1694,13 @@ Redis可以作为轻量级消息队列。如果是本身业务轻量级，且团
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 [ 分布式锁优化](https://ls8sck0zrg.feishu.cn/wiki/HOrdwMqsTi67ujkZFICcdRpwnCG)
 
 ### 85. **如何理解Redis原子性操作原理？**
 
-**分析** 
+**分析**
 
 Redis 原子性操作的原理：
 
@@ -1715,7 +1711,7 @@ Redis 原子性操作的原理：
 
 这些特性让 Redis 在高并发场景下能够安全、高效地执行原子操作
 
-**回答** 
+**回答**
 
 Redis提供的API都是单线程串行处理的，所以我们用单条对象操作命令都不用担心被中断，如果是多条命令要实现原子性，通常都是用LUA脚本来支持。
 
@@ -1723,7 +1719,7 @@ Redis提供的API都是单线程串行处理的，所以我们用单条对象操
 
 **分析**
 
- redis分布式锁的加锁命令（一行命令实现互斥效果+过期时间，原子性）：
+redis分布式锁的加锁命令（一行命令实现互斥效果+过期时间，原子性）：
 
 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">要注意 setnx 这个命令，是没办法携带过期时间参数的！如果 setnx + expire 2 个命令，就没办法保证加锁的原子性了！</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">所以要用 set 命令</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，携带</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)"> nx 和 px </span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">参数，才能保证加锁的原子性！</span>
 
@@ -1749,7 +1745,7 @@ Redis提供的API都是单线程串行处理的，所以我们用单条对象操
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 [ 分布式锁优化](https://ls8sck0zrg.feishu.cn/wiki/HOrdwMqsTi67ujkZFICcdRpwnCG)
 
@@ -1767,7 +1763,7 @@ Redis提供的API都是单线程串行处理的，所以我们用单条对象操
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 ### 88. 你提到了lua，用lua一定能保证原子性？
 
@@ -1785,11 +1781,11 @@ lua本身不具备原子性，上面提到用lua来保证原子性是因为Redis
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 ### 89. 基于 Redis 实现分布式锁有什么优缺点？
 
-**分析** 
+**分析**
 
 基于 Redis 实现分布式锁的优点：
 
@@ -1803,17 +1799,17 @@ lua本身不具备原子性，上面提到用lua来保证原子性是因为Redis
   - 那么如何合理设置超时时间呢？ 我们可以基于续约的方式设置超时时间：先给锁设置一个超时时间，然后启动一个守护线程，让守护线程在一段时间后，重新设置这个锁的超时时间。实现方式就是：写一个守护线程，然后去判断锁的情况，当锁快失效的时候，再次进行续约加锁，当主线程执行完成后，销毁续约锁即可，不过这种方式实现起来相对复杂。
 - **Redis 主从复制模式中的数据是异步复制的，这样导致分布式锁的不可靠性：**如果在 Redis 主节点获取到锁后，在没有同步到其他节点时，Redis 主节点宕机了，此时新的 Redis 主节点依然可以获取锁，所以多个应用服务就可以同时获取到锁。
 
-**回答** 
+**回答**
 
 Redis实现分布式锁的主要优点在于其性能高效、实现简单和被业界成熟应用。但是也有其局限性，首先是Redis的可用性直接影响到锁的可靠性，如果Redis服务出现故障，可能会导致锁服务不可用，虽然Redis提供了持久化机制，但在极端情况下，如Redis突然崩溃，可能会导致锁信息的丢失，从而引发锁失效的问题。
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 ### 90. **使用Redis实现分布式锁的优点？**
 
-**分析** 
+**分析**
 
 优点挺多的，核心是高性能、简单易用和广泛应用，面试时候一定要提到这两点，其它酌情应对即可。
 
@@ -1833,17 +1829,17 @@ Redis实现分布式锁的主要优点在于其性能高效、实现简单和被
 6. **轻量级**
    - 相比于Zookeeper等分布式协调服务，Redis更加轻量，部署和维护成本较低。
 
-**回答** 
+**回答**
 
 Redis是最常用的分布式锁，核心优势我认为在于3点，第一是性能高，速度非常快；第二是简单易用、简单意味着容易接入和不易出错；第三是广泛应用，即有丰富的实践经验。
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 ### 91. **使用Redis实现分布式锁的缺点？**
 
-**分析** 
+**分析**
 
 Redis分布式锁其实很好用了，但是一切事务都有正反两面，要找缺点肯定能说不少，比如：
 
@@ -1857,17 +1853,17 @@ Redis分布式锁其实很好用了，但是一切事务都有正反两面，要
    - 在高并发场景下，多个客户端可能频繁竞争锁，导致Redis性能下降。
    - 需要实现合理的重试机制（如指数退避）来缓解竞争。
 
-**回答** 
+**回答**
 
 Redis分布式锁足够简单好用，但是也存在一些局限，比如Redis锁不具备强一致性，主从节点数据有不一致的情况，可能会因此出现多个客户端同时持有锁的情况，导致业务不必要的重复执行。
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 ### 92. **如何为Redis分布式锁设置合理的超时时间？**
 
-**分析** 
+**分析**
 
 两个方面，核心是**评估业务逻辑：**
 
@@ -1875,17 +1871,17 @@ Redis分布式锁足够简单好用，但是也存在一些局限，比如Redis�
 - **分布式锁访问耗时：**Redis操作通常很快，但在高延迟环境中，需考虑客户端与Redis服务器之间的通信时间。
 - **考虑最坏情况**：确定任务在最坏情况下的执行时间（如网络抖动、资源竞争等）
 
-**回答** 
+**回答**
 
 核心是根据业务逻辑来评估，其次是网络延迟等交互消耗，比如业务最大执行时间是3s，网络延迟为200毫秒，多给1s缓冲，则超时时间可设置为4.2秒，向上取整为5秒。
 
 **推荐学习**
 
-《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d) 
+《Redis学习与面试》[ 分布式锁(很重要)](https://ls8sck0zrg.feishu.cn/wiki/wikcnKKNts4CaeJ5rAGn7XW4x3d)
 
 ### 93. **除了 Redis 实现分布式锁，还有哪些方案可以实现分布式锁？各有什么优缺点？**
 
-**分析** 
+**分析**
 
 实现方式很多，大多数组件都可以被利用为分布式锁，常见的如下：
 
@@ -1950,11 +1946,11 @@ Redis分布式锁足够简单好用，但是也存在一些局限，比如Redis�
   - 性能较低，适合低频锁场景。
   - 部署和维护 Consul 集群的成本较高。
 
-**回答** 
+**回答**
 
 Redis性能高，并被最广泛应用，最为推荐；数据库如MySQL优势在于不依赖额外组件，缺点是性能差；ZooKeeper可靠但性能低；Etcd强一致但部署复杂；Consul集成服务发现但性能一般；在具体开发工作中，我们需要根据场景选择合适方案。
 
-**推荐学习** 
+**推荐学习**
 
 |方案 |优点 |缺点 |适用场景 |
 |---|---|---|---|
@@ -1980,17 +1976,17 @@ Redis 实现可重入的分布式锁的实现思路如下：
 - **获取锁：**使用 `SET` 命令设置键值对，并设置过期时间，如果键已存在且值为当前客户端标识，则增加重入计数。
 - **释放锁**：减少重入计数，如果计数为 0，则删除键。
 
-**回答** 
+**回答**
 
 可重入锁的核心是计数，即额外维护一个计数器，记录锁的重入次数，我们拿加锁流程举例，即先尝试Set命令（结合NX参数），如果不存在就Set成功，存在的话则查询是否是自己的id，是的话就增加计数，解锁也是一个思路，加锁解锁都需要用LUA保证原子性。
 
 ### 95. 对 Redisson 分布式锁了解多少？（Java）
 
-**分析** 
+**分析**
 
 Redisson 是一个基于 Redis 的 Java 客户端，提供了封装好的分布式锁功能，这里既然是问了解，我们可以提下他的可重入、自动续期特性，不用主动展开，面试官有兴趣会追问。
 
-**回答** 
+**回答**
 
 我对 **Redisson** 分布式锁的实现有深入了解。Redisson 是一个基于 Redis 的 Java 客户端，提供了丰富的分布式数据结构和服务，其中分布式锁是其核心功能之一。Redisson 的分布式锁不仅支持可重入，还实现了锁的自动续期（Watchdog 机制）。
 
@@ -2002,17 +1998,17 @@ Redisson 是一个基于 Redis 的 Java 客户端，提供了封装好的分布�
 - 默认情况下，Watchdog 每隔 `lockWatchdogTimeout / 3` 时间（默认 10 秒）执行一次续期操作；
 - 续期逻辑：
 
-**回答** 
+**回答**
 
 本质就是一个后台线程，我们可以称之为看门狗，定期检查锁的状态并续期，即使不用Redisson我们也可以自己通过线程来实现，只是说Redisson封装好了这个能力。
 
 ### 97. Redis Redisson看门狗续期，是用一个后台线程去续期的，如果发生了GC停顿，导致这个线程无法执行，导致锁没有续期，这时候怎么办（Java）
 
-**分析** 
+**分析**
 
 Redis 的看门狗（Watchdog）机制通过后台线程定期续期锁，但如果发生 **GC 停顿** 或 **线程阻塞**，可能导致续期失败，进而引发锁过期，影响系统的可靠性。针对这个问题，Redisson 和其他分布式锁的实现通常会采取以下策略来缓解或解决：
 
-**回答** 
+**回答**
 
 可以有多种策略来应对这个问题：
 
@@ -2022,7 +2018,7 @@ Redis 的看门狗（Watchdog）机制通过后台线程定期续期锁，但如
 
 ### 98. **Redis 如何解决集群情况下分布式锁的可靠性？**
 
-**分析** 
+**分析**
 
 可以了解红锁算法：
 
@@ -2040,7 +2036,7 @@ Redis 的看门狗（Watchdog）机制通过后台线程定期续期锁，但如
 >
 > 加锁成功后，客户端需要重新计算这把锁的有效时间，计算的结果是「锁最初设置的过期时间」减去「客户端从大多数节点获取锁的总耗时（t2-t1）」。如果计算的结果已经来不及完成共享数据的操作了，可以释放锁，以免出现还没完成数据操作，锁就过期了的情况。加锁失败后，客户端向**所有 Redis 节点发起释放锁的操作**，执行释放锁的 Lua 脚本就可以。
 
-**回答** 
+**回答**
 
 Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在超过一半的节点成功才算获得锁。Redlock相对比较麻烦，但是也无法完全保证可靠，可以说没有完全可靠的分布式锁，实际上，在我接入过的业务中，几乎没有用Redlock做分布式锁的，引入更大的复杂度，也无法彻底解决问题。
 
@@ -2048,7 +2044,7 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 
 ### 99. 缓存穿透是什么？怎么解决？
 
-**分析** 
+**分析**
 
 当用户访问的数据，**既不在缓存中，也不在数据库中**，导致请求在访问缓存时，发现缓存缺失，再去访问数据库时，发现数据库中也没有要访问的数据，没办法构建缓存数据，来服务后续的请求。那么当有大量这样的请求到来时，数据库的压力骤增，这就是**缓存穿透**的问题。
 
@@ -2065,7 +2061,7 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 2. **<span style="color: rgb(46,161,33); background-color: inherit">使用布隆过滤器</span>**<span style="color: rgb(46,161,33); background-color: inherit">：</span>布隆过滤器是一种快速判断元素是否存在的数据结构，它可以在很小的内存占用下，快速判断一个元素是否在一个集合中。将所有可能存在的数据哈希到一个足够大的位数组中，当一个请求过来时，可以先通过查询布隆过滤器快速判断数据是否存在，如果不存在，则直接返回，避免对数据库的查询
 3. **<span style="color: rgb(46,161,33); background-color: inherit">限流策略</span>**：针对频繁请求的特定数据，可以设置限流策略，例如使用令牌桶算法或漏桶算法，限制对这些数据的请求频率，减轻数据库的压力。
 
-**回答** 
+**回答**
 
 缓存穿透是指查询一个不存在的数据，由于缓存未命中，请求直接穿透到数据库，导致数据库压力骤增。这种现象通常由恶意攻击或错误查询引发。
 
@@ -2077,7 +2073,7 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 
 通过这些措施，可以有效缓解缓存穿透问题，保护数据库不受过度查询的压力。
 
-**推荐学习** 
+**推荐学习**
 
 [ 缓存异常场景](https://ls8sck0zrg.feishu.cn/wiki/wikcnsGZtqqLic5wv5dDEqVml2I)
 
@@ -2101,7 +2097,7 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 
 ### 101. **布隆过滤器有什么缺陷？**
 
-**分析** 
+**分析**
 
 布隆过滤器特性：
 
@@ -2112,7 +2108,7 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 
 其中布隆过滤器最重要的缺陷就在于无法确定一个数据是一定存在，只能判断数据一定不存在，所以适用场景也受这个缺陷（特性）的制约，所以这个缺陷（特性）一定要提到，其它的比如无法删除可以酌情扩展。
 
-**回答** 
+**回答**
 
 - 布隆过滤器由于是基于哈希函数实现查找的，会存在哈希冲突的可能性，数据可能落在相同位置，存在误判的情况。查询布隆过滤器说数据存在，并不一定证明数据库中存在这个数据，但是查询到数据不存在，数据库中一定就不存在这个数据。
 - 不支持一个关键字的删除，因为一个关键字的删除会牵连其他的关键字。改进方法就是counting Bloom filter，用一个counter数组代替位数组，就可以支持删除了。
@@ -2134,13 +2130,13 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 3. **<span style="color: rgb(46,161,33); background-color: inherit">缓存永不过期</span>**：对于一些热点数据，可以将其缓存设置为永不过期，避免缓存击穿。
 4. **<span style="color: rgb(46,161,33); background-color: inherit">异步更新缓存</span>**：在缓存失效时，可以异步地去更新缓存，而不是同步地去查询数据库并刷新缓存。这样可以减少对数据库的直接访问，并且不会阻塞其他请求的响应。
 
-**回答** 
+**回答**
 
 如果缓存中的**某个热点数据过期**了，此时大量的请求访问了该热点数据，就无法从缓存中读取，直接访问数据库，数据库很容易就被高并发的请求冲垮。
 
 我们可以通过延长热点数据过期时间、使用互斥锁或分布式锁控制查询频率、缓存永不过期等手段来解决这个问题。
 
-**推荐学习** 
+**推荐学习**
 
 [ 缓存异常场景](https://ls8sck0zrg.feishu.cn/wiki/wikcnsGZtqqLic5wv5dDEqVml2I)
 
@@ -2167,11 +2163,11 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
   - **<span style="color: rgb(46,161,33); background-color: inherit">服务熔断或请求限流机制</span>**：启动服务熔断机制，暂停业务应用对缓存服务的访问，直接返回错误，所以不用再继续访问数据库，保证数据库系统的正常运行，等到 Redis 恢复正常后，再允许业务应用访问缓存服务。服务熔断机制是保护数据库的正常允许，但是暂停了业务应用访问缓存服系统，全部业务都无法正常工作。也可以启用请求限流机制，只将少部分请求发送到数据库进行处理，再多的请求就在入口直接拒绝服务。
   - **<span style="color: rgb(46,161,33); background-color: inherit">提高缓存本身的可用性</span>**：通过主从节点的方式构建 Redis 缓存高可靠集群，如果 Redis 缓存的主节点故障宕机，从节点可以切换成为主节点，继续提供缓存服务，避免了由于 Redis 故障宕机而导致的缓存雪崩问题。
 
-**回答** 
+**回答**
 
 缓存雪崩是指缓存中大量数据同时过期，导致所有请求直接访问数据库，造成数据库压力激增甚至崩溃。解决方法包括：1. 设置缓存过期时间的随机值，避免同时过期；2. 使用分布式锁或队列控制数据库访问，防止瞬间高并发；3. 实现缓存高可用，如主从复制或集群部署，确保缓存服务不中断；4. 热点数据永不过期，定时异步更新缓存；5. 提前预加载缓存，确保数据在过期前已更新。通过这些措施，可以有效缓解缓存雪崩问题。
 
-**推荐学习** 
+**推荐学习**
 
 [ 缓存异常场景](https://ls8sck0zrg.feishu.cn/wiki/wikcnsGZtqqLic5wv5dDEqVml2I)
 
@@ -2179,7 +2175,7 @@ Redlock可以增强可靠性，他的思路就是通过多个节点加锁，在�
 
 ### 104. **Redis 集群架构模式有哪几种？**
 
-**分析** 
+**分析**
 
 Redis 提供了三种集群模式：**<span style="color: inherit; background-color: rgba(255,246,122,0.8)">主从架构、哨兵集群、切片集群</span>**。
 
@@ -2258,7 +2254,6 @@ Redis 集群支持的主从复制，数据同步主要有两种方法：一种�
 - 存盘结束后，将对应的数据文件发送到 Slave 中，完成一次全量同步；
 - 主服务数据发送完毕后，将进行增量的缓冲区数据同步；
 - Slave 加载数据文件和缓冲区数据，开始接受命令请求，提供操作。
-
 - **增量同步**
 
 从节点完成了全量同步后，就可以正式的开启增量备份。当 Master 节点有写操作时，都会自动同步到 Slave 节点上。Master 节点每执行一个命令，都会同步向 Slave 服务器发送相同的写命令，当从服务器接收到命令，会同步执行。
@@ -2281,26 +2276,24 @@ Redis 集群支持的主从复制，数据同步主要有两种方法：一种�
 
 对于讲Redis主从复制模式优缺点，需要讲出Redis主从复制优缺点是什么，和其他方案的对比。
 
-**一、优点：**  
+**一、优点：**
 
-1. **读写分离**：主节点处理写请求，从节点分担读请求，提升系统吞吐量（适合读多写少场景）。  
-2. **数据冗余**：从节点实时备份主节点数据，降低数据丢失风险。  
+1. **读写分离**：主节点处理写请求，从节点分担读请求，提升系统吞吐量（适合读多写少场景）。
+2. **数据冗余**：从节点实时备份主节点数据，降低数据丢失风险。
+3. **高可用基础**：主节点故障时，从节点可快速切换为主（需配合哨兵或手动操作）。
+4. **扩展性**：通过增加从节点横向扩展读能力，成本较低。
 
-3. **高可用基础**：主节点故障时，从节点可快速切换为主（需配合哨兵或手动操作）。  
-4. **扩展性**：通过增加从节点横向扩展读能力，成本较低。  
+**二、缺点：**
 
-**二、缺点：**  
+1. **数据不一致**：异步复制存在延迟，可能读到旧数据（金融等强一致场景需额外方案）。
+2. **写瓶颈**：所有写操作集中在主节点，高并发写入时易成为性能瓶颈。
+3. **运维复杂度**：故障转移需人工干预或依赖哨兵，大规模集群管理成本高。
+4. **资源开销**：每个从节点需完整数据副本，内存/存储成本随节点数线性增长。
 
-1. **数据不一致**：异步复制存在延迟，可能读到旧数据（金融等强一致场景需额外方案）。  
-2. **写瓶颈**：所有写操作集中在主节点，高并发写入时易成为性能瓶颈。  
+**三、与其他方案对比：**
 
-3. **运维复杂度**：故障转移需人工干预或依赖哨兵，大规模集群管理成本高。  
-4. **资源开销**：每个从节点需完整数据副本，内存/存储成本随节点数线性增长。  
-
-**三、与其他方案对比：**  
-
-- **vs 哨兵模式**：哨兵提供自动故障转移，主从需手动或依赖哨兵实现高可用。  
-- **vs 集群模式**：集群通过分片支持海量数据和高并发写，主从仅扩展读能力，写仍受限于主节点。  
+- **vs 哨兵模式**：哨兵提供自动故障转移，主从需手动或依赖哨兵实现高可用。
+- **vs 集群模式**：集群通过分片支持海量数据和高并发写，主从仅扩展读能力，写仍受限于主节点。
 
 **回答**
 
@@ -2365,7 +2358,6 @@ Redis **哨兵（Sentinel）机制** 是一种高可用解决方案，用于监�
 - 第一轮考察：哨兵首先会根据从节点的优先级来进行排序，优先级的值越小排名越靠前。
 - 第二轮考察：如果优先级相同，则查看复制的下标，哪个接收的复制数据多哪个就靠前。
 - 第三轮考察：如果优先级和下标都相同，选择ID较小的那个。
-
 - **更换主节点**
 
 选出新主节点之后，哨兵leader让已下线主节点属下的所有从节点指向新主节点。
@@ -2378,7 +2370,7 @@ Redis **哨兵（Sentinel）机制** 是一种高可用解决方案，用于监�
 
 继续监视旧主节点，当旧主节点重新上线时，哨兵集群就会向它发送SLAVEOF命令，让它成为新主节点的从节点。
 
-**回答** 
+**回答**
 
 哨兵机制通过周期性PING检测节点存活，若主节点主观下线则发起投票，达到阈值后标记为客观下线并选举哨兵Leader；Leader基于优先级、复制进度和ID从从节点中选出新主节点，切换从节点指向新主并通知客户端，旧主恢复后降级为从节点，实现自动故障转移和高可用。
 
@@ -2420,22 +2412,25 @@ Redis 哈希槽（Hash Slot）​ 是 Redis Cluster 实现数据分片的核心�
 
 <span style="color: rgb(46,161,33); background-color: inherit">2. 工作原理</span>
 
-- 1. 客户端请求：客户端计算 key 的哈希槽，若连接节点不负责该槽，返回 `MOVED` 重定向响应，引导客户端访问正确节点。
-- 2. 节点间通信：节点通过 Gossip 协议交换槽分配信息，维护全局路由表。
-- 3. 槽迁移：管理员可手动将槽从一个节点迁移到另一个节点，迁移过程中新旧节点同时服务该槽的请求，确保平滑过渡。
+- 
+  1. 客户端请求：客户端计算 key 的哈希槽，若连接节点不负责该槽，返回 `MOVED` 重定向响应，引导客户端访问正确节点。
+- 
+  2. 节点间通信：节点通过 Gossip 协议交换槽分配信息，维护全局路由表。
+- 
+  3. 槽迁移：管理员可手动将槽从一个节点迁移到另一个节点，迁移过程中新旧节点同时服务该槽的请求，确保平滑过渡。
 
 <span style="color: rgb(46,161,33); background-color: inherit">3. 关键设计细节</span>
 
-- 为什么是16384个槽？  
-   Redis 作者 Antirez 解释：  
+- 为什么是16384个槽？\
+  Redis 作者 Antirez 解释：
 
   ![](images/Redis面试题库-image.png)
 
-- 网络开销：节点间需同步槽分配信息，16384个槽仅需 2KB 内存（每个槽用2字节表示），若使用65536槽则需4KB，在心跳包中占比过大。  
+- 网络开销：节点间需同步槽分配信息，16384个槽仅需 2KB 内存（每个槽用2字节表示），若使用65536槽则需4KB，在心跳包中占比过大。
 - 实际规模：16384槽足够支持上千节点，远超实际需求。
-- 对比一致性哈希优势  
+- 对比一致性哈希优势
 
-**回答** 
+**回答**
 
 Redis 哈希槽是 Redis Cluster 数据分片的核心机制，整个集群有 16384 个固定槽位，每个键通过 CRC16 算法计算后取模 16384 分配到特定槽位。集群将槽位均匀分布在不同节点，节点只负责自己持有的槽位数据。客户端访问时直接路由到目标节点，若请求的槽位不属于当前节点，则返回 MOVED 重定向响应。哈希槽支持动态迁移，可通过重新分配槽位实现集群扩容缩容，迁移过程中采用 ASK 临时重定向保证可用性。这种设计实现了数据均匀分布、高效路由和弹性扩展，相比一致性哈希减少数据迁移量，是 Redis Cluster 高可用和水平扩展的基础架构。
 
@@ -2447,11 +2442,11 @@ Redis 哈希槽是 Redis Cluster 数据分片的核心机制，整个集群有 1
 
 如果想自动平均分配，也可以使用 CLUSTER REBALANCE 命令。
 
-**回答** 
+**回答**
 
 主要有自动分配和手动分配两种方式。自动分配是集群创建或者节点添加减少时，Redis自动将哈希槽平均分配到集群节点上；手动分配是使用命令指定每个节点上面的哈希槽数目，使用手动分配时要把16384个槽位给分完，否则集群不会正常工作。
 
-**推荐学习** 
+**推荐学习**
 
 [ Redis集群](https://ls8sck0zrg.feishu.cn/wiki/wikcnOaxB2WCY2QLbdAQaoX2Dud?fromScene=spaceOverview)
 
@@ -2459,7 +2454,7 @@ Redis 哈希槽是 Redis Cluster 数据分片的核心机制，整个集群有 1
 
 ### 112. **主从模式的同步过程？**
 
-**分析** 
+**分析**
 
 Redis主从复制流程主要分为以下三个核心步骤：
 
@@ -2470,19 +2465,18 @@ Redis主从复制流程主要分为以下三个核心步骤：
 2. 数据全量同步阶段
    - 主服务器执行BGSAVE生成RDB快照文件
    - 从服务器接收RDB文件后，会先清空现有数据集，再加载RDB文件完成全量数据同步，为确保数据一致性，主服务器在此期间将新写入操作暂存至复制缓冲区（replication buffer）
-
 3. 增量同步阶段
    - 主服务器将复制缓冲区中的写操作按顺序发送至从服务器
    - 从服务器依次执行接收到的写命令，完成最终数据同步
    - 至此，首次主从数据同步完整流程执行完毕，进入增量数据同步阶段，也就是Redis主节点利用缓冲区将写入操作持续同步给Redis从节点
 
-**回答** 
+**回答**
 
 主要分为建立**连接协商、主从数据同步、发送新操作**三个步骤，连接协商主要确定复制偏移量等关键数据，为同步建立基础；首次主从同步数据是通过RDB文件传递来同步，期间的命令是利用复制缓冲区同步，完成首次同步之后，后续写入操作持续同步给Redis从节点，保证增量数据也是同步的。
 
 ### 113. 从服务重新上线之后，**主服务器如何知道要将哪些增量数据发送给从服务器？**
 
-**分析** 
+**分析**
 
 这里主要要点明如何决策是增量同步还是全量同步，这个决策取决于读的数据是不是在repl_backlog_buffer中。
 
@@ -2490,17 +2484,17 @@ Redis主从复制流程主要分为以下三个核心步骤：
 >
 > - **repl_backlog_buffer**是一个**环形**缓冲区，用于主从服务器断连后，从中找到差异的数据；**replication offset**标记缓冲区的同步进度。
 
-**回答** 
+**回答**
 
 网络断开从服务器重新上线之后，会发送自己的复制偏移量到主服务器，主服务器根据偏移量之间的差距判断要执行的操作：如果从服务器要读的数据在repl_backlog_buffer中，则采用增量复制；如果不在，采用全量复制。
 
 ### 114. Redis**如何减少主从数据的不一致？**
 
-**分析** 
+**分析**
 
 Redis从节点会向主节点同步数据，但是同步总有延迟，有延迟就有一段时间的不一致，回答要点是如何减少不一致时间，或者对外屏蔽不一致的从节点数据。
 
-**回答** 
+**回答**
 
 为了优化Redis主从节点不一致的问题，可以采取以下措施：
 
@@ -2513,7 +2507,7 @@ Redis从节点会向主节点同步数据，但是同步总有延迟，有延迟
 
 搞清楚同步复制和异步复制的区别，就不难判断，Redis是异步复制。
 
->  **同步复制（Synchronous Replication）**
+> **同步复制（Synchronous Replication）**
 >
 > - **定义**：主服务器在执行写操作时，必须等待所有从服务器成功写入数据并返回确认后，才向客户端返回成功响应。
 > - **特点**：
@@ -2537,7 +2531,7 @@ Redis从节点会向主节点同步数据，但是同步总有延迟，有延迟
 >   - 对性能要求高、允许短暂数据不一致的场景，如社交网络、日志系统。
 >   - 数据丢失风险可接受的场景。
 
-**回答** 
+**回答**
 
 异步复制。因为主节点收到写命令之后，先写到内部的缓冲区，然后再异步发送给从节点。这样做的好处是对主流程影响小，不干扰Redis的高性能。
 
@@ -2555,7 +2549,7 @@ Redis的高可用性指的是在节点故障时快速恢复服务，核心方案
 
 Redis支持主从复制机制，其中一个Redis实例（主节点）负责写操作，而其他实例（从节点）复制主节点的数据。如果主节点发生故障，结合哨兵，可以让从节点顶替成为主节点，提供读写功能，从而实现故障转移和高可用性。
 
--  **集群模式（大规模场景）**
+- **集群模式（大规模场景）**
 
 Redis Cluster是一种分布式Redis解决方案，它可以将数据分片存储在多个节点上，并自动管理节点间的数据分布和故障转移。Redis Cluster提供了高可用性和扩展性，允许在集群中添加或删除节点而不会影响整个系统的可用性。
 
@@ -2582,22 +2576,22 @@ Redis Cluster是一种分布式Redis解决方案，它可以将数据分片存�
 
 Redis Cluster 作为分布式缓存系统，遵循 CAP 理论，但需要在三者中做出取舍。其核心设计目标是高性能、高可用性和水平扩展，因此在 **AP（可用性+分区容错性）** 之间做了明确选择，牺牲了强一致性（C）。
 
-**具体来说，Redis Cluster 优先保证以下两者**：  
+**具体来说，Redis Cluster 优先保证以下两者**：
 
 1. **分区容错性（P）**
    - 数据分片：数据被划分为 16384 个哈希槽，分布在多个节点上。即使发生网络分区（如部分节点失联），各分区仍能独立处理自己负责的槽位请求。
-   - Gossip 协议：节点间通过 Gossip 协议自动发现和同步状态，确保网络分区后仍能维护集群元数据。  
+   - Gossip 协议：节点间通过 Gossip 协议自动发现和同步状态，确保网络分区后仍能维护集群元数据。
 2. **可用性（A）**
    - 主从自动故障转移：主节点宕机时，从节点通过选举机制快速晋升为新主节点，客户端无感知。
-   - 异步复制：主节点写入成功后立即返回响应，数据异步复制到从节点，避免同步复制导致的延迟。  
+   - 异步复制：主节点写入成功后立即返回响应，数据异步复制到从节点，避免同步复制导致的延迟。
 
-**为什么牺牲一致性？**  
+**为什么牺牲一致性？**
 
 **一致性（C）与可用性（A）的权衡**：Redis Cluster在默认情况下更倾向于可用性（A）。在数据复制过程中，Redis采用了异步复制机制，这意味着主节点写入数据后，不会等待所有从节点确认就返回操作成功的结果。这样做提高了系统的响应速度和可用性，但在极端情况下（如主节点宕机且未完成数据同步）可能会导致数据丢失，即牺牲了强一致性（C）。
 
 这种对一致性的权衡让Redis Cluster 更符合 AP 系统的特点。
 
-**回答** 
+**回答**
 
 Redis Cluster在CAP中明确选择AP（可用性+分区容错性），牺牲强一致性（C）。通过16384哈希槽分片和Gossip协议保障分区容错性（P），即使网络分区各节点仍能独立工作。采用主从自动故障转移和异步复制确保高可用性（A），写入快速响应但可能丢失未同步数据。这种设计优先保证高性能和扩展性，接受最终一致性，典型符合AP系统特征。
 
@@ -2641,7 +2635,7 @@ Redis Cluster 将数据按照键哈希分配到 16384 个哈希槽 slot 上，�
 
 主要通过 Redis 的发布者 / 订阅者机制来实现。每个哨兵节点提供发布者 / 订阅者机制，客户端可以从哨兵订阅消息。主从切换完成后，哨兵就会向+switch-master频道发布新主节点的 IP 地址和端口的消息，客户端和哨兵建立连接后，会订阅哨兵提供的频道，此时客户端就可以收到这条信息，然后用这里面的新主节点的 IP 地址和端口进行通信。
 
-**回答** 
+**回答**
 
 当 Redis 主节点挂了，哨兵（Sentinel）会从剩下的从节点里挑一个当新主节点。挑选规则主要是看谁的数据新、网络稳，然后几个哨兵投票决定。
 
@@ -2659,25 +2653,25 @@ Redis Cluster 将数据按照键哈希分配到 16384 个哈希槽 slot 上，�
 
 Redis Cluster 相比主从架构的核心优势体现在四方面：
 
-1. **数据分片**  
+1. **数据分片**
 
 主从架构数据集中存储，存在单点瓶颈；Cluster 通过哈希槽（16384 slots）自动分片，数据均匀分布到多个节点，实现负载均衡，突破单机容量限制。
 
-2. **读写性能**  
+2. **读写性能**
 
 主从架构写操作集中在主节点，读操作可能因同步延迟不一致；Cluster 所有节点均可读写，请求智能分配，避免单节点过载，提升高并发场景下的吞吐量。
 
-3. **高可用性**  
+3. **高可用性**
 
 主从架构依赖哨兵或人工切换，故障恢复慢；Cluster 内置自动故障转移，节点故障时秒级迁移数据槽（slot），确保服务无中断。
 
-4. **弹性扩展**  
+4. **弹性扩展**
 
 主从架构扩容需停机或复杂操作；Cluster 支持在线横向扩展，通过迁移数据槽平滑增删节点，适应业务动态增长。
 
 总结：Redis Cluster 通过分布式架构天然解决主从的性能、可用性和扩展性瓶颈，更适合大规模高并发场景。
 
-**回答** 
+**回答**
 
 Redis Cluster相比主从模式的核心优势在于：1) **数据分片**：通过16384个哈希槽自动分散数据，避免单机瓶颈；2) **读写性能**：所有节点均可读写，智能分配请求提升并发能力；3) **高可用**：内置自动故障转移，节点宕机时秒级切换；4) **弹性扩展**：支持在线增删节点，通过槽迁移实现平滑扩容。主从架构存在单点性能瓶颈、同步延迟、依赖哨兵切换和扩容复杂等问题，而Cluster的分布式设计天然解决了这些痛点，特别适合大规模高并发场景。
 
@@ -2705,7 +2699,7 @@ Cluster的主节点选举，其实就是问当主节点出问题，Cluster是怎
 
 自此一个新的主节点就重新选举出来了
 
-**回答** 
+**回答**
 
 当Redis Cluster主节点宕机时，故障转移流程如下：从节点发现主节点FAIL后发起选举，向其他主节点拉票；获得多数主节点投票后即选举成功。新主节点会接管原主节点的所有负责的槽位，更新集群状态为上线，并向全网广播PONG消息通知变更。整个过程确保槽位分配一致，集群快速恢复可用。故障转移完全自动，无需人工干预，保证服务高可用。
 
@@ -2765,7 +2759,7 @@ Redis Cluster 扩容、缩容的本质其实是 slot 的迁移。在 `slot` 迁�
 - 源节点将指定的键值对逐个发送给目标节点。
 - 目标节点接收到数据后，将其写入本地存储。
 
-**回答** 
+**回答**
 
 新节点加入Redis Cluster时，首先通过CLUSTER MEET命令加入集群，Gossip协议会同步集群状态。数据迁移通过以下步骤完成：1) 新节点被分配部分哈希槽；2) 源节点和目标节点建立迁移通道；3) 目标节点发送MIGRATE命令请求迁移指定槽位数据；4) 源节点逐个键值迁移，目标节点接收并存储；5) 迁移完成后更新集群配置，广播新槽位分配。整个过程保证数据一致性，服务不中断，支持在线扩容。
 
