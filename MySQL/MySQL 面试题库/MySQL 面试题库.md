@@ -50,7 +50,7 @@ count（）函数是返回表中某个列的非 NULL 值的数量。
 
 **推荐学习**
 
-[MySQL JOIN](https://www.sjkjc.com/mysql/join/) 
+[MySQL JOIN](https://www.sjkjc.com/mysql/join/)
 
 ## 3. 外连接时 on 和 where 过滤条件区别？
 
@@ -867,7 +867,7 @@ MySQL 数据页的大小是 16 KB，去掉一些头信息，大概有 15KB 是�
 - 在索引页中主要记录的是主键与页号，假设是主键 id 类型是 bigint，那就是 8 字节， 页号固定为 4 字节， 那么索引页中的一条数据也就是 12byte。那么一个索引页可以存储 15*1024/12≈1280 个页号。
 - 叶子节点中存放的是真正的行数据，这个影响的因素就会多很多，比如字字段的类型，字段的数量。每行数据占用空间越大，页中所放的行数量就会越少，假设按一条行数据 1KB 来算，那一页就能存下 15 条，15KB/1Kb = 15
 
-根据的公式，$$Total = x^{(z-1) } * y$$，已知 x=1280，y=15，假设 B+ 树是三层，那就是 z = 3，Total = （1280 ^2） *15 = 24576000 （约 2.45kw）
+根据的公式，Total=x(z−1)∗y，已知 x=1280，y=15，假设 B+ 树是三层，那就是 z = 3，Total = （1280 ^2） *15 = 24576000 （约 2.45kw）
 
 **推荐学习**
 
@@ -1714,7 +1714,7 @@ MySQL 事务有 ACID 四大特性，分别是原子性、一致性、隔离性�
 
 **回答**
 
-事务的原子性是通过 undo log 实现的，在事务还没提交前，历史数据会记录在 undo log 中，如果事务执行过程中，出现了错误或者用户执行了 ROLLBACK 语句，MySQL 可以利用 undo log 中的历史数据，将数据恢复到事务开始之前的状态，从而保证了事务的原子性。 
+事务的原子性是通过 undo log 实现的，在事务还没提交前，历史数据会记录在 undo log 中，如果事务执行过程中，出现了错误或者用户执行了 ROLLBACK 语句，MySQL 可以利用 undo log 中的历史数据，将数据恢复到事务开始之前的状态，从而保证了事务的原子性。
 
 **推荐学习**
 
@@ -1792,7 +1792,7 @@ MySQL 默认隔离级别是可重复读，除此之外， MySQL 还支持读未�
 
 串行化隔离级别所有 SQL 都会加行级锁，包括普通的 select 查询，都会加 S 型的 next-key 锁。其他事务就没办法对这些已经加锁的记录进行增删改操作了，从而避免了脏读、不可重复读和幻读现象，性能是隔离级别中最差的，没有 MVCC 机制，读写操作没办法并发。
 
-**推荐学习** 
+**推荐学习**
 [【mysql】串行化隔离级别](https://blog.51cto.com/u_15873544/5844180)
 
 ## 69. 脏读和幻读有什么区别？
@@ -1832,7 +1832,7 @@ select 查询是通过 <span style="color: inherit; background-color: rgba(255,2
 
 [事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
 
-## 71. 介绍一下 MVCC 
+## 71. 介绍一下 MVCC
 
 **分析**
 
@@ -1842,7 +1842,7 @@ select 查询是通过 <span style="color: inherit; background-color: rgba(255,2
 
 **回答**
 
-MVCC 是多版本并发控制，是通过记录历史版本数据，解决读写并发冲突问题，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">避免了读数据时加锁</span>，提高了事务的并发性能。 
+MVCC 是多版本并发控制，是通过记录历史版本数据，解决读写并发冲突问题，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">避免了读数据时加锁</span>，提高了事务的并发性能。
 
 MySQL 将<span style="color: inherit; background-color: rgba(255,246,122,0.8)">历史数据存储在 undo log 中</span>，结构逻辑上类似一个链表，MySQL 数据行上有<span style="color: inherit; background-color: rgba(255,246,122,0.8)">两个隐藏列，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">一个是事务 ID</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，一个就是</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">指向 undo log 的指针</span>。
 
@@ -2787,7 +2787,7 @@ using where 表示 MySQL 的存储引擎返回给 server 层的数据并不一�
 
 **分析**
 
- 常见 SQL 优化的方法。
+常见 SQL 优化的方法。
 
 - 优化数据访问：limit 子句缩减数据行数、避免 select *
 - 拆分查询：分而治之的思想，将一个大查询拆分多个小查询，每个小查询只返回一部分查询结果。、
@@ -2807,7 +2807,7 @@ using where 表示 MySQL 的存储引擎返回给 server 层的数据并不一�
 
 **推荐学习**
 
-[ MySQL夜市12月 23 日（SQL优化）](https://ls8sck0zrg.feishu.cn/wiki/PrewwWYZuim5fmku88jcNFOTnyh) 
+[ MySQL夜市12月 23 日（SQL优化）](https://ls8sck0zrg.feishu.cn/wiki/PrewwWYZuim5fmku88jcNFOTnyh)
 
 [SQL 优化：如何发现 SQL 中的问题？](https://leeshengis.com/archives/674168)
 
@@ -3144,7 +3144,7 @@ MySQL 主从复制没有实现发现主服务器宕机和处理故障迁移的�
 
 **分析**
 
-分库分表使用的场景不一样： 
+分库分表使用的场景不一样：
 
 - 分表是因为数据量比较大，导致事务执行缓慢；
 - 分库是因为单库的性能无法满足要求。
@@ -3153,7 +3153,7 @@ MySQL 主从复制没有实现发现主服务器宕机和处理故障迁移的�
 
 分库分表的意思<span style="color: inherit; background-color: rgba(255,246,122,0.8)">把原本存储于单个数据库上的数据拆分到多个数据库</span>，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">把原来存储在单张数据表的数据拆分到多张数据表中</span>，实现数据切分。
 
-分库分表使用的场景不一样： 
+分库分表使用的场景不一样：
 
 - 当<span style="color: inherit; background-color: rgba(255,246,122,0.8)">单张数据表的数据量太大</span>的时候，经验值是 500W 以上的数据量，就会影响了事务的执行效率，这时候就要考虑<span style="color: inherit; background-color: rgba(255,246,122,0.8)">分表</span>了，通过减少每次查询数据总量来解决数据查询缓慢的问题。
 - 当<span style="color: inherit; background-color: rgba(255,246,122,0.8)">单台 MySQL 扛不住高并发流量</span>的时候，就要考虑<span style="color: inherit; background-color: rgba(255,246,122,0.8)">分库</span>了，把并发请求分散到多台 MySQL 实例中。
@@ -3177,13 +3177,13 @@ MySQL 主从复制没有实现发现主服务器宕机和处理故障迁移的�
   - 资料补充学习：[Leaf——美团点评分布式 ID 生成系统](https://tech.meituan.com/2017/04/21/mt-leaf.html)、[存储拆分后，如何解决唯一主键问题？.md](https://learn.lianglianglee.com/专栏/分布式技术原理与实战45讲-完/25%20存储拆分后，如何解决唯一主键问题？.md)
 - 跨库跨表关联查询问题，解决方式：
   - 冗余额外字段避免跨库关联，或者交给数据库分库分表中间件来实现
-  - 将数据全量存储到 ES 中去，通过 ES 进行查询（如果简历上写用过 ES，可能会问 mysql 的数据是怎么同步到 es 的：[MySQL 数据同步 ES 的四种方法！你能想到几种？](https://www.51cto.com/article/744759.html)) 
+  - 将数据全量存储到 ES 中去，通过 ES 进行查询（如果简历上写用过 ES，可能会问 mysql 的数据是怎么同步到 es 的：[MySQL 数据同步 ES 的四种方法！你能想到几种？](https://www.51cto.com/article/744759.html))
 - 跨库跨表的排序问题，解决方式：
   - 业务代码或者数据库分库分表中间件分别查询每个子表中的数据，然后汇总进行排序。
-  - 将数据全量存储到 ES 中去，通过 ES 进行查询（如果简历上写用过 ES，可能会问 mysql 的数据是怎么同步到 es 的：[MySQL 数据同步 ES 的四种方法！你能想到几种？](https://www.51cto.com/article/744759.html)) 
+  - 将数据全量存储到 ES 中去，通过 ES 进行查询（如果简历上写用过 ES，可能会问 mysql 的数据是怎么同步到 es 的：[MySQL 数据同步 ES 的四种方法！你能想到几种？](https://www.51cto.com/article/744759.html))
 - 跨库跨表 COUNT 查询的问题，解决方式：
   - 将计数的数据单独存储在一张表里
-  - 将聚合查询的数据同步到 ES 中，交给 ES 进行查询（如果简历上写用过 ES，可能会问 mysql 的数据是怎么同步到 es 的：[MySQL 数据同步 ES 的四种方法！你能想到几种？](https://www.51cto.com/article/744759.html)) 
+  - 将聚合查询的数据同步到 ES 中，交给 ES 进行查询（如果简历上写用过 ES，可能会问 mysql 的数据是怎么同步到 es 的：[MySQL 数据同步 ES 的四种方法！你能想到几种？](https://www.51cto.com/article/744759.html))
 
 **回答**
 
