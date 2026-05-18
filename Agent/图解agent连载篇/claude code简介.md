@@ -1,19 +1,4 @@
----
-title: "面试官：“简历写着用过 Claude Code，那源码看过吗？”，我怼回去：“没看过，又能怎？”"
-author: "小林coding"
-site: "Weixin Official Accounts Platform"
-source: "https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247556000&idx=1&sn=01e3a55e22467c677af3e75f9a6d7c62&chksm=f98d5f0acefad61c6ea9c227ebbc65356eb14007cb66d09ac40e50a5a7538446060c61e5fefa&scene=178&cur_album_id=4404340926102421504&search_click_id="
-domain: "mp.weixin.qq.com"
-word_count: 15398
----
 
-小林coding 小林coding
-
-在小说阅读器读本章
-
-去阅读
-
-大家好，我是小林。
 
 Claude Code 源码泄漏这个瓜，大家都吃了吧？
 
@@ -130,8 +115,8 @@ Claude Code 没有采用 ReAct 的 Thought-Action-Observation 三步循环，而
 
 模型在内部完成推理（通过 Extended Thinking，这是 Claude Opus 的一个能力，模型在生成回复前会在内部进行一段不可见的深度推理，不占用上下文空间），然后直接返回两种结果之一：
 
-- `**tool_use**` ：「我要用某个工具」，应用层执行工具，把结果拼入消息列表，继续循环
-- `**end_turn**` ：「我说完了」，跳出循环，把最终结果返回给用户
+- `tool_use` ：「我要用某个工具」，应用层执行工具，把结果拼入消息列表，继续循环
+- `end_turn` ：「我说完了」，跳出循环，把最终结果返回给用户
 ![](https://mmbiz.qpic.cn/sz_mmbiz_png/ysyAxM1rgX2CNJRHuj7ZLFCVXaJpWEV654PCiaFMVwSeSlwnf6eaFGlY3au0SFbk5otHiaUC8K5trmWERRjwlB2lIT8VQ9ibV2cuVWlTxkfbFQ/640?wx_fmt=png&from=appmsg)
 
 这个设计的核心哲学是： **信任模型的推理能力，保持应用层框架尽可能简单** 。
@@ -977,53 +962,3 @@ export const POST_COMPACT_SKILLS_TOKEN_BUDGET = 25_000
 第 2 层 Snip 会告诉第 5 层「我已经释放了多少 Token」，避免重复压缩。第 4 层 Context Collapse 在第 5 层之前运行，如果它够用了，第 5 层就不触发。
 
 每一层都在为下一层「减负」。
-
-## 写在最后
-
-说真的，啃完这 51 万行源码，我整个人是有点懵的。
-
-Claude Code 源码里有太多优秀的 Agent 技术落地方案。
-
-比如压缩上下文要分五步走、记忆要分四种类型存、System Prompt 设计……
-
-每一件事单拿出来都算不上什么黑科技，但全串在一起，就是一套能把一匹野马驯成耕牛的缰绳系统。
-
-这给我一个很大的启发：做 Agent，别老盯着模型发呆。模型是发动机，但一辆车能不能安全上路，靠的是刹车、方向盘、安全带。这些「不起眼」的东西，才是真正决定成败的。
-
-最后调侃一句，Claude Code 源码泄漏这波操作，无疑将极大地缩短国内外 AI Agent 的信息差，全面利好国产 Agent 的爆发式发展！
-
-好了，今天就聊到这。如果觉得有收获，别忘了点赞转发，这对小林真的很重要！
-
----
-
-👉🏻 完整源码我存了一份，想要获取完整Claude Code源码的同学可以点我头像，私信「cc」获取，手慢无！
-
-![](https://mmbiz.qpic.cn/mmbiz_png/ysyAxM1rgX1PzxNz7jfdU6nAkuJF9qRtaG6wicRdsicR0xb07xDoFDnhb5APldgBUFYL4y6E9ED5oTfSL6LBicvVEfiaCrnLef1QiaTOVvluP8bY/640?wx_fmt=png&from=appmsg)
-
-💪面试突击资源推荐：  
-✅小林图解网站： [xiaolincoding.com](https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247539587&idx=1&sn=aeba78d225c15a25cb00a7da6b79a201&scene=21#wechat_redirect)
-
-✅简历制作网站： [jianli.xiaolinnote.com](https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247554599&idx=1&sn=56ed604fbc6d33cf2398624d2efa64f3&scene=21#wechat_redirect)
-
-✅资料获取： [图解系列+面试题PDF下载](https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247555389&idx=1&sn=167c9f14db36c13aa3e9bfa92ce82322&scene=21#wechat_redirect)
-
-✅刷题闯关+模拟面试： 牛面Offer小程序
-
-✅后端训练营： [Java/Go 后端训练营](https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247553487&idx=2&sn=dbb10ac564a5c9c7abcfcfc845ed37fe&scene=21&token=1176637830&lang=zh_CN#wechat_redirect)  
-✅大模型训练营： [转行去做大模型开发了](https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247554501&idx=2&sn=85911a9a90cb323d397cf1ca65364d58&scene=21#wechat_redirect)  
-✅做项目： [AI Agent 项目](https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247554902&idx=2&sn=4a4deb235ad2d6eeae2ff929b5e197a3&scene=21#wechat_redirect)
-
-Read more
-
-继续滑动看下一个
-
-小林coding
-
-向上滑动看下一个
-
-Got It
-
-Scan with Weixin to  
-use this Mini Program
-
-: ， ， ， ， ， ， ， ， ， ， ， ，. Video Mini Program Like ，轻点两下取消赞 Wow ，轻点两下取消在看
