@@ -139,7 +139,7 @@ if msg.finish_reason == "tool_calls":  # 模型要调工具，还没给最终答
 
 ## 📝 详细解析
 
-### 先建立一个直觉：内嵌 vs 独立
+### function call是内嵌的，MCP是独立的
 
 Function Calling 的工具是「内嵌」在应用代码里的，工具定义（schema）和调用逻辑都直接写在你的项目代码中，工具和应用绑在一起，应用换了就要重写一遍。
 
