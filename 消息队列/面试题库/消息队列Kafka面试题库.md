@@ -9,8 +9,6 @@
 - 异步处理：通过异步处理机制，可以把一个消息放入队列中，但不立即处理它，在需要的时候再进行处理
 - 消息分发：比如一条消息需要传递给多个服务，这时候就可以用Kafka进行分发
 
-  
-
 ## 1.2 什么情况下需要解耦？
 
 比如发送短信场景，模块A发送消息给B，模块B发送短信给客户，A不需要得到回应，对于A而言只需要触达B就行了，这时候就可以引入消息队列，A将消息投递到了消息队列，B自己去处理，A不用再关心。这样可以收获更强的稳定性以及接口性能。
@@ -23,7 +21,7 @@
 
 比如信息更新场景，某个用户信息更新了，而B、C、D三个模块都需要缓存这个信息，那么用户信息更新之后就可以发一条信息到消息队列，B、C、D只要订阅了相关主题，就都可以获得这条信息并做对应的缓存更新。
 
-## 1.5 在项目开发中，你会怎么选择消息队列？
+## 1.5 怎么选择消息队列？
 
 **分析**
 
@@ -80,65 +78,11 @@ Kafka优点非常多，我认为最核心的是高吞吐、高可靠、天然支
 
 ## 2.1 Kafka的大概框架是怎么样的
 
-**分析**
-
-基本问题，考察你对Kafka的架构有没有基础了解。
-
-建议：分层次回答。
-
-**回答**
-
 我们可以先把Kafka宏观看作三层：Producer（生产者），Server（中转者），Consumer（消费者），生产者发送消息，服务端负责存储消息，消费者负责拉取消息。其中服务端其实就是由多个Broker节点组成，而我们平常说的主题就是在Broker节点上，当然，Topic是个逻辑概念，实际物理存储形式是主题分片，也就是Partition。
-
-> 如果对Zookeeper了解并且不怕追问也可以提一嘴一些管理信息是必入Topic/Broker的信息是放Zookeeper的，同时它还帮忙起到选主的作用
-
-**参考**
-
-[ 把控全局，掌握整体架构](https://ls8sck0zrg.feishu.cn/wiki/MHsRwoRnki1kXRkIF0GcM6MCn7e)
 
 ## 2.2 如何获取topic主题的列表
 
-**分析**
-
-Kafka是提供了获取主题列表的接口的，如果是使用自带工具，可以用这个命令获取：./kafka-topics.sh --list --bootstrap-server localhost:9092
-
-同样的，因为接口支持了，各个语言的客户端当然也可以获取。
-
-Java和Golang都是用AdminClient获取，Java例子：
-
-```java
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.ListTopicsOptions;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ExecutionException;
-
-public class KafkaTopicLister {
-
-    public static void main(String[] args) {
-        // Kafka broker 地址
-        String brokerAddress = "localhost:9092";
-
-        // 配置 KafkaAdminClient
-        Properties properties = new Properties();
-        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress);
-
-        try (AdminClient adminClient = AdminClient.create(properties)) {
-            // 获取主题列表
-            ListTopicsOptions options = new ListTopicsOptions();
-            options.listInternal(false); // 是否列出内部主题
-            adminClient.listTopics(options).names().get().forEach(System.out::println);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-Golang例子：
+Kafka是提供了获取主题列表的接口的，[可以使用kafka-topics.sh](http://xn--kafka-topics-h86sm1e2w3acn9j.sh) 这个工具获取，如果要在我们业务服务来获取的话，那主流语言都是支持获取的，比如Java和Golang，都可以用KafkaAdminClient直接调用接口来获取。
 
 ```go
 package main
@@ -173,23 +117,8 @@ func main() {
 }
 ```
 
-**回答**
 
-Kafka是提供了获取主题列表的接口的，可以使用kafka-topics.sh 这个工具获取，如果要在我们业务服务来获取的话，那主流语言都是支持获取的，比如Java和Golang，都可以用KafkaAdminClient直接调用接口来获取。
-
-**参考**
-
-[ 开门见山，从Topic开始讲起](https://ls8sck0zrg.feishu.cn/wiki/AUN5wnNzqixiz5kuUaRcuEnfnme)
-
-## 2.3 有了Topic，为何还要Partition / Kafka 为什么要把消息分区
-
-**分析**
-
-Kafka消息会分发到不同Topic，这样既解决了消息混乱的问题，又顺带将流量进行了分摊，减少单个业务写入压力。
-
-但是，不同业务对应的数据量级是不一样的，就算按业务分了Topic，但一个Topic可能信息还是会非常多，我们需要进一步分而治之，所以Topic下面还划分了Partition来实际存储，每个Topic都可以有多个Partition。
-
-**回答**
+## 2.3 有了Topic，为何还要Partition
 
 **示例1（简洁回答）:**
 
@@ -201,61 +130,30 @@ Kafka消息会分发到不同Topic，这样既解决了消息混乱的问题，�
 - 发送消息时可以根据分区分配的原则落在不同的Kafka服务器节点上，提升了并发写消息的性能，消费消息的时候又和消费者绑定了关系，可以从不同节点的不同分区消费消息，提高了读消息的能力。
 - 另外一个就是分区又引入了副本，冗余的副本保证了Kafka的高可用和高持久性。
 
-**参考**
-
-[ 开门见山，从Topic开始讲起](https://ls8sck0zrg.feishu.cn/wiki/AUN5wnNzqixiz5kuUaRcuEnfnme?fromScene=spaceOverview)
-
-[ 分而治之，主题分片Partition](https://ls8sck0zrg.feishu.cn/wiki/WswtwhbKhi7oKyk2AtncQMnYnwh?fromScene=spaceOverview)
+  
 
 ## 2.4 Partition是逻辑概念还是物理概念？
-
-**分析**
-
-逻辑概念就是说是一个抽象概念，没有实际体现在物理存储上，物理概念则是相反的，Topic只是逻辑概念，Partition则是一个实实在在的物理存储概念。
 
 **回答**
 
 Partition是物理概念，因为数据实实在在是写入到Partition文件里去的。而因为设计了Partition的存在，Topic就只是一个逻辑概念了。
 
-**参考**
-
-[ 开门见山，从Topic开始讲起](https://ls8sck0zrg.feishu.cn/wiki/AUN5wnNzqixiz5kuUaRcuEnfnme?fromScene=spaceOverview)
-
-[ 分而治之，主题分片Partition](https://ls8sck0zrg.feishu.cn/wiki/WswtwhbKhi7oKyk2AtncQMnYnwh?fromScene=spaceOverview)
-
 ## 2.5 介绍一下分区的分配策略
-
-**分析**
-
-我们可以关注消费端partition.assignment.strategy这个配置，它有如下几种选择：
-
-1. Range Assignor：基于范围的分配策略，将分区按照范围分配给消费者。
-2. RoundRobin Assignor：基于轮询的分配策略，分区均匀地分配给消费者。
-3. Sticky Assignor：优先保持当前的分配状态，并尽量减少在再平衡过程中的分区移动。
-4. CooperativeStickyAssignor：和Sticky Assignor的策略是一样，区别在于未受变动的消费者可以继续消费主题
-
-**回答**
 
 1. Range Assignor：基于范围的分配策略，将分区按照范围分配给消费者。
 2. RoundRobin Assignor：基于轮询的分配策略，分区均匀地分配给消费者。
 3. Sticky Assignor：优先保持当前的分配状态，并尽量减少在再平衡过程中的分区移动。
 4. CooperativeStickyAssignor：和Sticky Assignor的策略是基本一样的，区别在于该协议将原来的一次大的全部分区重平衡，改成多次小规模分区重平衡。简单理解就是渐进式重平衡。
 
-## 2.6 Kafka 创建 Topic 时如何将分区放置到不同的 Broker 中
-
-**分析**
+## 2.6 创建 Topic 时如何将分区放置到不同的 Broker 中
 
 Partition是存放在Broker节点上的，如果单个Broker，很好理解，Partition都在Broker上。
 
 如果是多个Broker，则Partition会分布到不同的Broker上，简单来说，一个Partition只对应一个Broker，一个Broker可以存放多个Partition。
 
-![](images/消息队列Kafka面试题库-image.png)
+具体而言某个Topic的Partition分配的规则如下
 
-回顾了这个知识之后，那么剩下的就是直接讲述分配规则了。
-
-**回答**
-
-具体而言某个Topic的Partition分配的规则如下，我们以2个Partition的TopicB举例：
+我们以2个Partition的TopicB举例：
 
 1.先随机选取一个Broker，比如Broker11
 
@@ -265,83 +163,31 @@ Partition是存放在Broker节点上的，如果单个Broker，很好理解，Pa
 
 总结一下规则就是kafka是先随机挑选一个broker放置分区0，然后再按顺序放置其他分区
 
-**参考**
-
-[ 坚如磐石，服务器节点Broker](https://ls8sck0zrg.feishu.cn/wiki/UGREw1wsYiJxAAkKMTvcAxWxnEc)
-
 ## 2.7 消息存入哪个Partition的规则 / Kafka 中分区分配的原则
-
-**分析**
-
-可以说是Partition常识性问题，把规则说清楚就好了，有疑问的同学看看下面参考资料。
-
-**回答**
 
 一个主题的数据分散成了多个分片，我们就需要有一种方式来决定消息是写入哪个分片，规则如下：
 
-1.如果指定了Partition，那么就是发送到特定的Partition，但是一般情况下，业务其实不需要感知Partition，除非有特殊理由，否则不建议直接指定要发送到哪个Partition；
-
-2.如果没有指定Partition，但是指定了一个Key，那么就是根据Key的Hash对Partition数目取模来决定是哪个Partition，也就是说只要发送时指定了相同的Key，那么相关消息一定会发送到相同的Partition。
-
-3.如果没有指定Partition，也没有指定Key，那么就采取轮询调度算法，也就是每一次把来自用户的请求轮流分配给Partition。
-
-**参考**
-
-[ 分而治之，主题分片Partition](https://ls8sck0zrg.feishu.cn/wiki/WswtwhbKhi7oKyk2AtncQMnYnwh)
+1. 如果指定了Partition，那么就是发送到特定的Partition，但是一般情况下，业务其实不需要感知Partition，除非有特殊理由，否则不建议直接指定要发送到哪个Partition；
+2. 如果没有指定Partition，但是指定了一个Key，那么就是根据Key的Hash对Partition数目取模来决定是哪个Partition，也就是说只要发送时指定了相同的Key，那么相关消息一定会发送到相同的Partition。
+3. 如果没有指定Partition，也没有指定Key，那么就采取轮询调度算法，也就是每一次把来自用户的请求轮流分配给Partition。
 
 ## 2.8 Kafka服务端可接收的消息最大默认多少字节，如何修改
 
-**分析**
-
-知道有个配置可以修改，并且记住默认配置即可。记不住英文名就说消息最大字节数这个配置。
-
-**回答**
-
 Kafka可以接收的最大消息默认为1MB，如果想调整它的大小，可在Broker中修改配置参数：message.max.bytes的值。
 
-**参考**
-
-官方文档[Apache Kafka](https://kafka.apache.org/documentation/)搜索message.max.bytes就能看到
-
-## 2.9 Kafka 的Topic中 Partition 数据是怎么存储到磁盘的
-
-**分析**
-
-考察Partition存储相关知识，没有太多技巧，直接阐述即可
-
-**回答**
+## 2.9 Topic中 Partition 数据是怎么存储到磁盘的
 
 Topic 中的多个 Partition 以文件夹的形式保存到 Broker，每个分区序号从0递增，且消息有序。Partition 文件下有多个Segment（xxx.index，xxx.log），Segment文件的大小是可以进行配置的。默认为1GB。如果大小大于1GB时，会滚动一个新的Segment并且以上一个Segment最后一条消息的偏移量命名。
 
-**参考**
-
-[ 高性能秘诀-多层次](https://ls8sck0zrg.feishu.cn/wiki/L3JgwhGfRiQUaxkRUUhcmxU0nDe?fromScene=spaceOverview)
-
-## 2.10 Kafka如何清理数据/Kafka数据越积越多怎么办
-
-**分析**
-
-对Kafka的原理进行一些考察，无论是任何组件，其实都会遇到控制存储空间的问题，即数据满了怎么清理，像Redis是有对应的内存淘汰算法，而Kafka也有特定的保留策略。
-
-**回答**
+## 2.10 Kafka数据越积越多怎么办
 
 可以用基于时间的保留策略，这种策略允许用户指定消息的保留时间（如 7 天）。超过指定时间的消息将被自动删除。
 
 也可以用基于大小的保留策略，Kafka 允许用户指定日志的最大尺寸。一旦日志的大小超过了配置的值，Kafka 将开始删除最早的消息。
 
-**参考**
-
-[ Kafka消息保留策略](https://ls8sck0zrg.feishu.cn/wiki/CFaSwBux8imVlekeST5cnEe7nhe?fromScene=spaceOverview)
-
 # 3.生产者
 
 ## 3.1 介绍一下生产消息的流程
-
-**分析**
-
-考察生产者基础，回答要点：1.生产者是在业务服务器那一侧 2.讲述生产消息的流程。
-
-**回答**
 
 生产消息是发生在业务服务器那一侧，看似简单，其实也分了好几步来做。
 
@@ -351,140 +197,38 @@ Topic 中的多个 Partition 以文件夹的形式保存到 Broker，每个分�
 
 第三步是进行分区选择，即计算要发到哪个Partition，发送消息到该Partition对应的Broker
 
-**参考**
-
-[ 辛勤创造，生产者Producer](https://ls8sck0zrg.feishu.cn/wiki/OVE3wagUaii4A6k4X7Pcyw0Ynfb?fromScene=spaceOverview)
-
 ## 3.2 讲一讲kafka的ack的三种机制
-
-**分析**
-
-|acks |行为 |可靠 |性能 |
-|---|---|---|---|
-|0 |生产者在发送消息后不会等待来自服务器的确认，所以生产者实际是不知道消息是否成功，也就无从去重试，生产可靠性是最低的 |不可靠 |最高 |
-|1 |生产者会在消息发送后等待主节点的确认，但不会等待所有副本的确认 |相对可靠 |还是比较高的 |
-|all或-1 |只有在所有副本都成功写入消息后，生产者才会收到确认。这确保了消息的可靠性，但延迟显然是最高的 |可靠 |会低一些<br /> |
-
-文字看着策略可能会比较枯燥，我们可以进一步结合这个图来理解（其中实线箭头表示需要操作完成，虚线箭头表示不用等待操作完成）：
-
-![](images/消息队列Kafka面试题库-image-1.png)
-
-**回答**
 
 第一种模式，ack=0，生产者在发送消息后不会等待来自服务器的确认，所以生产者实际是不知道消息是否成功，也就无从去重试，生产可靠性是最低的。
 
 第二种模式，ack=1，生产者会在消息发送后等待主节点的确认，但不会等待所有副本的确认。
 
-第三种模式，ack=all，只有在所有副本都成功写入消息后，生产者才会收到确认。这确保了消息的可靠性，但延迟显然是最高的
+第三种模式，ack=all或-1，只有在所有副本都成功写入消息后，生产者才会收到确认。这确保了消息的可靠性，但延迟显然是最高的
 
-**参考**
+## 3.3 QueueFullExpection
 
-[ 如何保证消息不丢失](https://ls8sck0zrg.feishu.cn/wiki/GnrnwtEJEiM8qqkmEOkc7arinBb)
+产生原因：生产者发送消息的速度过快，导致生产者这一侧缓冲区满了，就会抛出QueueFullExpection这个错误。
 
-## 3.3 生产过程中何时会发生QueueFullExpection以及如何处理
-
-**分析**
-
-生产者发送消息的速度过快，导致生产者这一侧缓冲区满了，就会抛出QueueFullExpection这个错误。
-
-处理方式：直接对症下药就可以，参见回答。
-
-**回答**
-
-生产者发送消息的速度过快，导致生产者这一侧缓冲区满了，我们有几条路去解决：
+处理方式：
 
 - 等待重试：当发生QueueFullException异常时，可以等待一段时间后再次尝试发送消息。在等待的过程中，可以通过调整生产者的发送速度或者增加Kafka的消息队列大小等方式来避免再次发生QueueFullException异常。
 - 增加Kafka的缓冲区大小：可以通过修改Kafka的配置文件来增加缓冲区的大小，以适应生产者发送消息的速度。
 - 限流控制：可以通过限制生产者发送消息的速度来避免QueueFullException异常的发生。
 
-**参考**
-
-[ 高性能秘诀-批量操作](https://ls8sck0zrg.feishu.cn/wiki/ZTxkwgpJ9ihXdMkHP7BcnDHSnNc)搜buffer.memory
+  
 
 ## 3.4 Kafka 生产者何时发出消息
-
-**分析**
-
-对缓冲区参数的考察，没啥讨论，直接描述即可
-
-**回答**
 
 - 累计的数据大小达到Batch大小，默认16KB
 - 缓冲区中累计的空闲等待时间间隔，默认0ms，也就是默认收到数据就发送
 
 通过增加 Batch 的大小，可以减少网络请求和磁盘I/O的频次，具体参数配置需要在效率和时效性做一个权衡。
 
-**参考**
-
-[ 高性能秘诀-批量操作](https://ls8sck0zrg.feishu.cn/wiki/ZTxkwgpJ9ihXdMkHP7BcnDHSnNc)搜buffer.memory
-
-## 3.5 生产者发送消息的模式有几种（Java）
-
-**分析**
-
-Java的SDK支持三种发送模式
-
-1.同步发送，这种方式会阻塞调用线程，直到消息发送成功或抛出异常。适用于需要确保消息发送成功后才进行后续处理的场景。这种速度会慢一些，但是可以很准确知道发送是否成功。
-
-```java
-try {
-    kafkaTemplate.send("topicName", "message").get();
-} catch (InterruptedException | ExecutionException e) {
-    e.printStackTrace();
-}
-```
-
-2.发送即忘（Fire-and-forget）**，**发送了就不管了，这种方式是最简单的发送方式。消息发送后不等待任何响应，也不处理可能的异常，示例：
-
-```java
-kafkaTemplate.send("topicName", "message");
-```
-
-3.异步发送，发送了就做其它事情去了，这种方式不会阻塞调用线程，而且可以注册回调函数来处理发送结果或异常。示例：
-
-```java
-ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send("topicName", "message");
-future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {@Overridepublic void onSuccess(SendResult<String, String> result) {
-        System.out.println("Sent message=["message + "] with offset=["result.getRecordMetadata().offset() + "]");
-    }@Overridepublic void onFailure(Throwable ex) {
-        System.out.println("Unable to send message=["          + message + "] due to : "ex.getMessage());
- }
-});
-```
-
-**回答**
-
-有三种模式，同步发送、发送即忘、异步发送。
-
-- 同步发送性能最差，但是可靠性最强。
-- 发送即忘性能最高，这种模式不需要等待 Kafka 服务器的响应，所以可靠性低，也不知道是不是发送成功了
-- 异步发送不阻塞调用线程，同时允许调用者处理发送结果或异常。适用于对消息传输可靠性有要求，同时希望保持高性能的场景。
-
-<span style="color: rgb(143,149,158); background-color: inherit">如果有参与过相关项目，可以加如下一段话，展示自己是有实际经验的</span>
-
-其中异步发送模式因为兼顾（折中）了可靠性和性能，所以是最被广泛使用的，我在实习/工作中参与的xxx项目、xxx项目，都是用的异步发送模式。
-
-**参考**
-
-[ 辛勤创造，生产者Producer](https://ls8sck0zrg.feishu.cn/wiki/OVE3wagUaii4A6k4X7Pcyw0Ynfb?fromScene=spaceOverview)
-
 # 4.消费者
 
-## 4.1 Kafka 消费者是推模式还是拉模式/Kafka 消息的消费模式
-
-**分析**
-
-Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者是发消息到Kafka的Broker来获取信息，而不是由Kafka的Broker主动推送。
-
-选择拉模式的主要原因还是为了让消费者可以按自身情况来控制消费速度，根据系统资源利用情况（如 CPU、内存等）、业务需要等因素合理拉取消息，避免因消息处理速度不合理带来的资源浪费或过载。
-
-**回答**
+## 4.1 Kafka 消息的消费模式
 
 Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自身的消费能力去消费。拉模式有个缺点是，如果Broker没有可供消费的消息，将导致Consumer不断在循环中轮询，直到新消息到达。为了避免这点，kafka消费者可以使用在消费数据时传入timeout参数，在这个时间范围内进行阻塞等待，直到有数据或超时后再返回。
-
-**参考**
-
-[ 努力承接，消费者Comsumer](https://ls8sck0zrg.feishu.cn/wiki/QTLdwzoXFiX39lkZDPhcGsUqnHe?fromScene=spaceOverview)
 
 ## 4.2 消费者故障，出现活锁问题如何解决？
 
@@ -504,17 +248,7 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 >
 > 用这个方式要注意确保已提交的 offset 不超过实际处理到的位置。 另外，你必须禁用自动提交，并只有在线程完成处理后才为记录手动提交偏移量。
 
-**参考**
-
-[ 努力承接，消费者Comsumer](https://ls8sck0zrg.feishu.cn/wiki/QTLdwzoXFiX39lkZDPhcGsUqnHe?fromScene=spaceOverview)
-
 ## 4.3 有消费者为什么还要消费者组？
-
-**分析**
-
-考察对消费者组的理解，可以用一句话笼统介绍，再列举下消费者组解决了什么问题。
-
-**回答**
 
 消费组其实就是把多个消费者组织在一起进行消费。我觉得解决了几个问题吧：
 
@@ -524,25 +258,11 @@ Kafka采用拉模式拉取消息，采用拉模式可以使每个消费者以自
 
 3.对于业务开发者而言，有了消费组，就只用关心主题维度，而不用关心分片维度，很大程度降低了理解和应用难度
 
-**参考**
-
-[ 努力承接，消费者Comsumer](https://ls8sck0zrg.feishu.cn/wiki/QTLdwzoXFiX39lkZDPhcGsUqnHe?fromScene=spaceOverview)
-
 ## 4.4 介绍一下再平衡机制
-
-**分析**
-
-首先要大体介绍一下，表示这个机制的核心目的你是知道的，其次可以介绍一下平衡策略，尽量说得随意点，不要像背书一样。
-
-**回答**
 
 消费者组再平衡是一个关键机制，用于管理和分配主题分区给消费者组中的各个消费者。再平衡过程可以确保数据负载在消费者之间均匀分布，并在消费者加入或离开时自动调整分区的分配。我记得是有几个分区策略可以选择的，
 
 分别是范围分配，轮询分配，粘性分配，合作粘性分配，其中合作粘性分配和粘性分配一样都是尽可能减少变动，不同点是合作粘性分配下，是把大的分区平衡分为多次小规模的分区平衡，以尽可能减少影响。
-
-**参考**
-
-[ 拥抱变化，消费组再平衡机制](https://ls8sck0zrg.feishu.cn/wiki/HDMvwzerfiqMZ0ktTAdcFQjnnDg?fromScene=spaceOverview)
 
 ## 4.5 Kafka什么情况下会Rebalance
 
@@ -855,112 +575,52 @@ Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者
 
 # 5.实践经验
 
-## 5.1 Kafka 中什么情况下会出现消息丢失的问题
-
-**分析**
-
-从消息流转环节分析，分别考虑生产环节、存储环节、消费环节
-
-**回答**
+## 5.1 消息丢失的原因
 
 消息生产时如果设置的acks不是全部副本，那么如果在follower副本未完成同步之前，leader副本挂掉了，消息就会丢失。存储时如果没有用多副本备份，消息也可能会丢失。最后就是消费时，如果没有确认消费成功再提交offset，而这时候消费者又挂掉了，那么消息同样会丢失。
 
-**参考**
-
-[ 如何保证消息不丢失](https://ls8sck0zrg.feishu.cn/wiki/GnrnwtEJEiM8qqkmEOkc7arinBb?fromScene=spaceOverview)
-
-## 5.2 Kafka 如何保证消息不丢失（可靠性）
-
-**分析**
-
-从消息流转环节分析，分别考虑生产环节、存储环节、消费环节来看。
-
-**回答**
-
-示例1（抓住核心总结性回答，面试官感兴趣的话会追问的）:
+## 5.2 如何保证消息不丢失
 
 首先为主题分区配置好多副本，并且设置写入acks参数为全部副本，最后就是消费时候一定要确认消费成功再提交offset，这样即使消费者挂掉了，重启之后也能拉到原来那条未成功消费的消息。
 
-如果是Java同学，也可以提一下发送消息要用带回调的方法，并且重试次数设置得大一些，比如10以上，避免瞬时抖动带来的失败。
+## 5.3 消息积压的原因
 
-**参考**
+- 消费者 在大批量计算或陷入死循环
+- 消费者被数据库、网络 I/O 或第三方接口阻塞了，无法处理消息
+- 如果消费者一切正常，那就是机器数量太少
 
-[ 如何保证消息不丢失](https://ls8sck0zrg.feishu.cn/wiki/GnrnwtEJEiM8qqkmEOkc7arinBb?fromScene=spaceOverview)
+## 5.4 如何处理消息积压
 
-## 5.3 **MQ**消息积压了怎么办
-
-**分析**
-
-三板斧：扩容、降级、排查异常
-
-**回答**
+三板斧：扩容、降级、排查异常：
 
 - 如果分区数大于消费者数量，那么通过扩容消费端的实例数来提升总体的消费能力；如果相等，那么既需要扩容消费者数量同时需要扩容分区数。
-- 如果短时间内没有足够的服务器资源进行扩容，可以考虑将系统降级，通过关闭一些不重要的分支业务，让系统还能正常运转，服务一些重要业务。
-- 还有一种不太常见的情况，你通过监控发现，无论是发送消息的速度还是消费消息的速度和原来都没什么变化，这时候你需要检查一下你的消费端，是不是消费失败导致的一条消息反复消费这种情况比较多，这种情况也会拖慢整个系统的消费速度。如果监控到消费变慢了，你需要检查你的消费实例，分析一下是什么原因导致消费变慢。优先检查一下日志是否有大量的消费错误，如果没有错误的话，可以通过打印堆栈信息，看一下你的消费线程是不是卡在什么地方不动了，比如触发了死锁或者卡在等待某些资源上了。
+- 如果短时间内没有足够的资源进行扩容，可以考虑将系统降级，通过关闭一些不重要的分支业务，让系统还能正常运转，服务一些重要业务。
+- 排查消费端，是不是消费失败导致的一条消息反复消费。优先检查一下日志是否有大量的消费错误，如果没有错误的话，可以通过打印堆栈信息，看一下你的消费线程是不是卡在什么地方不动了，比如触发了死锁或者卡在等待某些资源上了。
 
-**参考**
-
-[ 消息积压怎么办](https://ls8sck0zrg.feishu.cn/wiki/MYzZw8MtUiLJIOkS9PSc7X4Ancc?fromScene=spaceOverview)
-
-## 5.4 （幂等性）如何保证消息不重复消费
-
-**分析**
-
-**kafka出现消息重复消费的原因：**
+## 5.4 消息重复消费的原因
 
 - 消费者宕机、重启或者被强行kill进程，导致消费者消费的offset没有提交，恢复正常后可能会重复消费。
 - 由于消费者端处理业务时间长导致会话超时，那么就会触发reblance重平衡，此时可能存在消费者offset没提交，会导致重平衡后重复消费。
 
 要注意重复是不可避免的，重要的是保证不产生重复影响，即消费端需要保证幂等性。
 
-**回答**
+## 5.5 如何保证消息不重复消费
 
-消费逻辑需要是幂等的，保证不产生重复影响，实现方式很多，比如MySQL设置唯一索引、额外使用记录表来判重等方式。
+- 消费消息服务做幂等校验，比如 Redis 的set、MySQL 的主键等天然的幂等功能。这种方法最有效。
+- 开启Kafka的幂等生产者和事务型生产者，不过开启事务型生产者会增加系统的开销，需要根据实际业务决定是否开启事务型生产者。
+- 生产消息时增加消息唯一ID，将消息的标识保存到外部存储介质中，每次消费时判断是否处理过即可。
 
-**参考**
-
-[ 如何让消息不重复](https://ls8sck0zrg.feishu.cn/wiki/KrNGwaj5oi3P9vk7MxocvAWWnOO?fromScene=spaceOverview)
-
-[ 后端场景优化-接口幂等性](https://ls8sck0zrg.feishu.cn/wiki/AFiVwuCfhiT86dkG9PyclDYOn9M?fromScene=spaceOverview)
-
-## 5.5 Kafka 如何实现精准一次语义
-
-**分析**
-
-至少一次+最多一次，不重复+不丢失
-
-**回答**
+## 5.6 如何实现精准一次语义
 
 本质就是不重复+不丢失。不重复的核心是幂等消费。不丢失的核心是为主题分区配置好多副本，并且设置写入acks参数为全部副本，同时消费时候一定要确认消费成功再提交offset，这样即使消费者挂掉了，重启之后也能拉到原来那条未成功消费的消息。
 
-**参考**
-
-[ 如何保证消息不丢失](https://ls8sck0zrg.feishu.cn/wiki/GnrnwtEJEiM8qqkmEOkc7arinBb?fromScene=spaceOverview)
-
-[ 如何让消息不重复](https://ls8sck0zrg.feishu.cn/wiki/KrNGwaj5oi3P9vk7MxocvAWWnOO?fromScene=spaceOverview)
-
-## 5.6 希望进入Kafka的消息是有序的，你会怎么做？
-
-**分析**
-
-考察消息落入分片的规则，以及你会不会实际应用。可以直接回答怎么做，也可以先讲一下规则再说具体做法。
-
-**回答**
+## 5.7 如何让消息是有序
 
 Kafka的分片流入规则是这样的：
 
 如果指定了Partition，那么就是发送到特定的Partition；如果没有指定Partition，但是指定了一个Key，那么就是根据Key的Hash取模来决定是哪个Partition；如果都没有指定，就是依次轮替着写入。
 
 所以我们可以用一个能标识业务的唯一名字来当Key，比如秒杀，就叫SecKill，指定Key之后算出来一定是落在相同的Partition，也就保证了顺序。
-
-**参考**
-
-[ 开门见山，从Topic开始讲起](https://ls8sck0zrg.feishu.cn/wiki/AUN5wnNzqixiz5kuUaRcuEnfnme?fromScene=spaceOverview)
-
-[ 分而治之，主题分片Partition](https://ls8sck0zrg.feishu.cn/wiki/WswtwhbKhi7oKyk2AtncQMnYnwh?fromScene=spaceOverview)
-
-[ 如何让消息有序](https://ls8sck0zrg.feishu.cn/wiki/V3qnwiMsWi4XDtkXUVacMA7EnLc?fromScene=spaceOverview)
 
 # 6.高可用
 
