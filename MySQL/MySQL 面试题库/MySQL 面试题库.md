@@ -2581,8 +2581,6 @@ Redolog 刷盘策略主要有三种：
 
 考察  explain 执行计划输出的信息。
 
-![](images/MySQL%20面试题库-image-34.png)
-
 执行计划，参数有：
 
 - possible_keys 字段表示可能用到的索引；
@@ -2609,10 +2607,6 @@ extra 显示的结果，这里说几个重要的参考指标：
 **回答**
 
 可以通过 explain 查看 SQL 的执行计划，关注 type 字段，这个字段表明 SQL 扫描的方式，如果 type 字段不是 all 或者 index 就代表是索引扫描的方式，这种情况就代表 SQL 走了索引，并且我们还可以通过 key 字段，看这条查询用了哪个索引字段来走索引，如果 key 为 null，也代表没有走索引。
-
-**推荐学习**
-
-[查询优化的百科全书-Explain 详解](https://relph1119.github.io/mysql-learning-notes/#/mysql/15-查询优化的百科全书-Explain详解（上）)
 
 ## 106. extra 字段中的 using index 和 using where 的区别？
 
