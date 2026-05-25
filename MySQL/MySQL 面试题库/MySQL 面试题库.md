@@ -1,5 +1,3 @@
-> MySQL 系统学习指引：[ MySQL 学习指引](https://ls8sck0zrg.feishu.cn/wiki/wikcnFq6ysyuUeoKIzCQi0tNDRb)
-
 # SQL 语法
 
 ## 1. count 主键和 count 非主键结果会不同吗？
@@ -27,17 +25,12 @@ count（）函数是返回表中某个列的非 NULL 值的数量。
 
 内连接（INNER JOIN）：内连接返回两个表中匹配的行，即只返回两个表中共有的数据。
 
-![](images/MySQL%20面试题库-image.png)
-
 外连接（OUTER JOIN）：外连接则返回两个表中匹配和不匹配的行。MySQL 外连接主要有左外连接（LEFT JOIN）、右外连接（RIGHT JOIN）两种。
 
 - 左连接（LEFT JOIN）：`SELECT * FROM A LEFT JOIN B ON A.A_id = B.B_id`，将返回左表 A 中的所有行和右表 B 中与之匹配的行。如果 B 表中没有匹配的行，则 B 表相关的列使用 NULL 值填充。
 
-![](images/MySQL%20面试题库-image-1.png)
-
 - 右连接（RIGHT JOIN）：`SELECT * FROM A RIGHT JOIN B ON A.A_id = B.B_id`，将返回右表 B 中的所有行和左表 A 中与之匹配的行。如果 A 表中没有匹配的行，则 A 表相关的列使用 NULL 值填充。
 
-![](images/MySQL%20面试题库-image-2.png)
 
 **回答**
 
@@ -48,15 +41,10 @@ count（）函数是返回表中某个列的非 NULL 值的数量。
 - 左连接返回左表中的所有行和右表中匹配的行，如果右表中没有匹配的行，则用 NULL 值填充。
 - 右连接返回右表中的所有行和左表中匹配的行，如果左表中没有匹配的行，则用 NULL 值填充
 
-**推荐学习**
-
-[MySQL JOIN](https://www.sjkjc.com/mysql/join/)
 
 ## 3. 外连接时 on 和 where 过滤条件区别？
 
 **分析**
-
-![](images/MySQL%20面试题库-image-3.png)
 
 - 对于内连接（inner join）查询，`WHERE`和`ON`中的过滤条件等效；
 - 对于外连接（outer join）查询，`ON`中的过滤条件在连接时进行，`WHERE`中的过滤条件在连接操作之后执行。
@@ -65,12 +53,9 @@ count（）函数是返回表中某个列的非 NULL 值的数量。
 
 在外连接中，使用 on 和 where 过滤条件的区别在于：
 
-- on 用于指定连接两个表的条件，通常用于指定两个表之间的关联条件，即连接条件，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">在连接时进行过滤</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">。</span>
-- where 用于指定过滤条件，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">对连接后的结果集进行进一步筛选</span>。
+- on 用于指定连接两个表的条件，通常用于指定两个表之间的关联条件，即连接条件， 在连接时进行过滤。
+- where 用于指定过滤条件， 对连接后的结果集进行进一步筛选。
 
-**推荐学习**
-
-[SQL 面试题：WHERE 和 HAVING、ON 有什么区别？](https://tonydong.blog.csdn.net/article/details/105380420)
 
 ## 4. having 与 where 的区别？
 
@@ -85,9 +70,6 @@ count（）函数是返回表中某个列的非 NULL 值的数量。
 
 在 GROUP BY 分组查询过程中，Where 是工作在 GROUP BY 之前，Where 是对分组之前的数据进行筛选，无法使用聚合函数，Having 是工作在 GROUP BY 之后，Having 主要对分组之后的数据进行筛选，可以使用聚合函数。
 
-**推荐学习**
-
-[MySQL GROUP BY](https://www.sjkjc.com/mysql/group-by/)
 
 ## 5. EXISTS 和 IN 的区别是什么？
 
@@ -165,9 +147,6 @@ return resultSet;
   - 如果查询的两个表大小相当，那么用 in 和 exists 性能差别不大。
   - 如果查询的两个表中一个是小表，一个是大表，IN 适合于外表大而内表小的情况，EXISTS 适合于外表小而内表大的情况。
 
-**推荐学习**
-
-[SQL 查询中 IN 与 EXISTS 的区别及性能分析](https://mp.weixin.qq.com/s/c7ocMxX1TFqe_qbzl7SnIg)
 
 ## 6. mysql 的约束有哪些？
 
@@ -184,7 +163,7 @@ return resultSet;
 - **默认约束（DEFAULT）**：表明了字段的默认值。如果在插入数据的时候，这个字段没有取值，就设置为默认值。比如我们将身高 height 字段的取值默认设置为 0.00，即 DEFAULT 0.00。
 - **检查约束（CHECK）**：用来检查特定字段取值范围的有效性，CHECK 约束的结果不能为 FALSE，比如我们可以对身高 height 的数值进行 CHECK 约束，必须≥0，且＜3，即 CHECK（height>=0 AND height<3）。
 
-注意：**MySQL 只支持前 5 钟约束，不支持检查约束**，MySQL 默默地忽略`CHECK`约束并且不执行数据验证， 要`CHECK`在 MySQL 中实现约束，可以使用[触发器](https://www.begtut.com/mysql/mysql-triggers.html)或[视图](https://www.begtut.com/mysql/mysql-views-tutorial.html)。
+注意：**MySQL 只支持前 5 钟约束，不支持检查约束**，MySQL 默默地忽略`CHECK`约束并且不执行数据验证， 要`CHECK`在 MySQL 中实现约束，可以使用[触发器]或[视图]
 
 **回答**
 
@@ -198,15 +177,10 @@ MySQL 支持的这些约束的作用如下：
 - 非空约束的作用是保证字段不能为 NULL
 - 默认约束的作用是给字段设置默认值，如果插入数据的时候，这个字段没有取值的话，就会用默认值
 
-**推荐学习**
-
-[ MySQL 学习指引](https://ls8sck0zrg.feishu.cn/wiki/wikcnFq6ysyuUeoKIzCQi0tNDRb#part-GMMMdEuE7oHsyvxir5jcDsv2n7e)（SQL 学习指引-六大约束）
 
 ## 7. delete、drop、truncate 有什么区别？
 
 **分析**
-
-![](images/MySQL%20面试题库-image-4.png)
 
 - delete 用来删除记录。该命令其实只是把「记录的位置」或者「数据页」标记为了“可复用”，但磁盘文件的大小是不会变的。也就是说，通过 delete 命令是不能回收表空间的。但是，delete 全表是很慢的，需要生成回滚日志、写 redo、写 binlog。所以，从性能角度考虑，你应该优先考虑使用 truncate table 或者 drop table 命令。
 - drop  可以用来删除表和表数据。每个 InnoDB 表数据存储在一个以 。ibd 为后缀的文件中，那么使用 drop table 命令，系统就会直接删除这个文件，从而回收表空间大小。如果表的数据放在系统共享表空间，即使 drop table 命令，空间也是不会回收的。
@@ -220,11 +194,6 @@ drop 是删除表结构和表中所有的数据，truncate 是只删除表中所
 
 从删除表的性能来看，drop>truncate>delete。
 
-**推荐学习**
-
-[Delete、Drop、Truncate 有什么区别？你知道吗？](https://www.51cto.com/article/711009.html)
-
-[mysql 删除那点事](https://tech.qimao.com/mysqlshan-chu-na-dian-shi/)
 
 ## 8. 联合查询中 union 和 union all 的区别是什么？
 
@@ -240,11 +209,8 @@ drop 是删除表结构和表中所有的数据，truncate 是只删除表中所
 - `UNION`：在合并结果集后会自动剔除重复的行。
 - `UNION ALL`：则会保留所有的重复行，不会进行去重操作。
 
-**推荐学习**
 
-[MySQL UNION](https://www.sjkjc.com/mysql/union/#union-all-运算)
-
-## 9. 数据库**三大范式是什么？追问 1：范式设计是为了解决什么问题？ 追问 2：范式设计有什么缺点？**
+## 9. 数据库三大范式是什么？追问 1：范式设计是为了解决什么问题？ 追问 2：范式设计有什么缺点？**
 
 **分析**
 
@@ -275,23 +241,14 @@ drop 是删除表结构和表中所有的数据，truncate 是只删除表中所
 
 范式化将数据分解为多个表，那么查询数据的时候，就需要进行更多的表连接操作，在应用中，进行表关联的成本是很高，也不适合分库分表的场景，所以有时候实际应用，设计表的时候会反范式的，比如说可以通过字段冗余的设计，避免联表查询。
 
-**推荐学习**
-
-[数据库逻辑设计之三大范式通俗理解](https://www.hsuyeung.com/article/database-three-n-f)
-
-[表结构设计：忘记范式准则。md](https://learn.lianglianglee.com/专栏/MySQL实战宝典/05%20%20表结构设计：忘记范式准则.md)
 
 ## 10. **count（*）性能比 count（1）好吗？**
 
 **分析**
 
-![](images/MySQL%20面试题库-image-5.png)
-
 性能对比：count（*）=count（1）>count（主键）>count（字段）
 
 count（`*`） 其实等于 count（`0`），也就是说，当你使用 count（`*`） 时，MySQL 会将 `*` 参数转化为参数 0 来处理。
-
-![](images/MySQL%20面试题库-Q6sfbLNzroURf4xSCNFc6lVRnye.png)
 
 所以，count（*） 执行过程跟 count（1） 执行过程基本一样的，性能没有什么差异。
 
@@ -301,33 +258,20 @@ count（`*`） 其实等于 count（`0`），也就是说，当你使用 count�
 
 MySQL 会将星号参数转化为参数 0 来处理，所以 count（*） 和 count（1） 性能是一样的。
 
-**推荐学习**
-
-[count（*） 和 count（1） 有什么区别？哪个性能最好？](https://xiaolincoding.com/mysql/index/count.html)
 
 # 存储引擎
 
 ## 11. 说一说执行一条查询 SQL 语句的全过程
-
-**分析**
-
-考察你对 MySQL 整体架构的理解和认识，大体的流程如下图：
-
-![](images/MySQL%20面试题库-image-6.png)
-
 **回答**
 
 MySQL 执行一条查询 SQL 语句的时候，会经过连接器、查询缓存、解析器、优化器、执行器、存储引擎这些模块。
 
-- 首先 MySQL 的<span style="color: inherit; background-color: rgba(255,246,122,0.8)">连接器</span>会负责建立连接、校验用户身份、接收客户端的 SQL 语句；
-- 第二步 MySQL 会在<span style="color: inherit; background-color: rgba(255,246,122,0.8)">查询缓存</span>中查找数据，如果命中直接返回数据给客户端，否则就需要继续往下查询，不过查询缓存功能在 MySQL 8.0 版本被删除了，原因是只要对这张表进行了写操作，这张表的查询缓存就会失效，所以在实际场景中，查询缓存的命中率其实不高；
-- 第三步 MySQL 的<span style="color: inherit; background-color: rgba(255,246,122,0.8)">解析器</span>会对 SQL 语句进行词法分析和语法分析，然后构建语法树，方便后续模块读取表名、字段、语句类型；
-- 第四步 MySQL 的<span style="color: inherit; background-color: rgba(255,246,122,0.8)">优化器</span>会基于查询成本的考虑，会判断每个索引的执行成本，从中选择查询成本最小的执行计划；
-- 第五步 MySQL 的<span style="color: inherit; background-color: rgba(255,246,122,0.8)">执行器</span>会根据执行计划来执行查询语句，从存储引擎读取记录，返回给客户端；
+- 首先 MySQL 的 连接器 会负责建立连接、校验用户身份、接收客户端的 SQL 语句；
+- 第二步 MySQL 会在 查询缓存 中查找数据，如果命中直接返回数据给客户端，否则就需要继续往下查询，不过查询缓存功能在 MySQL 8.0 版本被删除了，原因是只要对这张表进行了写操作，这张表的查询缓存就会失效，所以在实际场景中，查询缓存的命中率其实不高；
+- 第三步 MySQL 的 解析器 会对 SQL 语句进行词法分析和语法分析，然后构建语法树，方便后续模块读取表名、字段、语句类型；
+- 第四步 MySQL 的 优化器 会基于查询成本的考虑，会判断每个索引的执行成本，从中选择查询成本最小的执行计划；
+- 第五步 MySQL 的 执行器 会根据执行计划来执行查询语句，从存储引擎读取记录，返回给客户端；
 
-**推荐学习**
-
-[执行一条 select 语句，期间发生了什么？](https://xiaolincoding.com/mysql/base/how_select.html)
 
 ## 12. MySQL 存储引擎有哪些？
 
@@ -339,23 +283,14 @@ MySQL 整体上分为 Server 层和存储引擎层，Server 层负责的部分�
 
 **回答**
 
-MySQL 常见的存储引擎有 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">InnoDB、MyISAM、Memory</span>。
-
+MySQL 常见的存储引擎有 InnoDB、MyISAM、Memory
 - 我比较熟悉的是 InnoDB 引擎，它是 MySQL 默认的存储引擎，支持事务和行级锁，具有事务提交、回滚和崩溃恢复功能。
 - MyISAM 引擎我没有用过，但是我在学习的时候有了解过，它是不支持事务和行级锁的，而且由于只支持表锁，锁的粒度比较大，更新性能比较差，我认为它比较适合读多写少的场景。
 - Memory 引擎我了解不多，大概知道它是将数据存储在内存中，所以数据的读写还是比较快的，但是数据不具备持久性，我觉得适用于临时存储数据的场景。
 
-**推荐学习**
-
-[引擎分类](https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html)（官方文档）
-
-[《高性能 mysql 第三版》](https://juejin.cn/post/6976290766876311559)（1.5 MySQL 存储引擎）
-
 ## 13. MyISAM 和 InnoDB 存储引擎有什么区别？
 
 **分析**
-
-![](images/MySQL%20面试题库-image-7.png)
 
 从数据存储、B+树结构、锁粒度、事务这四个角度来分析。
 
@@ -379,18 +314,12 @@ MySQL 常见的存储引擎有 <span style="color: inherit; background-color: rg
 
 **回答**
 
-InnoDB 引擎和 MyISAM 引擎在<span style="color: inherit; background-color: rgba(255,246,122,0.8)">数据存储上有很大区别</span>，InnoDB 引擎数据存储的方式采用的是**索引组织表，**在索引组织表中，数据即索引，索引即数据**，**因此表数据和索引数据都存储在同一个文件中。MyISAM 引擎数据存储的方式采用的是**堆表，**在堆表的组织结构中，数据和索引分开存储**，**因此表数据和索引数据会分别放在两个不同的文件中存储，索引组织表有两个优势：
+InnoDB 引擎和 MyISAM 引擎在 数据存储上有很大区别，InnoDB 引擎数据存储的方式采用的是 索引组织表，在索引组织表中，数据即索引，索引即数据，因此表数据和索引数据都存储在同一个文件中。MyISAM 引擎数据存储的方式采用的是**堆表**，在堆表的组织结构中，数据和索引分开存储，因此表数据和索引数据会分别放在两个不同的文件中存储，索引组织表有两个优势：
 
 - 在索引组织表将索引和数据保存在同一个 B+树中，相比非聚簇索引每次查询都需要回表，因此从聚簇索引中获取数据比非聚簇索引更快，查询数据会更快
 - 在索引组织表中，如果记录发生了修改，则其他索引无须进行维护，除非记录的主键发生了修改，而当堆表的数据发生改变且位置发生了变更，那么所有索引中的地址都要更新，这非常影响性能。
 
-另外，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">InnoDB 引擎支持行级锁和事务，而 MyISAM 引擎都不支持，只支持表锁。</span>
-
-**推荐学习**
-
-[索引组织表：万物皆索引。md](https://learn.lianglianglee.com/专栏/MySQL实战宝典/09%20%20索引组织表：万物皆索引.md)
-
-[MySQL 引擎篇：半道出家的 InnoDB 为何能替换官方的 MyISAM？ ](https://juejin.cn/post/7160557698642083847)
+另外，InnoDB 引擎支持行级锁和事务，而 MyISAM 引擎都不支持，只支持表锁
 
 ## 14. MySQL 为什么选择 InnoDB 作为默认引擎？
 
@@ -540,8 +469,6 @@ MySQL 在更新数据的时候，MySQL 为了保证事务的隔离性，是需�
 
 索引都是由存储引擎来实现的，不同存储引擎支持的索引类型也是不同的。大多数存储引擎都是支持 B+ 树索引，而哈希索引只有 Memory 引擎实现了。
 
-![](images/MySQL%20面试题库-image-10.png)
-
 B+ 树索引、哈希索引、全文索引的区别：
 
 - **<span style="color: rgb(36,91,219); background-color: inherit">B+ 树索引</span>**：B+ 树索引是一种平衡树数据结构，它将数据按照索引键值有序地存储在树的叶子节点上，非叶子节点只存储索引键值和指向下一层节点的指针，适合于范围查找、排序查询、等值查询的情况，并且性能稳定，因为 B+ 树保存千万级别的数据，树的高度依然维持在 3～4 层左右，也就是从千万级数据查询一条数据只需要 3～4 次的磁盘 I/O 操作就能查询到目标数据。
@@ -550,11 +477,7 @@ B+ 树索引、哈希索引、全文索引的区别：
 
 **回答**
 
-我了解到 MySQL 支持 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">B+ 树索引、哈希索引、</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">全文索引</span>这三种索引类型。 我比较常用的是 B+ 树索引，因为它是 InnodB 引擎默认使用的索引类型，支持排序、分组、范围查询、模糊查询等功能。
-
-**推荐学习**
-
-[引擎分类](https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html)（官方文档）
+我了解到 MySQL 支持 B+ 树索引、哈希索引、全文索引这三种索引类型。 我比较常用的是 B+ 树索引，因为它是 InnodB 引擎默认使用的索引类型，支持排序、分组、范围查询、模糊查询等功能。
 
 ## 21. InnodB 引擎的索引数据结构是什么？
 
@@ -564,21 +487,15 @@ InnodB 存储引擎支持两种索引数据结构，B+ 树索引和 FULLTEXT 索
 
 **回答**
 
-我了解到 InnodB 引擎是采用了 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">B+ 树</span>作为索引的数据结构。它的一些特性：
+我了解到 InnodB 引擎是采用了 B+ 树 作为索引的数据结构。它的一些特性：
 
 1. 数据组织形式：InnodB 存储引擎的主键索引 B+树的非叶子节点只存放索引键值和指向子节点的指针，不存储实际的数据，这里对应到 MySQL 中就是索引，叶子节点存储索引键值和行数据，所以 InnodB 存储引擎的主键索引属于聚簇索引
 2. 叶子节点链表：所有叶子节点通过指针相连，形成一个双向链表，支持快速的顺序访问和范围查询。
 3. 平衡树结构：所有叶子节点在同一层上，树的高度平衡，保证任何数据记录的查找、插入、删除和更新操作的路径长度相同，稳定性好。
 
-**推荐学习**
-
-[引擎分类](https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html)（官方文档）
-
 ## 22. B+树的特性是什么？
 
 **分析**
-
-![](images/MySQL%20面试题库-diagram.png)
 
 至少回答出 B+树这 2 个特点：
 
@@ -592,11 +509,6 @@ B+树是一个多叉树，一个父节点，可以有多个子节点，主要的
 - B+树的中间节点不会存储数据，而只有叶子节点才会存储，中间节点只用于存储到叶子节点的路由信息（即索引），而且每个节点里的数据都是根据索引的值来顺序存放的
 - B+树的所有的叶子节点之间会通过双向指针串联在一起，构成一个双向链表，可以方便扫表和范围查询
 - B+查询性能稳定，因为所有叶子节点都在同一层**，**确保了所有数据项的检索都具有相同的 I/O 延迟，而且 B+ 树保存千万级别的数据，树的高度依然维持在 3～4 层左右，也就是从千万级数据查询一条数据只需要 3～4 次的磁盘 I/O 操作就能查询到目标数据。
-
-**推荐学习**
-
-[ 数据结构与算法学习指引](https://ls8sck0zrg.feishu.cn/wiki/Rz5gwrzEuiQfKtkXXK7cF29ynab#part-Y2IadCZ1SoMibox1iyTckUUNngg)（B+树）
-
 ## 23. B+ 和 B 树有什么区别？
 
 **分析**
@@ -715,30 +627,20 @@ MySQL 会有很多范围查询和排序的场景，虽然哈希表的搜索时�
 - **B+树有一个最大的好处是方便范围查询**，B+树的叶子节点之间有链表，直接通过叶子节点链表就能方便的完成范围查询的工作，而 B 树必须用中序遍历的方法来实现范围查询，这会比 B+树范围查询涉及更多个节点的磁盘 I/O 操作，因此范围查询效率不如 B+ 树。
 - **B+树最大的性能问题是会产生大量的随机 IO**，随着新数据的插入，叶子节点会慢慢分裂，逻辑上连续的叶子节点在物理上往往不连续，甚至分离的很远，但做范围查询时，会产生大量读随机 IO。对于大量的随机写也一样，举一个插入 key 跨度很大的例子，如 7->1000->3->2000 ... 新插入的数据存储在磁盘上相隔很远，会产生大量的随机写 IO。
 
-**推荐学习**
-
-[ 稀疏索引：为什么高并发写不推荐关系数据库？](https://learn.lianglianglee.com/专栏/高并发系统实战课/10%20稀疏索引：为什么高并发写不推荐关系数据库？.md)
-
 ## 29. 聚簇索引和非聚簇索引有什么区别？
 
 **分析**
 
 先说聚簇索引和非聚簇索 B+树叶子节点存放内容的区别，然后再引出回表查询和覆盖索引查询。
 
-![](images/MySQL%20面试题库-image-11.png)
-
 **回答**
 
 聚簇索引和非聚簇索（二级索引）引最主要的区别是 B+树叶子节点存放的内容不同：
+- 聚簇索引的 B+树叶子节点存放的是 主键值 + 完整的记录；
+- 非聚簇索引的 B+树叶子节点存放的是 索引值+主键值；
 
-- 聚簇索引的 B+树叶子节点存放的是<span style="color: inherit; background-color: rgba(255,246,122,0.8)">主键值+</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">完整的记录</span>；
-- 非聚簇索引的 B+树叶子节点存放的是<span style="color: inherit; background-color: rgba(255,246,122,0.8)">索引值+主键值</span>；
+如果查询语句的查询条件用了二级索引，但是查询的数据不是主键值，也不是二级索引值，这时在二级索引找到主键值后，就需要 回表 才能查找到数据，，需要扫描两次 B+树。如果查询的列是主键值和二级索引值时，因为只在二级索引就能查询到，这时候就会用到 覆盖索引，不需要回表，只需要扫描一次 B+树。
 
-如果查询语句的查询条件用了二级索引，但是查询的数据不是主键值，也不是二级索引值，这时在二级索引找到主键值后，就需要<span style="color: inherit; background-color: rgba(255,246,122,0.8)">回表</span>才能查找到数据，，需要扫描两次 B+树。如果查询的列是主键值和二级索引值时，因为只在二级索引就能查询到，这时候就会用到<span style="color: inherit; background-color: rgba(255,246,122,0.8)">覆盖索引</span>，不需要回表，只需要扫描一次 B+树。
-
-**推荐学习**
-
-[聚簇索引与非聚簇索引（也叫二级索引）--最清楚的一篇讲解](https://cloud.tencent.com/developer/article/1541265)
 
 ## 30. 什么是覆盖索引？
 
@@ -757,8 +659,6 @@ MySQL 会有很多范围查询和排序的场景，虽然哈希表的搜索时�
 - select  id from table where a= ? and b =?;
 
 我们也可以通过 explian 命令 来确认查询是否用到了覆盖索引。
-
-![](images/MySQL%20面试题库-image-12.png)
 
 可以看到 extra 信息显示了“using index”，就代表查询用到了覆盖索引，不涉及回表的过程。
 
@@ -852,11 +752,9 @@ B+ 树的数据都是有序的，所以：
 
 表总数会等于 x 的 z-1 次方 与 Y 的乘积：
 
-$$
+```math
 Total = x^{(z-1) } * y
-$$
-
-![](images/MySQL%20面试题库-Z1R4brNXCo2xuHxZiS1cbxOEnjg.png)
+```
 
 **回答**
 
@@ -869,9 +767,7 @@ MySQL 数据页的大小是 16 KB，去掉一些头信息，大概有 15KB 是�
 
 根据的公式，Total=x(z−1)∗y，已知 x=1280，y=15，假设 B+ 树是三层，那就是 z = 3，Total = （1280 ^2） *15 = 24576000 （约 2.45kw）
 
-**推荐学习**
 
-[MySQL 单表不要超过 2000W 行，靠谱吗？](https://xiaolincoding.com/mysql/index/2000w.html)
 
 # 索引应用（重要）
 
@@ -984,13 +880,10 @@ InnoDB 在创建聚簇索引时，**<span style="color: rgb(36,91,219); backgrou
 
 普通索引列的值是可以重复的，而唯一索引列的值是必须唯一的，当我们对唯一索引插入了一条重复的值，会因为唯一性约束而报错。
 
-我认为普通索引的更新性能会更好，因为普通索引在更新的时候，如果更新的数据页不在内存的话，可以直接把更新操作缓存在  <span style="color: inherit; background-color: rgba(255,246,122,0.8)">change buffer</span> 中，更新操作就结束了，但是，唯一索引因为需要有唯一性约束，如果更新的数据页不在内存的话，需要从磁盘读取对应的数据页到内存，判断到没有冲突，这里会涉及磁盘随机 IO 的访问。
+我认为普通索引的更新性能会更好，因为普通索引在更新的时候，如果更新的数据页不在内存的话，可以直接把更新操作缓存在 change buffer 中，更新操作就结束了，但是，唯一索引因为需要有唯一性约束，如果更新的数据页不在内存的话，需要从磁盘读取对应的数据页到内存，判断到没有冲突，这里会涉及磁盘随机 IO 的访问。
 
 普通索引因为能使用 change buffer 特性，所以普通索引的更新相比于唯一索引，减少了随机磁盘访问，所以更新性能更好。
 
-**推荐资料**
-
-[普通索引和唯一索引，应该怎么选择？.md](https://learn.lianglianglee.com/专栏/MySQL实战45讲/09%20%20普通索引和唯一索引，应该怎么选择？.md)
 
 ## 39. 主键怎么设置？追问：假如你不设置会怎么样？
 
@@ -1392,11 +1285,6 @@ MySQL 8.0 新增索引跳跃扫描机制，支持不符合联合索引最左前�
 
 还有一个新特性是<span style="color: inherit; background-color: rgba(255,246,122,0.8)">索引跳跃式扫描</span>，5.7 版本之前，使用联合索引的时候，如果不满足最左匹配原则，就会发生索引失效，而 8.0 出了索引跳跃式扫描特性之后，即使没有遵循最左匹配原则，部分场景下，依然可以使用联合索引。
 
-**推荐学习**
-
-[MySQL 8.0 函数索引](https://www.jianshu.com/p/1835fa54d198)
-
-[MySQL 8.0 索引跳跃扫描（Index Skip Scan）](https://mytecdb.com/blogDetail.php?id=153)
 
 ## 51. 什么是最左匹配原则？
 
@@ -1412,26 +1300,21 @@ MySQL 8.0 新增索引跳跃扫描机制，支持不符合联合索引最左前�
 
 **回答**
 
-假设有一个`(a, b, c)` 联合索引，它的存储顺序是<span style="color: inherit; background-color: rgba(255,246,122,0.8)">先按 a 排序，在 a 相同的情况再按 b 排序，在 b 相同的情况再按 c 排序</span>。由于这个的特性，在使用联合索引时，存在最左匹配原则，具体的规则：
+假设有一个`(a, b, c)` 联合索引，它的存储顺序是 先按 a 排序，在 a 相同的情况再按 b 排序，在 b 相同的情况再按 c 排序。由于这个的特性，在使用联合索引时，存在最左匹配原则，具体的规则：
 
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">MySQL 会从联合索引从最左边的索引列开始匹配查询条件，然后依次</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">从从左到右</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">的顺序匹配，如果查询条件没有使用到</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">某个列</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">那么该列右边的所有列都无法使用走索引</span>。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">当查询条件中使用了某个列，但是该列的值包含范围查询，范围查询的字段可以用到联合索引，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">但是在范围查询字段的后面的字段无法用到联合索引</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">。</span>
+- MySQL 会从联合索引从最左边的索引列开始匹配查询条件，然后依次从左到右的顺序匹配，如果查询条件没有使用到某个列，那么该列右边的所有列都无法使用走索引。
+- 当查询条件中使用了某个列，但是该列的值包含范围查询，范围查询的字段可以用到联合索引，但是在范围查询字段的后面的字段无法用到联合索引
 
 所以，我们在使用联合索引的时候，要遵守最左匹配原则，否则可能会出现部分索引字段走不了索引。
 
-**推荐学习**
 
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
-
-## 52. **建立联合索引有什么需要注意的？**
+## 52. 建立联合索引有什么需要注意的？
 
 **分析**
 
 建立联合索引时的字段顺序，对索引效率也有很大影响。越靠前的字段被用于索引过滤的概率越高，实际开发工作中**建立联合索引时，要把区分度大的字段排在前面，这样区分度大的字段越有可能被更多的 SQL 使用到**。
 
 区分度就是某个字段 column 不同值的个数「除以」表的总行数，计算公式如下：
-
-![](images/MySQL%20面试题库-image-20.png)
 
 比如，性别的区分度就很小，不适合建立索引或不适合排在联合索引列的靠前的位置，而 UUID 这类字段就比较适合做索引或排在联合索引列的靠前的位置。
 
@@ -1443,10 +1326,6 @@ MySQL 8.0 新增索引跳跃扫描机制，支持不符合联合索引最左前�
 
 如果区分度很低的字段放在了联合索引最左侧，有可能会导致查询优化器会选择全表扫描，而不走索引了。
 
-**推荐学习**
-
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
-
 ## 53. 了解索引下推吗？什么情况下会下推到引擎去处理？
 
 **分析**
@@ -1455,7 +1334,6 @@ MySQL 8.0 新增索引跳跃扫描机制，支持不符合联合索引最左前�
 
 举一个具体的例子，方便大家理解，这里一张用户表如下，我对 age 和 reward 字段建立了联合索引（age，reward）：
 
-![](images/MySQL%20面试题库-CDmYblss9o6PK7x74FXcaN2GnPf.png)
 
 现在有下面这条查询语句：
 
@@ -1486,17 +1364,12 @@ select * from t_user  where age > 20 and reward = 100000;
 
 当你发现执行计划里的 Extr 部分显示了 “Using index condition”，说明使用了索引下推。
 
-![](images/MySQL%20面试题库-Fnl8bhs9QoxJXzxefSrcr2Pnnvf.png)
-
 **回答**
 
 索引下推能够减少二级索引在查询时的回表操作，提高查询的效率，因为它将 Server 层部分负责的事情，交给存储引擎层去处理了。
 
 举个例子，联合索引（a，b，c），查询条件为 a=？ and c=? 的时候，由于联合索引的最左匹配原则，c 是无法走索引的，在没有索引下推机制之前，查询语句走二级索引的时候，需要回表读取 c 的值，然后在 server 层进行过滤，有了索引下推机制后，即使 c 无法走索引，但是由于 c 在二级索引里，那么将过滤 c 的工作从 server 层下推到存储引擎层，这样直接在二级索引里过滤满足 c 条件的记录，减少了回表的次数。
 
-**推荐学习**
-
-[五分钟搞懂 MySQL 索引下推](https://www.cnblogs.com/three-fighter/p/15246577.html)
 
 ## 54. 联合索引 （a，b，c），下面的查询语句会不会走索引？如果走具体是哪些字段能走？
 
@@ -1507,9 +1380,6 @@ select * from t_user  where age > 20 and reward = 100000;
 5. select * from T where b=2 and c=3;
 6. select (a,b) from T where a=1 and b>2
 
-**分析**
-
-大厂面试的时候，喜欢出这种题目，列几条 SQL 语句让你肉眼判断走不走索引，其实也是在考察你对最左匹配原则的理解。
 
 **回答**
 
@@ -1520,13 +1390,9 @@ select * from t_user  where age > 20 and reward = 100000;
 5. 根据最左匹配原则，bc 都无法走索引。
 6. a 和 b 都能走索引，查询方式是覆盖查询，不需要回表。
 
-**推荐学习**
 
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
 
-[执行一条 select 语句，期间发生了什么？](https://xiaolincoding.com/mysql/base/how_select.html)（索引下推的概念在执行器有讲解）
-
-## 55. **where a>1 and b = 2 and c <3 怎么建立索引？**
+## 55. where a>1 and b = 2 and c <3 怎么建立索引？
 
 **分析**
 
