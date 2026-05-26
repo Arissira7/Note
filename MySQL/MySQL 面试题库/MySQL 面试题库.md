@@ -771,6 +771,15 @@ MySQL 数据页的大小是 16 KB，去掉一些头信息，大概有 15KB 是�
 
 # 索引应用（重要）
 
+## 索引失效
+- 不满足最左前缀原则
+- 模糊查询 % 放在最前面
+- 范围查询放在最前面
+- 索引列做函数和表达式计算
+- 隐式类型转换（mysql底层做函数转换）
+- 优化器放弃索引
+
+
 ## 34. MySQL 有哪些索引？
 
 **分析**
@@ -1393,20 +1402,6 @@ select * from t_user  where age > 20 and reward = 100000;
 
 
 ## 55. where a>1 and b = 2 and c <3 怎么建立索引？
-
-**分析**
-
-这题属于上一题的反向思维，根据查询条件，创建联合索引，来提高这条语句的查询效率，所以就要创建一个能让更多字段能走索引的联合索引。
-
-假设：
-
-- 创建（abc）、（acb）、（ab）、（ac）联合索引，只有 a 能索引
-- 创建（cab）、（cba）、（ca）、（cb）联合索引，只有 c 能索引
-- 创建（ba）联合索引，b 和 a 都能走索引
-- 创建（bc）联合索引，b 和 c 都能走索引
-- 创建 （bac） 联合索引，b 和 a 都能走索引，但比 （ba）联合索引多了一个好处，c 字段能索引下推，会减少回表的次数；
-- 创建 （bca） 联合索引，b 和 c 都能走索引，但比 （bc）联合索引多了一个好处，a 字段能索引下推，会减少回表的次数；
-
 **回答**
 
 我会创建（bac）联合索引或者（bca）联合索引，因为这两种联合索引都可以有 2 个字段走索引。比如
@@ -1414,47 +1409,18 @@ select * from t_user  where age > 20 and reward = 100000;
 - 创建 （bac） 联合索引，b 和 a 都能走索引，c 字段虽然无法走索引，但是可以进行索引下推，这样会减少回表的次数；
 - 创建 （bca） 联合索引，b 和 c 都能走索引，a 字段虽然无法走索引，但是可以进行索引下推，这样会减少回表的次数；
 
-**推荐学习**
-
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
-
-[执行一条 select 语句，期间发生了什么？](https://xiaolincoding.com/mysql/base/how_select.html)（索引下推的概念在执行器有讲解）
 
 ## 56. where a=? And b=? order by c 怎么建立索引？
 
-**分析**
-
-这里有 order by 排序，我们尽量要用索引来避免额外排序的操作，可以考虑建立 （a，b，c） 联合索引，因为 c 有序的前提是建立在 a=？ And b =?  的场景下，刚好符合这个查询条件，这样 c 就不需要额外排序了，天然利用了索引的有序性。
-
 **回答**
+可以建立（a，b，c）联合索引：
+在 (a, b, c) 的 B+ 树里，底层的物理排序规则是：先按 a 排，a 相同按 b 排，a 和 b 都相同时，严格按照 c 的大小排队。，这样 c 排序的时候，就能利用索引的有序性，避免 using filesort 了。
 
-可以建立（a，b，c）联合索引，这样 c 排序的时候，就能利用索引的有序性，避免 using filesort 了。
-
-**推荐学习**
-
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
 
 ## 57. where a>100 and b=100 and c=123 order by d 怎么建立联合索引？
-
-**分析**
-
-如果是 bcad 联合索引的话，虽然 bca 能走索引，但是排序 d 无法利用索引，会发生 file sort（因为 a>100 范围查询后获得的记录，d 并不一定是有序的了，所以需要额外排序，d 有序的前提是 a 相等的情况下）
-
-![](images/MySQL%20面试题库-b97a2303-46e2-4989-84f4-d903067a34e7.jpeg)
-
-如果 bcda 联合索引，d 不仅能利用索引有序性，避免 file sort，a 虽然都不了索引，但是可以索引下推，所以建立（bcda）联合索引会比较好。
-
-![](images/MySQL%20面试题库-78bfd2b2-4570-4f4a-bc10-06b9fbf6174c.jpeg)
-
 **回答**
 
 我觉得建立 bcda 顺序的联合索引比较好，这时候 b 和 c 字段都能走索引，而且 d 能利用索引有序性，避免 filesort，最后的 a 字段虽然无法走索引，但是可以利用索引下推，减少回表的次数。
-
-**推荐学习**
-
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
-
-[执行一条 select 语句，期间发生了什么？](https://xiaolincoding.com/mysql/base/how_select.html)（索引下推的概念在执行器有讲解）
 
 ## 58. select b from table where a = 10 and c>20 怎么创建索引？
 
@@ -1482,12 +1448,6 @@ select * from t_user  where age > 20 and reward = 100000;
 
 最后查询的字段是 id 和 name，这两个字段都能在联合索引上查找到，所以不需要回表，是索引覆盖查询。
 
-**推荐学习**
-
-[索引常见面试题](https://xiaolincoding.com/mysql/index/index_interview.html)（联合索引部分）
-
-[执行一条 select 语句，期间发生了什么？](https://xiaolincoding.com/mysql/base/how_select.html)（索引下推的概念在执行器有讲解）
-
 ## 60. where id NOT IN (?, ?, ?） 会走索引吗？
 
 **分析**
@@ -1502,16 +1462,6 @@ in 能不能走索引，关键是看查询成本，没有绝对说 in 会发生�
 
 ## 61. 如果查询条件中包含索引列和非索引列，MySQL 的具体查询流程是什么样的？
 
-**分析**
-
-假设 a 是索引列，d 是非索引列，select a from test where a = ？  and d = ? 查询过程先按索引去查，然后回表再过滤非索引列，会涉及回表的过程。
-
-![](images/MySQL%20面试题库-feb45467-5b04-4579-a2ce-6264ca2ee854.jpeg)
-
-![](images/MySQL%20面试题库-cd971456-d451-42af-8f89-64afc437c43e.jpeg)
-
-从上图的执行计划，也可以看到，exta 没有显示 using index，代表没有覆盖索引，然后走了二级索引，所以查询过程有发生回表。
-
 **回答**
 
 查询过程先按索引去二级索引 B+树查，然后拿到主键 id，回表到主键索引 B+树再过滤非索引列，查询过程会查 2 个 b+树，涉及回表的过程。
@@ -1520,33 +1470,18 @@ in 能不能走索引，关键是看查询成本，没有绝对说 in 会发生�
 
 ## 62. MySQL 事务有什么特性？
 
-**分析**
-
-考察事务的 ACID 特性。
-
-- 原子性（Atomicity）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节，而且事务在执行过程中发生错误，会被回滚到事务开始前的状态，就像这个事务从来没有执行过一样，就好比买一件商品，购买成功时，则给商家付了钱，商品到手；购买失败时，则商品在商家手中，消费者的钱也没花出去。
-- 一致性（Consistency）：是指事务操作前和操作后，数据满足完整性约束，数据库保持一致性状态。比如，用户 A 和用户 B 在银行分别有 800 元和 600 元，总共 1400 元，用户 A 给用户 B 转账 200 元，分为两个步骤，从 A 的账户扣除 200 元和对 B 的账户增加 200 元。一致性就是要求上述步骤操作后，最后的结果是用户 A 还有 600 元，用户 B 有 800 元，总共 1400 元，而不会出现用户 A 扣除了 200 元，但用户 B 未增加的情况（该情况，用户 A 和 B 均为 600 元，总共 1200 元）。
-- 隔离性（Isolation）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致，因为多个事务同时使用相同的数据时，不会相互干扰，每个事务都有一个完整的数据空间，对其他并发事务是隔离的。也就是说，消费者购买商品这个事务，是不影响其他消费者购买的。
-- 持久性（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
-
 **回答**
 
 MySQL 事务有 ACID 四大特性，分别是原子性、一致性、隔离性、持久性。
 
 - 原子性的意思是事务中的所有操作要么全部完成，要么全部不完成，不会结束在中间某个环节，原子性是由 undo log 日志保证的；
-- 一致性的意思是事务执行前后，数据库的状态必须保持一致性，一致性是由通过持久性+原子性+隔离性这三个共同保证的；
 - 隔离性的意思是许多个事务并发读写数据库，可以防止多个事务并发读写同一个数据的时候，导致数据不一致问题的发生，隔离性是由 MVCC 和锁保证的；
 - 持久性的意思是保证事务完成后对数据的修改就是永久的，不会因为系统故障而丢失，持久性是由 redo log 日志保证的；
+- 一致性的意思是事务执行前后，数据库的状态必须保持一致性，一致性是由通过持久性+原子性+隔离性这三个共同保证的；
 
-**推荐学习**
 
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
 
 ## 63. 事务的隔离性如何保证？
-
-**分析**
-
-先说是由 MVCC 和锁实现的，再说一下为什么用 MVCC 和锁能实现隔离性。
 
 **回答**
 
@@ -1554,47 +1489,19 @@ MySQL 事务有 ACID 四大特性，分别是原子性、一致性、隔离性�
 
 可重复读隔离级别下的快照读（普通 select），是通过 MVCC 来保证事务隔离性的，当前读（update、select ... for update）是通过行级锁来保证事务隔离性的。
 
-**推荐学习**
-
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
-
 ## 64. 事务的持久性如何保证？
-
-**分析**
-
-先说是由 redo log 实现的，再说一下为什么用 redo log 能实现持久性。
 
 **回答**
 
 事务的持久性是由 redo log 保证的，因为 MySQL 通过 WAL （先写日志再写数据）机制，在修改数据的时候，会将本次对数据页的修改以 redo log 的形式记录下来，这个时候更新就算完成了，Buffer Pool 的脏页会通过后台线程刷盘，即使在脏页还没刷盘的时候发生了数据库重启，由于修改操作都记录到了 redo log，之前已提交的记录都不会丢失，重启后就通过  redo log，恢复脏页数据，从而保证了事务的持久性。
 
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
-
 ## 65. 事务的原子性如何保证？
-
-**分析**
-
-先说是由 undo log 实现的，再说一下为什么用 undo log 能实现原子性。
 
 **回答**
 
 事务的原子性是通过 undo log 实现的，在事务还没提交前，历史数据会记录在 undo log 中，如果事务执行过程中，出现了错误或者用户执行了 ROLLBACK 语句，MySQL 可以利用 undo log 中的历史数据，将数据恢复到事务开始之前的状态，从而保证了事务的原子性。
 
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
-
 ## 66. MySQL 事务和 Redis 事务有什么区别？
-
-**分析**
-
-Redis 事务没保证原子性和持久性。
-
-原子性：Redis 事务没有回滚功能，没办法实现跟 MySQL 事务一样的原子性，就是没办法保证事务执行期间，要不全部失败，要不全部成功，如果 Redis 事务执行过程中，中间有命令是错误的，不会停止执行和回滚，这时候事务的执行会出现半成功的状态。
-
-持久性：如果 Redis 使用了 RDB 模式，那么，在一个事务执行后，而下一次的 RDB 快照还未执行前，如果发生了实例宕机，这种情况下，事务修改的数据也是不能保证持久化的。如果 Redis 采用了 AOF 模式，因为 AOF 模式的三种配置选项 no、everysec 和 always 都会存在数据丢失的情况（为什么 always 也会丢失看这篇：[redis 能保证数据 100%不丢失吗？ ](https://www.cnblogs.com/innocenter/p/13208034.html)），所以，事务的持久性属性也还是得不到保证。所以，不管 Redis 采用什么持久化模式，事务的持久性属性是得不到保证的。
 
 **回答**
 
@@ -1604,34 +1511,16 @@ Redis 事务没有回滚功能，没办法实现跟 MySQL 事务一样的原子�
 
 Redis 不管是 AOF 模式，还是 RDB 快照，都没办法保证数据不丢失，所以 Redis 事务不具有持久性。
 
-**推荐学习**
-
-[ 事务机制：Redis 能实现 ACID 属性吗？.md](https://learn.lianglianglee.com/专栏/Redis%20核心技术与实战/31%20%20事务机制：Redis能实现ACID属性吗？.md)
-
-## 67. MySQL 事务隔离级别有哪些？分别解决哪些问题？
-
 **分析**
 
-MySQL 共有四个隔离级别如下：
+Redis 事务没保证原子性和持久性。
 
-- 读未提交（*read uncommitted*），指一个事务还没提交时，它做的变更就能被其他事务看到；
-- 读提交（*read committed*），指一个事务提交之后，它做的变更才能被其他事务看到；
-- 可重复读（*repeatable read*），指一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，MySQL InnoDB 引擎的默认隔离级别；
-- 串行化（*serializable* ）；会对记录加上读写锁，在多个事务对这条记录进行读写操作时，如果发生了读写冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行；
+原子性：Redis 事务没有回滚功能，没办法实现跟 MySQL 事务一样的原子性，就是没办法保证事务执行期间，要不全部失败，要不全部成功，如果 Redis 事务执行过程中，中间有命令是错误的，不会停止执行和回滚，这时候事务的执行会出现半成功的状态。
 
-按隔离水平高低排序如下：
+持久性：如果 Redis 使用了 RDB 模式，那么，在一个事务执行后，而下一次的 RDB 快照还未执行前，如果发生了实例宕机，这种情况下，事务修改的数据也是不能保证持久化的。如果 Redis 采用了 AOF 模式，因为 AOF 模式的三种配置选项 no、everysec 和 always 都会存在数据丢失的情况（为什么 always 也会丢失看这篇：[redis 能保证数据 100%不丢失吗？ ](https://www.cnblogs.com/innocenter/p/13208034.html)），所以，事务的持久性属性也还是得不到保证。所以，不管 Redis 采用什么持久化模式，事务的持久性属性是得不到保证的。
 
-![](images/MySQL%20面试题库-RuYhbtjgLoWiZJxYSn4chpnyngf.png)
 
-针对不同的隔离级别，并发事务时可能发生的现象也会不同。
-
-![](images/MySQL%20面试题库-FCp1bVGnDo0Ie9x9qhPcbIdmngh.png)
-
-脏读、不可重复读、幻读的意思：
-
-- 脏读是指一个事务读取了另一个事务还未提交的数据，如果另一个事务回滚，则读取的数据是无效的。脏读可能导致数据的不一致性。
-- 不可重复读是指一个事务多次读取同一条记录，但是在此期间另一个事务修改了该记录，导致前后读取的数据不一致。不可重复读可能导致数据的不一致性。
-- 幻读是指一个事务多次执行同一个查询，但是在此期间另一个事务插入了符合该查询条件的新数据，导致前后查询的结果不一致。幻读可能导致数据的不完整性。
+## 67. MySQL 事务隔离级别有哪些？分别解决哪些问题？
 
 **回答**
 
@@ -1644,9 +1533,22 @@ MySQL 默认隔离级别是可重复读，除此之外， MySQL 还支持读未�
 - 可重复读避免了脏读和不可重复读的问题，不过对于幻读问题是很大程度上避免了，没有完全避免。
 - 串行化是所有问题都可以避免，但是事务的并发性能是最差的。
 
-**推荐学习**
+**分析**
 
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
+MySQL 共有四个隔离级别如下：
+
+- 读未提交（*read uncommitted*），指一个事务还没提交时，它做的变更就能被其他事务看到；
+- 读提交（*read committed*），指一个事务提交之后，它做的变更才能被其他事务看到；
+- 可重复读（*repeatable read*），指一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，MySQL InnoDB 引擎的默认隔离级别；
+- 串行化（*serializable* ）；会对记录加上读写锁，在多个事务对这条记录进行读写操作时，如果发生了读写冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行；
+
+针对不同的隔离级别，并发事务时可能发生的现象也会不同。
+
+脏读、不可重复读、幻读的意思：
+
+- 脏读是指一个事务读取了另一个事务还未提交的数据，如果另一个事务回滚，则读取的数据是无效的。脏读可能导致数据的不一致性。
+- 不可重复读是指一个事务多次读取同一条记录，但是在此期间另一个事务修改了该记录，导致前后读取的数据不一致。不可重复读可能导致数据的不一致性。
+- 幻读是指一个事务多次执行同一个查询，但是在此期间另一个事务插入了符合该查询条件的新数据，导致前后查询的结果不一致。幻读可能导致数据的不完整性。
 
 ## 68. 串行化隔离级别是通过什么实现的？
 
@@ -1658,65 +1560,32 @@ MySQL 默认隔离级别是可重复读，除此之外， MySQL 还支持读未�
 
 串行化隔离级别所有 SQL 都会加行级锁，包括普通的 select 查询，都会加 S 型的 next-key 锁。其他事务就没办法对这些已经加锁的记录进行增删改操作了，从而避免了脏读、不可重复读和幻读现象，性能是隔离级别中最差的，没有 MVCC 机制，读写操作没办法并发。
 
-**推荐学习**
-[【mysql】串行化隔离级别](https://blog.51cto.com/u_15873544/5844180)
 
 ## 69. 脏读和幻读有什么区别？
-
-**分析**
-
-脏读是一个事务读到了另一个未提交事务修改过的数据。
-
-![](images/MySQL%20面试题库-image-21.png)
-
-在一个事务内多次查询某个符合查询条件的「记录数量」，如果出现前后两次查询到的记录数量不一样的情况，就意味着发生了「幻读」现象。
-
-![](images/MySQL%20面试题库-image-22.png)
 
 **回答**
 
 - 脏读是一个事务读到了另一个未提交事务修改过的数据，如果另外一个事务回滚了，刚才读到的数据就与数据库里的数据不一致了。
 - 幻读是前后两次的查询的结果集的数量是不同，比如，如果 select 执行了两次，但第二次返回了第一次没有返回的行数据，则该行是“幻像”行。
 
-**推荐学习**
-
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
-
 ## 70. MySQL 默认的隔离级别是什么？怎么实现的？
-
-**分析**
-
-考察可重复度的实现原理。
 
 **回答**
 
 MySQL 默认的隔离级别是可重复读。
 
-select 查询是通过 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">MVCC 实现的</span>，在 MVCC 实现中，每条记录都会保存多个版本，每个版本都有一个版本号，事务在读取数据时，会根据事务开始时的版本号来读取数据，从而保证了事务的隔离性。可重复读隔离级别是在开启事务后，执行一条 select 语句的时候， 会生成一个 Read View，后续事务查询数据的时候都在复用 Read View，所以保证了事务期间多次读到的数据都是一致的。
-
-**推荐学习**
-
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
+select 查询是通过 MVCC 实现的，在 MVCC 实现中，每条记录都会保存多个版本，每个版本都有一个版本号，事务在读取数据时，会根据事务开始时的版本号来读取数据，从而保证了事务的隔离性。可重复读隔离级别是在开启事务后，执行一条 select 语句的时候， 会生成一个 Read View，后续事务查询数据的时候都在复用 Read View，所以保证了事务期间多次读到的数据都是一致的。
 
 ## 71. 介绍一下 MVCC
 
-**分析**
-
-从 MVCC 是什么？解决了什么问题？MVCC 实现原理？这三个方向回答。
-
-注意，不用展开讲解可见性规则的判断，不然这个问题要回答很长时间，面试官可能会不耐烦，如果他追问，才去回答。
-
 **回答**
 
-MVCC 是多版本并发控制，是通过记录历史版本数据，解决读写并发冲突问题，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">避免了读数据时加锁</span>，提高了事务的并发性能。
+MVCC 是多版本并发控制，是通过记录历史版本数据，解决读写并发冲突问题，避免了读数据时加锁，提高了事务的并发性能。
 
-MySQL 将<span style="color: inherit; background-color: rgba(255,246,122,0.8)">历史数据存储在 undo log 中</span>，结构逻辑上类似一个链表，MySQL 数据行上有<span style="color: inherit; background-color: rgba(255,246,122,0.8)">两个隐藏列，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">一个是事务 ID</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，一个就是</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">指向 undo log 的指针</span>。
+MySQL 将历史数据存储在 undo log 中，结构逻辑上类似一个链表，MySQL 数据行上有两个隐藏列，一个是事务 ID，一个就是指向 undo log 的指针
 
-事务开启后，执行第一条 select 语句的时候，会<span style="color: inherit; background-color: rgba(255,246,122,0.8)">创建 ReadView</span> ，ReadView 记录了当前未提交的事务，通过与历史数据的事务 ID 比较，就可以根据可见性规则进行判断，判断这条记录是否可见，如果可见就直接将这个数据返回给客客户端，如果不可见就继续往 undo log 版本链查找第一个可见的数据。需要展开说说可见性规则吗？
+事务开启后，执行第一条 select 语句的时候，会创建 ReadView ，ReadView 记录了当前未提交的事务，通过与历史数据的事务 ID 比较，就可以根据可见性规则进行判断，判断这条记录是否可见，如果可见就直接将这个数据返回给客客户端，如果不可见就继续往 undo log 版本链查找第一个可见的数据。需要展开说说可见性规则吗？
 
-**推荐学习**
-
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
 
 ## 72. MVCC 的如何判断行记录对某一个事务是否可见
 
@@ -1724,23 +1593,16 @@ MySQL 将<span style="color: inherit; background-color: rgba(255,246,122,0.8)">�
 
 Read View 有四个重要的字段：
 
-![](images/MySQL%20面试题库-image-23.png)
-
 - m_ids ：指的是在创建 Read View 时，当前数据库中「活跃事务」的事务 id 列表，注意是一个列表，“活跃事务”指的就是，启动了但还没提交的事务。
 - min_trx_id ：指的是在创建 Read View 时，当前数据库中「活跃事务」中事务 id 最小的事务，也就是 m_ids 的最小值。
 - max_trx_id ：这个并不是 m_ids 的最大值，而是创建 Read View 时当前数据库中应该给下一个事务的 id 值，也就是全局事务中最大的事务 id 值 + 1；
 - creator_trx_id ：指的是创建该 Read View 的事务的事务 id。
 
 聚簇索引记录中都包含下面两个隐藏列：
-
-![](images/MySQL%20面试题库-image-24.png)
-
 - trx_id，当一个事务对某条聚簇索引记录进行改动时，就会把该事务的事务 id 记录在 trx_id 隐藏列里；
 - roll_pointer，每次对某条聚簇索引记录进行改动时，都会把旧版本的记录写入到 undo 日志中，然后这个隐藏列是个指针，指向每一个旧版本记录，于是就可以通过它找到修改前的记录。
 
 在创建 Read View 后，我们可以将记录中的 trx_id 划分这三种情况：
-
-![](images/MySQL%20面试题库-FwhzbS326oH8fGxYB3Qcd3YRnjb.png)
 
 一个事务去访问记录的时候，除了自己的更新记录总是可见之外，还有这几种情况：
 
@@ -1752,7 +1614,7 @@ Read View 有四个重要的字段：
 
 **回答**
 
-我们<span style="color: inherit; background-color: rgba(255,246,122,0.8)">每一条记录都有两个隐藏列，一个是事务 id，一个是指向历史数据 undo log 的指针</span>，然后 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">Read View 有四个字段，分别是创建</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">  Read View 的事务 id</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">、活跃事务 id 列表、活跃事务 id 列表中最小的 id、下一个事务的 id</span>。主要有这几种判断规则：
+我们每一条记录都有两个隐藏列，一个是事务 id，一个是指向历史数据 undo log 的指针，然后 Read View 有四个字段，分别是创建 Read View 的事务 id、活跃事务 id 列表、活跃事务 id 列表中最小的 id、下一个事务的 id。主要有这几种判断规则：
 
 - 如果记录的事务 id 小于活跃事务 id 列表中最小的 id，就说明该记录是在创建 Read View 前就生成好了，所以该记录是当前事务是可见的。
 - 如果记录的事务 id 大于等于下一个事务的 id，就说明该记录是在创建 Read View 后才生成的，所以该记录是当前事务是不可见的。
@@ -1760,26 +1622,14 @@ Read View 有四个重要的字段：
   - 如果记录的事务 id 在活跃事务 id 列表中，说明修改该记录的事务还没提交，所以该记录是不可见的。
   - 如果记录的事务 id 不在活跃事务 id 列表中，说明修改该记录的事务已经提交了，那么该记录就是可见。
 
-**推荐学习**
-
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
-
 ## 73. 读已提交和可重复读隔离级别实现  MVCC 的区别？
-
-**分析**
-
-生成 readview 的时机不同
-
 **回答**
 
-读已提交和可重复读隔离级别都是由 MVCC 实现的，它们的区别在于<span style="color: inherit; background-color: rgba(255,246,122,0.8)">创建 Read View 的时机不同</span>。
+读已提交和可重复读隔离级别都是由 MVCC 实现的，它们的区别在于创建 Read View 的时机不同。
 
-- 读已提交隔离级别在事务开启后，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">每次执行 select 都会生成一个新的 Read View</span>，所以每次 select 都能看到其他事务最近提交的数据。
-- 可重复读隔离级别在事务开启后，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">执行第一条 select 时生成一个 Read View</span>，然后整个事务期间都在复用用这个 Read View，所以一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的。
-
-**推荐学习**
-
-[事务隔离级别是怎么实现的？](https://xiaolincoding.com/mysql/transaction/mvcc.html)
+- 读已提交隔离级别在事务开启后，每次执行 select 都会生成一个新的 Read View，所以每次 select 都能看到其他事务最近提交的数据。
+- 可重复读隔离级别在事务开启后，执行第一条 select 时生成一个 Read View，然后整个事务期间都在复用用这个 Read View，所以一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的。
+ 
 
 ## 74. 为什么互联网公司用读已提交隔离级别？
 
@@ -1789,11 +1639,7 @@ Read View 有四个重要的字段：
 
 **回答**
 
-读已提交的并发性能更好，因为<span style="color: inherit; background-color: rgba(255,246,122,0.8)">读已提交没有间隙锁，只有记录锁</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，发生死锁的概率比较低</span>。然后互联网业务对于幻读和不可重复读的问题都是能接受的，所以为了降低死锁的概率，提高事务的并发性能，都会选择使用读已提交隔离级别。
-
-**推荐学习**
-
-[互联网项目中 MySQL 应该选什么事务隔离级别](https://www.cnblogs.com/rjzheng/p/10510174.html)
+读已提交的并发性能更好，因为读已提交没有间隙锁，只有记录锁，发生死锁的概率比较低。然后互联网业务对于幻读和不可重复读的问题都是能接受的，所以为了降低死锁的概率，提高事务的并发性能，都会选择使用读已提交隔离级别。
 
 ## 75. 可重复读隔离级别是如何解决不可重复读的？
 
@@ -1812,9 +1658,6 @@ MySQL 提供了两种查询方式，一种是快照读，就是普通 select 语
 
 针对当前读的话，是靠行级锁中的记录锁来实现的，在可重复读隔离级别下，第一次 select for update 语句查询的时候，会对记录加 next-key 锁，这个锁包含记录锁，这时候如果其他事务更新了加了锁的记录，都会被阻塞住，这样就不会发生不可重复读的问题了。
 
-**推荐学习**
-
-[MySQL 可重复读隔离级别，完全解决幻读了吗？](https://xiaolincoding.com/mysql/transaction/phantom.html)
 
 ## 76. 可重复读隔离级别是怎么解决幻读的？
 
@@ -1833,23 +1676,11 @@ MySQL 提供了两种查询方式，一种是快照读，就是普通 select 语
 
 针对当前读的话，是靠行级锁中的间隙锁来实现的，在可重复读隔离级别下，第一次 select for update 语句查询的时候，会对记录加 next-key 锁，这个锁包含间隙锁，这时候如果其他事务往这个间隙插入新记录的话，都会被阻塞住，这样就不会发生幻读的问题了。
 
-**推荐学习**
-
-[MySQL 可重复读隔离级别，完全解决幻读了吗？](https://xiaolincoding.com/mysql/transaction/phantom.html)
-
 ## 77. 可重复读隔离级别解决了什么问题？有没有完全解决幻读？
-
-**分析**
-
-要强调可重复读隔离级别是很大程度上解决了幻读，并没有完全解决幻读。
 
 **回答**
 
 可重复读隔离级别解决了脏读、不可重复读问题，幻读也很大程度上避免了，但是我觉得并没有完全解决幻读，在一些特殊的场景，还是会发生幻读的问题，需要我展开说下吗？
-
-**推荐学习**
-
-[MySQL 可重复读隔离级别，完全解决幻读了吗？](https://xiaolincoding.com/mysql/transaction/phantom.html)
 
 ## 78. 可重复读隔离级别为什么不能完全避免幻读？什么情况下出现幻读？
 
@@ -1859,11 +1690,9 @@ MySQL 提供了两种查询方式，一种是快照读，就是普通 select 语
 
 发生幻读的第一个场景：
 
-![](images/MySQL%20面试题库-image-25.png)
-
 - 数据库表不存在 id=5 的记录，事务 a 执行第一次查询的时候，读不到该记录，接着事务 b 插入了 id=5 的新记录。
-- 事务 a 的更新语句更新了事务 b 刚插入的 id =5 的这条记录，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">由于更新操作是当前读，所以事务 a 的更新操作能读到 id=5 的记录并进行更新</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">更新的时候，会把 id=5 这条记录隐藏列的事务 id 变为事务 a id，代表是事务 a 修改的。</span>
-- 然后事务 a 第二次查询的时候，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">发现 id=5 的事务 id，跟本事务的 id 是一样的，就会认为是可见的</span>，那么就能读到 id=5 的数据了， 此时也就发生了幻读现象。
+- 事务 a 的更新语句更新了事务 b 刚插入的 id =5 的这条记录，由于更新操作是当前读，所以事务 a 的更新操作能读到 id=5 的记录并进行更新更新的时候，会把 id=5 这条记录隐藏列的事务 id 变为事务 a id，代表是事务 a 修改的。
+- 然后事务 a 第二次查询的时候，发现 id=5 的事务 id，跟本事务的 id 是一样的，就会认为是可见的，那么就能读到 id=5 的数据了， 此时也就发生了幻读现象。
 
 发生幻读的第二个场景。
 
@@ -1875,15 +1704,12 @@ MySQL 提供了两种查询方式，一种是快照读，就是普通 select 语
 
 在可重复读隔离级别场景下，当先快照读再当前读的场景下可能会出现幻读的问题。
 
-比如说这个场景，事务 A 通过快照读的方式查询 id = 5 的记录，此时数据库没有这条记录，然后事务 B 向这张表中新插入了一条 id = 5 的记录并提交了事务。接着，事务 A 对 id = 5 这条记录进行了更新操作，在这个时刻，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">这条新记录隐藏列中的事务 id 就变成了事务 A 的事务 id</span>，这时候事务 A 再使用 select 语句去查询这条记录时就可以看到这条记录了，这里事务 A 前后两次查询的结果集合数不一样了，于是就发生了幻读。
+比如说这个场景，事务 A 通过快照读的方式查询 id = 5 的记录，此时数据库没有这条记录，然后事务 B 向这张表中新插入了一条 id = 5 的记录并提交了事务。接着，事务 A 对 id = 5 这条记录进行了更新操作，在这个时刻，这条新记录隐藏列中的事务 id 就变成了事务 A 的事务 id，这时候事务 A 再使用 select 语句去查询这条记录时就可以看到这条记录了，这里事务 A 前后两次查询的结果集合数不一样了，于是就发生了幻读。
 
 我还知道另外一个场景，事务 A 通过快照读的方式查询 id 大于 100 的记录，假设这时候有 1 条记录，然后事务 B 插入了 id = 200 的记录并提交了事务，接着事务 A 通过当前读的方式查询 id 大于 100 的记录，这时候就会得到 2 条记录，事务 A 前后两次查询的结果集合数不一样了，就发生了幻读。
 
 我觉得上面这两种发生幻读的场景，也是可以避免的，就是尽量在开启事务之后，马上执行 select ... for update 语句，因为它会对记录加临键锁（next-key 锁），这样就可以避免其他事务插入一条新记录，就避免了幻读的问题。
 
-**推荐学习**
-
-[MySQL 可重复读隔离级别，完全解决幻读了吗？](https://xiaolincoding.com/mysql/transaction/phantom.html)
 
 ## 79. 可重复读隔离级别，MVCC 完全解决了不可重复读问题吗？
 
@@ -1925,14 +1751,10 @@ where TIME_TO_SEC(timediff(now(),trx_started))>60
 
 **回答**
 
-- 锁是事务提交的时候才释放的，那么长事务会导致锁持久的时间过长，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">容易导致大量的死锁和锁超时的问题</span>
-- 执行事务中每条增删改 SQL 会产生 undo 日志，那么长事务就会导致 undo 日志堆积很多，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">占用存储空间，也会导致回滚的时间过长。</span>
-- 长事务执行时间长，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">容易造成主从延迟</span>**，**如果一个主库上的语句执行 10 分钟，那这个事务很可能就会导致从库延迟 10 分钟
-- 在长事务中，连接可能会被持续打开，这会占用数据库连接池的资源，可能<span style="color: inherit; background-color: rgba(255,246,122,0.8)">导致连接池被占满</span>
-
-**推荐学习**
-
-[面试官：你知道大事务会带来什么问题以及如何解决么？](https://cloud.tencent.com/developer/article/1595282)
+- 锁是事务提交的时候才释放的，那么长事务会导致锁持久的时间过长，容易导致大量的死锁和锁超时的问题
+- 执行事务中每条增删改 SQL 会产生 undo 日志，那么长事务就会导致 undo 日志堆积很多，占用存储空间，也会导致回滚的时间过长。
+- 长事务执行时间长，容易造成主从延迟，如果一个主库上的语句执行 10 分钟，那这个事务很可能就会导致从库延迟 10 分钟
+- 在长事务中，连接可能会被持续打开，这会占用数据库连接池的资源，可能导致连接池被占满
 
 # 锁
 
@@ -1955,17 +1777,21 @@ where TIME_TO_SEC(timediff(now(),trx_started))>60
 
 **回答**
 
-根据锁粒度的不同， MySQL 的锁可以分为<span style="color: inherit; background-color: rgba(255,246,122,0.8)">全局锁、表级锁、行级锁</span>。
+根据锁粒度的不同， MySQL 的锁可以分为全局锁、表级锁、行级锁
 
 我比较熟悉的是表级锁和行级锁，比如我们对一张表结构进行修改的时候，MySQL 就会对这张表加一个元数据锁，元数据锁是属于表级锁的。
 
 行级锁目前只有 Innodb 存储引擎实现了，MyISAM 存储引擎是不支持行级锁的，只有表锁。Innodb 存储引擎实现的行级锁主要有记录锁、间隙锁、临键锁、插入意向锁这些，当我们对表记录进行 select for update，或者增删改的时候，都会对记录加行级锁。
 
-**推荐学习**
-
-[MySQL 有哪些锁？](https://xiaolincoding.com/mysql/lock/mysql_lock.html#全局锁)
-
 ## 82. MySQL 怎么实现乐观锁？（重要）
+
+**回答**
+
+可以在数据库表增加一个版本号字段，利用这个版本号字段在数据库中实现乐观锁。
+
+具体的实现，每次更新数据的时候，都要带上版本号，同时将版本 +1，比如现在要更新 id=1，版本号为 2 的记录。这时候先要获取 id=1 的版本号，然后更新语句写成 update table set name = “小明”， version = version+1 where id = 1 and version = 2。
+
+如果这个版本号与表记录中的版本号一致的话，就能更新成功，如果不相等则不进行更新，然后需要重新获取该记录的最新版本号，然后再尝试更新数据。
 
 **分析**
 
@@ -2014,19 +1840,7 @@ WHERE id = 1 AND version = 0;
 
 执行更新语句后，需要检查更新操作影响的行数。如果影响的行数为 1，说明更新成功；如果影响的行数为 0，说明版本号校验失败，数据在操作期间已被其他事务修改。
 
-![](images/MySQL%20面试题库-image-26.png)
 
-**回答**
-
-可以在数据库表增加一个版本号字段，利用这个版本号字段在数据库中实现乐观锁。
-
-具体的实现，每次更新数据的时候，都要带上版本号，同时将版本 +1，比如现在要更新 id=1，版本号为 2 的记录。这时候先要获取 id=1 的版本号，然后更新语句写成 update table set name = “小明”， version = version+1 where id = 1 and version = 2。
-
-如果这个版本号与表记录中的版本号一致的话，就能更新成功，如果不相等则不进行更新，然后需要重新获取该记录的最新版本号，然后再尝试更新数据。
-
-**推荐学习**
-
-[数据库中的乐观锁与悲观锁](https://www.cnblogs.com/kyoner/p/11318979.html)
 
 ## 83. 在线上修改表结构，会发生什么？
 
@@ -2036,11 +1850,7 @@ WHERE id = 1 AND version = 0;
 
 **回答**
 
-线上环境可能存在很多事务都在读写这张表，如果对这张表进行了表结构修改，就会发生阻塞，原因是有事务对这张表进行读写操作的时候，会生成元数据读锁，而修改表结构的时候，会生成元数据写锁，这时候就<span style="color: inherit; background-color: rgba(255,246,122,0.8)">产生了读写冲突，所以修改表结构的操作就会</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">阻塞</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">并且</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">后续事务的</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">增删查改</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">操作都会</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">阻塞</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">。</span>
-
-**推荐学习**
-
-[加索引可能引发的事故，我们要心中有数](https://juejin.cn/post/6844904193531052040#heading-12)
+线上环境可能存在很多事务都在读写这张表，如果对这张表进行了表结构修改，就会发生阻塞，原因是有事务对这张表进行读写操作的时候，会生成元数据读锁，而修改表结构的时候，会生成元数据写锁，这时候就产生了读写冲突，所以修改表结构的操作就会阻塞，并且后续事务的增删查改操作都会阻塞
 
 ## 84. 创建索引的时候会锁表吗？
 
@@ -2050,19 +1860,24 @@ WHERE id = 1 AND version = 0;
 
 **回答**
 
-会的，创建索引的时候会加 MDL 写锁，如果这时候有其他事务对这张表进行增删查改的话，这些事务就都会被阻塞，原因是有事务对这张表进行读写操作的时候，会生成 MDL 读锁，这时候就<span style="color: inherit; background-color: rgba(255,246,122,0.8)">产生了读写冲突。</span>
-
-**推荐学习**
-
-[加索引可能引发的事故，我们要心中有数](https://juejin.cn/post/6844904193531052040#heading-12)
+会的，创建索引的时候会加 MDL 写锁，如果这时候有其他事务对这张表进行增删查改的话，这些事务就都会被阻塞，原因是有事务对这张表进行读写操作的时候，会生成 MDL 读锁，这时候就产生了读写冲突。
 
 ## 85. Innodb 存储引擎中的行级锁有哪些？（重要）
+
+**回答**
+
+Innodb 实现的行级锁有记录锁、间隙锁、临键锁、插入意向锁。我们在使用增删改或者锁定读语句的时候，都会对记录加行级锁。
+
+- 记录锁，可以避免其他事务对该记录进行删除和更新操作
+- 间隙锁，可以避免其他事务往间隙里插入新记录
+- 临键锁，是记录锁和间隙锁的组合，所以它既可以免其他事务对该记录进行删除和更新操作，也可以避免其他事务往间隙里插入新记录
+- 插入意向锁，插入意向锁和间隙锁是互斥的关系，其他事务插入的时候，发现插入位置的下一条记录有间隙锁的话，才会生成的插入意向锁，并且这时候锁的状态是阻塞状态，目的是告诉用户插入的位置存在间隙锁
 
 **分析**
 
 主要是有「记录锁、间隙锁、临键锁、插入意向锁」。
 
-**<span style="color: inherit; background-color: rgba(255,246,122,0.8)">记录锁</span>**
+**记录锁**
 
 Record Lock 称为记录锁，锁住的是一条记录。而且记录锁是有 S 锁和 X 锁之分的：
 
@@ -2080,17 +1895,15 @@ mysql > select * from t_test where id = 1 for update;
 
 当事务执行 commit 后，事务过程中生成的锁都会被释放。
 
-**<span style="color: inherit; background-color: rgba(255,246,122,0.8)">间隙锁</span>**
+**间隙锁**
 
 Gap Lock 称为间隙锁，只存在于可重复读隔离级别和串行化隔离级（读已提交隔离级别不存在间隙锁），目的是为了解决可重复读隔离级别下幻读的现象。
 
 假设，表中有一个范围 id 为（3，5）间隙锁，那么其他事务就无法插入 id = 4 这条记录了，这样就有效的防止幻读现象的发生。
 
-![](images/MySQL%20面试题库-AlcPbBwEOo2K7RxN03pcaNMin0j.png)
-
 间隙锁虽然存在 X 型间隙锁和 S 型间隙锁，但是并没有什么区别，间隙锁之间是兼容的，即两个事务可以同时持有包含共同间隙范围的间隙锁，并不存在互斥关系，因为间隙锁的目的是防止插入幻影记录而提出的。
 
-**<span style="color: inherit; background-color: rgba(255,246,122,0.8)">临键锁</span>**
+**临键锁**
 
 Next-Key Lock 称为临键锁，是 Record Lock + Gap Lock 的组合，锁定一个范围，并且锁定记录本身。
 
@@ -2104,7 +1917,7 @@ next-key lock 是包含间隙锁+记录锁的，如果一个事务获取了 X �
 
 虽然相同范围的间隙锁是多个事务相互兼容的，但对于记录锁，我们是要考虑 X 型与 S 型关系，X 型的记录锁与 X 型的记录锁是冲突的。
 
-**<span style="color: inherit; background-color: rgba(255,246,122,0.8)">插入意向锁</span>**
+**插入意向锁**
 
 一个事务在插入一条记录的时候，需要判断插入位置是否已被其他事务加了间隙锁（next-key lock 也包含间隙锁）。
 
@@ -2112,7 +1925,6 @@ next-key lock 是包含间隙锁+记录锁的，如果一个事务获取了 X �
 
 举个例子，假设事务 A 已经对表加了一个范围 id 为（3，5）间隙锁。
 
-![](images/MySQL%20面试题库-image-27.png)
 
 当事务 A 还没提交的时候，事务 B 向该表插入一条 id = 4 的新记录，这时会判断到插入的位置已经被事务 A 加了间隙锁，于是事物 B 会生成一个插入意向锁，然后将锁的状态设置为等待状态（*PS：MySQL 加锁时，是先生成锁结构，然后设置锁的状态，如果锁状态是等待状态，并不是意味着事务成功获取到了锁，只有当锁状态为正常状态时，才代表事务成功获取到了锁*），此时事务 B 就会发生阻塞，直到事务 A 提交了事务。
 
@@ -2121,19 +1933,6 @@ next-key lock 是包含间隙锁+记录锁的，如果一个事务获取了 X �
 如果说间隙锁锁住的是一个区间，那么「插入意向锁」锁住的就是一个点。因而从这个角度来说，插入意向锁确实是一种特殊的间隙锁。
 
 插入意向锁与间隙锁的另一个非常重要的差别是：尽管「插入意向锁」也属于间隙锁，但两个事务却不能在同一时间内，一个拥有间隙锁，另一个拥有该间隙区间内的插入意向锁（当然，插入意向锁如果不在间隙锁区间内则是可以的）。
-
-**回答**
-
-Innodb 实现的行级锁有记录锁、间隙锁、临键锁、插入意向锁。我们在使用增删改或者锁定读语句的时候，都会对记录加行级锁。
-
-- 记录锁，可以避免其他事务对该记录进行删除和更新操作
-- 间隙锁，可以避免其他事务往间隙里插入新记录
-- 临键锁，是记录锁和间隙锁的组合，所以它既可以免其他事务对该记录进行删除和更新操作，也可以避免其他事务往间隙里插入新记录
-- 插入意向锁，插入意向锁和间隙锁是互斥的关系，其他事务插入的时候，发现插入位置的下一条记录有间隙锁的话，才会生成的插入意向锁，并且这时候锁的状态是阻塞状态，目的是告诉用户插入的位置存在间隙锁
-
-**推荐学习**
-
-[MySQL 有哪些锁？](https://xiaolincoding.com/mysql/lock/mysql_lock.html#全局锁)
 
 ## 86. 间隙锁的工作原理是什么？
 
@@ -2332,40 +2131,35 @@ MySQL 的锁是在事务提交的时候才会释放的，所以可以通过<span
 - 设置合适的锁等待超时阈值，当一个事务的等待时间超过该值后，将回滚当前语句 （而不是整个事务），如果要回滚整个事务，请使用“innodb_rollback_on_timeout” 开启值为：ON，开启这个参数之后，锁超时就会对这个事务进行回滚，于是锁就释放了。
 - 开启主动死锁检测，主动死锁检测在发现死锁后，主动回滚死锁链条中的某一个事务，让其他事务得以继续执行。
 
-**推荐学习**
-
-[解决死锁之路（终结篇） - 再见死锁](https://www.aneasystone.com/archives/2018/04/solving-dead-locks-four.html)
 
 # 日志
 
-## 95. **MySQL 三大日志是什么？（重要）**
-
-**分析**
-
-说出 undolog、redolog、binlog 三种日志的作用。
+## 95. MySQL 三大日志是什么？
 
 **回答**
 
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">undo log </span>是 Innodb 存储引擎层生成的日志，**实现了事务中的原子性**，主要**用于事务回滚和 MVCC**。在事务没提交之前，Innodb 会先记录更新前的数据记录 undo log 中，回滚时利用 undo log 来进行回滚。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">redo log </span>也是 Innodb 存储引擎层的日志，属于物理日志，记录了某个数据页做了什么修改，**实现了事务的持久性，主要用于掉电等故障恢复**。比如某个事务提交了，脏页数据还没有刷盘，如果 MySQL 机器断电了，脏页的数据就丢失了，MySQL 重启后可以通过 redolog 日志，可以将已提交事务的数据恢复回来。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">binlog</span> 是 Server 层生成的日志，主要**用于数据备份和主从复制**。在完成一条更新操作后，Server 层会生成一条 binlog，等之后事务提交的时候，会将该事务执行过程中产生的所有 binlog 统一写入 binlog 文件。binlog 文件是记录了所有数据库表结构变更和表数据修改的日志，不会记录查询类的操作。
+- undo log 是 Innodb 存储引擎层生成的日志，**实现了事务中的原子性**，主要**用于事务回滚和 MVCC**。在事务没提交之前，Innodb 会先记录更新前的数据记录 undo log 中，回滚时利用 undo log 来进行回滚。
+- redo log 也是 Innodb 存储引擎层的日志，属于物理日志，记录了某个数据页做了什么修改，**实现了事务的持久性，主要用于掉电等故障恢复**。比如某个事务提交了，脏页数据还没有刷盘，如果 MySQL 机器断电了，脏页的数据就丢失了，MySQL 重启后可以通过 redolog 日志，可以将已提交事务的数据恢复回来。
+- binlog 是 Server 层生成的日志，主要**用于数据备份和主从复制**。在完成一条更新操作后，Server 层会生成一条 binlog，等之后事务提交的时候，会将该事务执行过程中产生的所有 binlog 统一写入 binlog 文件。binlog 文件是记录了所有数据库表结构变更和表数据修改的日志，不会记录查询类的操作。
 
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
 
 ## 96. redo log 和 binlog 的区别和应用场景？
+
+**回答**
+
+- redo log 是  InnoDB 引擎实现的日志，属于物理日志，记录了 Innodb 存储引擎对数据页所做的修改操作，主要用于崩溃恢复，比如某个事务提交了，脏页数据还没有刷盘，如果 MySQL 机器断电了，脏页的数据就丢失了，MySQL 重启后可以通过重做日志，可以将已提交事务的数据恢复回来。
+- binlog 是 server 层实现的日志，保存了所有对数据库的增删改操作，binlog 有三种日志格式，日志的内容可能是 SQL 语句、数据本身或两者的混合，主要用于数据库备份和归档，也用于主从复制。
 
 **分析**
 
 redo log 和 binlog  有 4 个区别的地方。
 
-<span style="color: inherit; background-color: rgba(255,246,122,0.8)">适用对象不同：</span>
+适用对象不同：
 
 - binlog 是 MySQL 的 Server 层实现的日志，所有存储引擎都可以使用；
 - redo log 是 Innodb 存储引擎实现的日志；
 
-<span style="color: inherit; background-color: rgba(255,246,122,0.8)">文件格式不同：</span>
+文件格式不同：
 
 - binlog 有 3 种格式类型，分别是 STATEMENT（默认格式）、ROW、 MIXED，区别如下：
   - STATEMENT：每一条修改数据的 SQL 都会被记录到 binlog 中（相当于记录了逻辑操作，所以针对这种格式， binlog 可以称为逻辑日志），主从复制中 slave 端再根据 SQL 语句重现。但 STATEMENT 有动态函数的问题，比如你用了 uuid 或者 now 这些函数，你在主库上执行的结果并不是你在从库执行的结果，这种随时在变的函数会导致复制的数据不一致；
@@ -2373,57 +2167,32 @@ redo log 和 binlog  有 4 个区别的地方。
   - MIXED：包含了 STATEMENT 和 ROW 模式，它会根据不同的情况自动使用 ROW 模式和 STATEMENT 模式；
 - redo log 是物理日志，记录的是在某个数据页做了什么修改，比如对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了 AAA 更新；
 
-<span style="color: inherit; background-color: rgba(255,246,122,0.8)">写入方式不同</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">：</span>
+写入方式不同：
 
 - binlog 是追加写，写满一个文件，就创建一个新的文件继续写，不会覆盖以前的日志，保存的是全量的日志。
 - redo log 是循环写，日志空间大小是固定，全部写满就从头开始，保存未被刷入磁盘的脏页日志。
 
-<span style="color: inherit; background-color: rgba(255,246,122,0.8)">用途不同：</span>
+用途不同：
 
 - binlog 用于备份恢复、主从复制；
 - redo log 用于掉电等故障恢复。
 
-面试的时候，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">重点说出两个日志的内容和应用场景的区别</span>。
-
-**回答**
-
-- redo log 是  InnoDB 引擎实现的日志，属于物理日志，记录了 Innodb 存储引擎对数据页所做的修改操作，主要用于崩溃恢复，比如某个事务提交了，脏页数据还没有刷盘，如果 MySQL 机器断电了，脏页的数据就丢失了，MySQL 重启后可以通过重做日志，可以将已提交事务的数据恢复回来。
-- binlog 是 server 层实现的日志，保存了所有对数据库的增删改操作，binlog 有三种日志格式，日志的内容可能是 SQL 语句、数据本身或两者的混合，主要用于数据库备份和归档，也用于主从复制。
-
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
 
 ## 97. redo log 和 binlog 在恢复数据库有什么区别？
 
-**分析**
 
-考察  redo log 和 binlog 应用区别。
 
 **回答**
 
-- binlog 是追加写，写满一个文件，就创建一个新的文件继续写，不会覆盖以前的日志，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">保存了所有对数据库的更新操作</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，可以用来</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">恢复数据库某个时刻的数据</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">或者全量恢复数据库数据</span>。
-- redo log 是循环写，日志空间大小是固定，全部写满就从头开始，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">保存的是 Innodb 存储引擎对数据页所做的修改操作，用来恢复因中途 MySQL 断电丢失的脏页数据</span>。
-
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
+- binlog 是追加写，写满一个文件，就创建一个新的文件继续写，不会覆盖以前的日志，保存了所有对数据库的更新操作，可以用来恢复数据库某个时刻的数据或者全量恢复数据库数据。
+- redo log 是循环写，日志空间大小是固定，全部写满就从头开始，保存的是 Innodb 存储引擎对数据页所做的修改操作，用来恢复因中途 MySQL 断电丢失的脏页数据。
 
 ## 98. 为什么崩溃恢复不用 binlog 而用 redolog？
-
-**分析**
-
-![](images/MySQL%20面试题库-img_v3_029f_3eededfb-1a84-4276-9539-4a423264710g.jpg)
-
 **回答**
 
-binlog 是 server 层的日志，不会记录 innodb 存储引擎层中有哪些数据页没有被刷盘，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">redolog 是 innodb 层的日志，可以记录哪些脏页没有被刷盘，崩溃恢复的时候，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">恢复的粒度更细粒，可以精确到需要恢复的数据页</span>，而 binlog 保存的是全量日志，没办法做到这一点，所以崩溃恢复用的是 redolog
+binlog 是 server 层的日志，不会记录 innodb 存储引擎层中有哪些数据页没有被刷盘，redolog 是 innodb 层的日志，可以记录哪些脏页没有被刷盘，崩溃恢复的时候，恢复的粒度更细粒，可以精确到需要恢复的数据页，而 binlog 保存的是全量日志，没办法做到这一点，所以崩溃恢复用的是 redolog
 
-**推荐资料**
-
-[为什么 redo log 具有 crash-safe 的能力，是 binlog 无法替代的？](https://cloud.tencent.com/developer/article/1757612)
-
-## 99. **binlog 的三种格式是什么？**
+## 99. binlog 的三种格式是什么？
 
 **分析**
 
@@ -2443,10 +2212,6 @@ binlog 有 3 种格式类型，分别是 STATEMENT（默认格式）、ROW、 MI
 
 ## 100. redo log 是怎么实现持久化的？
 
-**分析**
-
-- 先说明没有 redo log 前，数据库发生宕机时，脏页数据可能会发生丢失的问题。
-- 再说明引入了  redo log 后，是怎么实现持久化的。
 
 **回答**
 
@@ -2454,14 +2219,13 @@ binlog 有 3 种格式类型，分别是 STATEMENT（默认格式）、ROW、 MI
 
 如果事务提交了，脏页数据没有刷盘时，数据库发生宕机，这就会导致事务修改的数据丢失了。
 
-所以 MySQL 就引入了 redo log，  redo log 保存的内容是物理日志，主要是记录 Innodb 对某个数据页的修改操作，当事务提交的时候，redo log 会先刷入磁盘<span style="color: inherit; background-color: rgba(255,246,122,0.8)">，因为 redo log 保存了数据页的修改操作，即使脏页数据没有刷盘时数据库发生宕机了，重启后 MySQL 通过重放 redo log ，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">就能恢复未刷盘的脏页</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">，保证了数据的持久化。</span>
-
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
+所以 MySQL 就引入了 redo log，  redo log 保存的内容是物理日志，主要是记录 Innodb 对某个数据页的修改操作，当事务提交的时候，redo log 会先刷入磁盘、，因为 redo log 保存了数据页的修改操作，即使脏页数据没有刷盘时数据库发生宕机了，重启后 MySQL 通过重放 redo log ，就能恢复未刷盘的脏页，保证了数据的持久化。
 
 ## 101. redo log 除了崩溃恢复还有什么其他作用？
+**回答**
 
+写 redolog 日志是追加的形式，所以 redolog 写磁盘是一个顺序写的过程，而数据页写磁盘是一个随机写的过程，顺序写的性能是比随机写性能高的，事务在提交的时候，是先写日志再写数据的机制，相当于把 MySQL 写入磁盘的操作从磁盘随机写成了顺序写，所以 redo log 还可以起到提升 MySQL 写入磁盘性能的作用。
+   
 **分析**
 
 写入 redo log 的方式使用了追加操作， 所以磁盘操作是顺序写，而写入数据需要先找到写入位置，然后才写到磁盘，所以磁盘操作是随机写。
@@ -2475,53 +2239,43 @@ binlog 有 3 种格式类型，分别是 STATEMENT（默认格式）、ROW、 MI
 - 实现事务的持久性，让 MySQL 有 crash-safe 的能力，能够保证 MySQL 在任何时间段突然崩溃，重启后之前已提交的记录都不会丢失；
 - 将写操作从「随机写」变成了「顺序写」，提升 MySQL 写入磁盘的性能。
 
-**回答**
-
-写 Redolog 日志是追加的形式，所以 redolog 写磁盘是一个顺序写的过程，而数据页写磁盘是一个随机写的过程，顺序写的性能是比随机写性能高的，事务在提交的时候，是先写日志再写数据的机制，相当于把 MySQL 写入磁盘的操作从磁盘随机写成了顺序写，所以 redo log 还可以起到提升 MySQL 写入磁盘性能的作用。
-
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
 
 ## 102. 为什么需要两阶段提交？
 
-**分析**
 
-先说结论，再分析没有两阶段提交会有什么问题？
 
 **回答**
 
-两阶段提交是<span style="color: inherit; background-color: rgba(255,246,122,0.8)">为了保证 redo log 和 binlog 逻辑一致，从而保证主从复制的时候不会出现数据不一致的问题</span>。
+两阶段提交是为了保证 redo log 和 binlog 逻辑一致，从而保证主从复制的时候不会出现数据不一致的问题
 
-事务提交后，redo log 和 binlog 都要持久化到磁盘，但是这两个是独立的逻辑，可能出现半成功的状态，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">比如在主从复制的场景下，如果在将 redo log 刷入到磁盘之后， MySQL 突然宕机了，而 binlog 还没有来得及写入磁盘，这时候主库是最新的数据，而从库是旧数据，这样就造成两份日志之间的</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">逻辑不一致</span>。
-
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
+事务提交后，redo log 和 binlog 都要持久化到磁盘，但是这两个是独立的逻辑，可能出现半成功的状态，比如在主从复制的场景下，如果在将 redo log 刷入到磁盘之后， MySQL 突然宕机了，而 binlog 还没有来得及写入磁盘，这时候主库是最新的数据，而从库是旧数据，这样就造成两份日志之间的逻辑不一致
 
 ## 103. 两阶段提交的过程？
-
-**分析**
-
-![](images/MySQL%20面试题库-image-33.png)
 
 **回答**
 
 两阶段提交把事务的提交拆分成了 2 个阶段，分别是准备阶段和提交阶段。
 
-- 准备阶段会将 <span style="color: inherit; background-color: rgba(255,246,122,0.8)">redo log 状态设置为  prepare 状态，</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">然后将 redo log 刷入磁盘</span> <span style="color: inherit; background-color: rgba(255,246,122,0.8)">；</span>
-- 提交阶段会将<span style="color: inherit; background-color: rgba(255,246,122,0.8)"> binlog 刷入磁盘</span>，然后设置<span style="color: inherit; background-color: rgba(255,246,122,0.8)"> redo log 设置为 commit 状态</span>，到这里两阶段就已经完成了。
+- 准备阶段会将 redo log 状态设置为  prepare 状态，然后将 redo log 刷入磁盘
+- 提交阶段会将binlog 刷入磁盘，然后设置 redo log 设置为 commit 状态，到这里两阶段就已经完成了。
 
 在两阶段提交中，是以 binlog 刷入磁盘时机作为事务提交成功的标志的：
 
 - 如果 binlog 还没刷入磁盘的时候，MySQL 就发生了崩溃，MySQL 重启的时候就需要回滚事务；
 - 如果 binlog 刷入磁盘，即使  redo log 没有设置 commit 状态，MySQL 就发生了崩溃，MySQL 重启的时候就会提交事务。
 
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
 
 ## 104. Redolog 刷盘策略有哪三种？
+
+**回答**
+
+Redolog 刷盘策略主要有三种：
+
+- 当刷盘策略配置为 参数 0 的时候，表示每次事务提交时 ，还是**将 redo log 留在  redo log buffer 中** ，该模式下在事务提交时不会主动触发写入磁盘的操作，后续由 innodb 后台线程把缓存在 redo log buffer 中的 redo log，写入到操作系统 pagecache 缓存并持久化到磁盘。
+- 当刷盘策略配置为 参数 1 的时候，表示每次事务提交时，都**将缓存在  redo log buffer 里的  redo log 直接持久化到磁盘**
+- 当刷盘策略配置为 参数 2 的时候，表示每次事务提交时，都只是缓存在  redo log buffer 里的  redo log **写到 操作系统的 pagecache 缓存，**但是并不会执行刷盘操作，后续由 innodb 后台线程来执行刷盘操作。
+
+这三种刷盘策略，参数 1 的模式是数据安全性最高的，但是也是写入性能最差的，而参数 0 是数据安全性最差的，但是是写入性能最好的。
 
 **分析**
 
@@ -2533,10 +2287,6 @@ binlog 有 3 种格式类型，分别是 STATEMENT（默认格式）、ROW、 MI
 - 当设置该**参数为 1 时**，表示每次事务提交时，都**将缓存在  redo log buffer 里的  redo log 直接持久化到磁盘**，这样可以保证 MySQL 异常重启之后数据不会丢失。
 - 当设置该**参数为 2 时**，表示每次事务提交时，都只是缓存在  redo log buffer 里的  redo log **写到 redo log 文件，注意写入到「 redo log 文件」并不意味着写入到了磁盘**，因为操作系统的文件系统中有个 Page Cache（如果你想了解  Page Cache，可以看[这篇](https://xiaolincoding.com/os/6_file_system/pagecache.html) ），Page Cache 是专门用来缓存文件数据的，所以写入「 redo log 文件」意味着写入到了操作系统的文件缓存。
 
-我画了一个图，方便大家理解：
-
-![](images/MySQL%20面试题库-ORaWbOxw9oHxe2x2SbXcAk2hn8g.png)
-
 innodb_flush_log_at_trx_commit 为 0 和 2 的时候，什么时候才将 redo log 写入磁盘？
 
 innodb 的后台线程每隔 1 秒：
@@ -2544,9 +2294,6 @@ innodb 的后台线程每隔 1 秒：
 - 针对参数 0 ：会把缓存在 redo log buffer 中的 redo log ，通过调用 `write()` 写到操作系统的 Page Cache，然后调用 `fsync()` 持久化到磁盘。**所以参数为 0 的策略，MySQL 进程的崩溃会导致上一秒钟所有事务数据的丢失**；
 - 针对参数 2 ：调用 fsync，将缓存在操作系统中 Page Cache 里的 redo log 持久化到磁盘。**所以参数为 2 的策略，较取值为 0 情况下更安全，因为 MySQL 进程的崩溃并不会丢失数据，只有在操作系统崩溃或者系统断电的情况下，上一秒钟所有事务数据才可能丢失**。
 
-加入了后台现线程后，innodb_flush_log_at_trx_commit 的刷盘时机如下图：
-
-![](images/MySQL%20面试题库-VeHzbO4XQoOkqXxH1EFcz5CYnJV.png)
 
 这三个参数的数据安全性和写入性能的比较如下：
 
@@ -2559,19 +2306,6 @@ innodb 的后台线程每隔 1 秒：
 - 在一些可以容忍数据库崩溃时丢失 1s 数据的场景中，我们可以将该值设置为 0，这样可以明显地减少日志同步到磁盘的 I/O 操作。
 - 安全性和性能折中的方案就是参数 2，虽然参数 2 没有参数 0 的性能高，但是数据安全性方面比参数 0 强，因为参数 2 只要操作系统不宕机，即使数据库崩溃了，也不会丢失数据，同时性能方便比参数 1 高。
 
-**回答**
-
-Redolog 刷盘策略主要有三种：
-
-- 当刷盘策略配置为<span style="color: inherit; background-color: rgba(255,246,122,0.8)">参数 0</span> 的时候，表示每次事务提交时 ，还是**将 redo log 留在  redo log buffer 中** ，该模式下在事务提交时不会主动触发写入磁盘的操作，后续由 innodb 后台线程把缓存在 redo log buffer 中的 redo log，写入到操作系统 pagecache 缓存并持久化到磁盘。
-- 当刷盘策略配置为<span style="color: inherit; background-color: rgba(255,246,122,0.8)">参数 1</span> 的时候，表示每次事务提交时，都**将缓存在  redo log buffer 里的  redo log 直接持久化到磁盘**
-- 当刷盘策略配置为<span style="color: inherit; background-color: rgba(255,246,122,0.8)">参数 2</span> 的时候，表示每次事务提交时，都只是缓存在  redo log buffer 里的  redo log **写到 操作系统的 pagecache 缓存，**但是并不会执行刷盘操作，后续由 innodb 后台线程来执行刷盘操作。
-
-这三种刷盘策略，参数 1 的模式是数据安全性最高的，但是也是写入性能最差的，而参数 0 是数据安全性最差的，但是是写入性能最好的。
-
-**推荐学习**
-
-[MySQL 日志：undo log、redo log、binlog 有什么用？](https://xiaolincoding.com/mysql/log/how_update.html)
 
 # 性能调优（重要）
 
@@ -2625,23 +2359,12 @@ using index 表示查询使用了索引覆盖，不会回表，这个可以提�
 
 using where 表示 MySQL 的存储引擎返回给 server 层的数据并不一定满足 where 子句的条件，所以 MySQL 从存储引擎拿到的数据，还得在 server 层进行了 where 子句的条件判断，来过滤出最终 sql 所需要查询的数据。
 
-**推荐学习**
-
-[查询优化的百科全书-Explain 详解](https://relph1119.github.io/mysql-learning-notes/#/mysql/15-查询优化的百科全书-Explain详解（上）)
 
 ## 107. 怎么找到慢 SQL？
 
-**分析**
-
-考察慢查询日志的应用
-
 **回答**
 
-可以开启<span style="color: inherit; background-color: rgba(255,246,122,0.8)">慢查询日志</span>，MySQL 就会自动将执行比较慢的 SQL 语句记录在慢查询日志中，具体多慢我们可以自己设置的，比如设置 3 秒，那么 MySQL 就会将执行超过 3 秒的 SQL 语句记录在慢查询日志中。
-
-**推荐学习**
-
-[ MySQL：SQL优化](https://ls8sck0zrg.feishu.cn/wiki/PrewwWYZuim5fmku88jcNFOTnyh) [ ](https://juejin.cn/post/7167610898754830343)
+可以开启 慢查询日志，MySQL 就会自动将执行比较慢的 SQL 语句记录在慢查询日志中，具体多慢我们可以自己设置的，比如设置 3 秒，那么 MySQL 就会将执行超过 3 秒的 SQL 语句记录在慢查询日志中。
 
 ## 108. 如何优化慢 SQL？
 
@@ -2658,24 +2381,12 @@ using where 表示 MySQL 的存储引擎返回给 server 层的数据并不一�
 
 **回答**
 
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">优化数据访问</span>：要先确认这条查询语句是否查询了不必要的数据行，可以通过 limit 子句来缩减查询返回的数据行数，如果查询语句用了 select *，需要改进 SQL  语句，只返回需要查询的列。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">切分查询</span>：针对一个大查询可以拆分多个小查询，每个小查询只返回一部分查询数据。比如删除一千万行数据，可以改进成分批删除，每一次只删除一批数据，然后睡眠一下，再删除下一批，这样可以将一次性的压力分散到一个很长的时间段中，不仅可以降低对服务器的性能影响，还可以大大减少删除时锁的持续时间。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">覆盖索引</span>：如果没有索引字段的话，就需要考虑建立索引，或者建立联合索引，通过覆盖索引的查询，这样就避免回表查询，可以提高查询性能。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">避免索引失效</span>：检查 SQL 语句有没有问题，比如对索引进行了计算和函数操作、联合索引没有遵循最左匹配原则等，这些场景都会导致索引失效，这时候就需要修改 SQL 避免索引失效的发生。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">分解联表查询</span>：针对联表查询的 SQL 语句，可以将联表查询分解成多个单表查询的语句，然后在业务层来聚合数据，或者增加冗余字段减少联表查询。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">排序优化</span>：针对 order by 排序操作，如果执行计划的 extra 显示了文件排序，这时候我们可以对排序字段和其他字段建立联合索引，因为索引数据是天然有序的，这样对索引字段进行排序操作的时候，就不需要文件排序了，提高了查询性能。
-
-**推荐学习**
-
-[ MySQL夜市12月 23 日（SQL优化）](https://ls8sck0zrg.feishu.cn/wiki/PrewwWYZuim5fmku88jcNFOTnyh)
-
-[SQL 优化：如何发现 SQL 中的问题？](https://leeshengis.com/archives/674168)
-
-[ 如何根治慢 SQL？](https://learn.lianglianglee.com/专栏/说透性能测试/19%20%20如何根治慢%20SQL？.md)
-
-[SQL 优化篇：如何成为一位写优质 SQL 语句的绝顶高手！](https://juejin.cn/post/7164652941159170078)
-
-[《高性能 mysql 第三版》](https://juejin.cn/post/6976290766876311559)（看第六章）
+- 优化数据访问：要先确认这条查询语句是否查询了不必要的数据行，可以通过 limit 子句来缩减查询返回的数据行数，如果查询语句用了 select *，需要改进 SQL  语句，只返回需要查询的列。
+- 切分查询：针对一个大查询可以拆分多个小查询，每个小查询只返回一部分查询数据。比如删除一千万行数据，可以改进成分批删除，每一次只删除一批数据，然后睡眠一下，再删除下一批，这样可以将一次性的压力分散到一个很长的时间段中，不仅可以降低对服务器的性能影响，还可以大大减少删除时锁的持续时间。
+- 覆盖索引：如果没有索引字段的话，就需要考虑建立索引，或者建立联合索引，通过覆盖索引的查询，这样就避免回表查询，可以提高查询性能。
+- 避免索引失效：检查 SQL 语句有没有问题，比如对索引进行了计算和函数操作、联合索引没有遵循最左匹配原则等，这些场景都会导致索引失效，这时候就需要修改 SQL 避免索引失效的发生。
+- 分解联表查询：针对联表查询的 SQL 语句，可以将联表查询分解成多个单表查询的语句，然后在业务层来聚合数据，或者增加冗余字段减少联表查询。
+- 排序优化：针对 order by 排序操作，如果执行计划的 extra 显示了文件排序，这时候我们可以对排序字段和其他字段建立联合索引，因为索引数据是天然有序的，这样对索引字段进行排序操作的时候，就不需要文件排序了，提高了查询性能。
 
 ## 109. 深分页场景如何优化？
 
@@ -2719,27 +2430,15 @@ select * from t_player id in
 - 可以在业务上改进，<span style="color: inherit; background-color: rgba(255,246,122,0.8)">将"第几页"改成"下一页"</span>，先记录上一页的最后一条记录的 id，然后下次就直接从该记录的位置开始扫描，这样就避免 MySQL 扫描大量不需要的行然后再抛弃掉的问题。
 - 如果要遵循第几页的方案，可以通过<span style="color: inherit; background-color: rgba(255,246,122,0.8)">覆盖索引+子查询</span>方式改进。子查询语句主要查询分页数据对应的数据库唯一 id 值，因为主键在辅助索引上就有，所以子查询可以不用回表。然后主查询再根据子查询返回的 id，进行索引查询完整的数据行。
 
-**推荐学习**
-
-[分页性能瓶颈分析](https://mp.weixin.qq.com/s?__biz=Mzg5ODU2ODczMQ==&mid=2247499167&idx=1&sn=f6510663e93d0c7e5154ea6f6bde0fde&chksm=c0623aebf715b3fd057755f1062d4a2656160f2beaf890db6b8228dc11837d2bd17e26c42666&token=1429342161&lang=zh_CN#rd)
 
 ## 110. 如果 SQL 和索引都没问题，查询还是很慢怎么办？
-
-**分析**
-
-需要发散下思维，往架构优化方向思考。
-
 **回答**
 
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">分批查询</span>：针对一个大查询可以拆分多个小查询，每个小查询只返回一部分查询数据。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">增加缓存</span>：针对频繁读取的热点数据，我们可以放到 Redis 缓存，避免每次都要请求 MySQL。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">分表</span>：如果表的数据量很大，比如表数据千万级别了，这时候可以考虑分表了，通过减少每次查询数据总量来解决数据查询缓慢的问题。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">主从复制</span>：针对读多写少的场景，我们可以搭建 MySQL 主从模式来分摊读请求的流量。
-- <span style="color: inherit; background-color: rgba(255,246,122,0.8)">分库：</span>针对写多读少的场景，单库的性能无法抗住高并发流量， 就需要进行分库，把并发请求分散到多个实例中去。
-
-**推荐学习**
-
-[MySQL 调优篇：单机数据库如何在高并发场景下健步如飞？](https://juejin.cn/post/7163894728201601060#heading-23)
+- 分批查询：针对一个大查询可以拆分多个小查询，每个小查询只返回一部分查询数据。
+- 增加缓存：针对频繁读取的热点数据，我们可以放到 Redis 缓存，避免每次都要请求 MySQL。
+- 分表：如果表的数据量很大，比如表数据千万级别了，这时候可以考虑分表了，通过减少每次查询数据总量来解决数据查询缓慢的问题。
+- 主从复制：针对读多写少的场景，我们可以搭建 MySQL 主从模式来分摊读请求的流量。
+- 分库：针对写多读少的场景，单库的性能无法抗住高并发流量， 就需要进行分库，把并发请求分散到多个实例中去。
 
 # 数据库选型
 
@@ -2858,13 +2557,17 @@ SQL 和 NoSQL 数据库区别主要有：
 
 我觉得 NoSQL 并非是为了取代 SQL，相反它们是需要相互结合的，SQL 数据库提供 ACID 事务，NoSQL 数据库提供更好的扩展性和性能，所以 NoSQL 一般是作为传统关系型数据库的补充而存在，弥补关系型数据库在性能、扩展性和某些场景下的不足。
 
-**推荐学习**
-
-[SQL vs NoSQL:一次搞清楚五花八门的“SQL”](https://learn.lianglianglee.com/专栏/24讲吃透分布式数据库-完/02%20%20SQL%20vs%20NoSQL：一次搞清楚五花八门的“SQL”.md)
-
-[NoSQL:在高并发场景下，数据库和 NoSQL 如何做到互补？](https://learn.lianglianglee.com/专栏/高并发系统设计40问/11%20%20NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？.md)
-
 ## 112. MySQL 和 mongodb 之间怎么选型？
+
+**回答**
+
+MySQL 是关系型数据库，支持 ACID 特性的事务，而 MongoDB 是 NoSQL 类型的数据库，不支持事务，如果业务需要通过事务保证数据一致性的话，是需要选择 MySQL 的。
+
+如果业务上没有强一致性的要求，那么可以根据下面这两种场景来考虑：
+
+- MongoDB 是灵活的文档模型。也就是说，如果我预计我的数据可以被一个稳定的模型来描述，那么我会倾向于使用 MySQL 等关系型数据库。而一旦我认为我的数据模型会经常变动，比如说我很难预料到用户会输入什么数据，这种情况下我就更加倾向于使用 MongoDB。
+- MongoDB 属于 NoSQL，更容易进行横向扩展。虽然关系型数据库也可以通过分库分表来达成横向扩展的目标，但是比 MongoDB 要困难很多，后期运维也要复杂很多，而这一切在 MongoDB 里面都是自动的，运维成本低。
+
 
 **分析**
 
@@ -2887,19 +2590,6 @@ mongodb 是文档型 NoSQL 数据库，以 JSON 或者 XML 格式存储数据，
 - 缺点：
   - 不支持事务操作
   - 多表之间的关联查询不支持（虽然有嵌入文档的方式），join 查询还是需要多次操作
-
-**回答**
-
-MySQL 是关系型数据库，支持 ACID 特性的事务，而 MongoDB 是 NoSQL 类型的数据库，不支持事务，如果业务需要通过事务保证数据一致性的话，是需要选择 MySQL 的。
-
-如果业务上没有强一致性的要求，那么可以根据下面这两种场景来考虑：
-
-- MongoDB 是灵活的文档模型。也就是说，如果我预计我的数据可以被一个稳定的模型来描述，那么我会倾向于使用 MySQL 等关系型数据库。而一旦我认为我的数据模型会经常变动，比如说我很难预料到用户会输入什么数据，这种情况下我就更加倾向于使用 MongoDB。
-- MongoDB 属于 NoSQL，更容易进行横向扩展。虽然关系型数据库也可以通过分库分表来达成横向扩展的目标，但是比 MongoDB 要困难很多，后期运维也要复杂很多，而这一切在 MongoDB 里面都是自动的，运维成本低。
-
-**推荐学习**
-
-[数据库存储选型经验总结](https://mp.weixin.qq.com/s/YpRQa9YguOqJygJbdRZ-nA)
 
 # 高可用
 
