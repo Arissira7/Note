@@ -92,7 +92,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -166,7 +166,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "计算机网络/面试题/应用层面试题/应用层面试题（重点）.md",
+                "file": "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -176,7 +176,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "应用层面试题（重点） 的反向链接列表"
+              "title": "进程管理面试题（重点） 的反向链接列表"
             }
           },
           {
@@ -185,12 +185,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "计算机网络/面试题/应用层面试题/应用层面试题（重点）.md",
+                "file": "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "应用层面试题（重点） 的出链列表"
+              "title": "进程管理面试题（重点） 的出链列表"
             }
           },
           {
@@ -228,13 +228,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "计算机网络/面试题/应用层面试题/应用层面试题（重点）.md",
+                "file": "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "应用层面试题（重点） 的大纲"
+              "title": "进程管理面试题（重点） 的大纲"
             }
           }
         ],
@@ -255,13 +255,13 @@
       "bases:新建数据库": false
     }
   },
-  "active": "00c1fddcf98adec1",
+  "active": "78294069940266ef",
   "lastOpenFiles": [
+    "操作系统/面试题/1.系统结构面试题/系统结构面试题.md",
+    "计算机网络/面试题/应用层面试题/应用层面试题（重点）.md",
     "计算机网络/面试题/传输层面试题/传输层面试题（重点）.md",
     "计算机网络/面试题/网络场景面试题/网络传输场景面试题（重点）.md",
-    "计算机网络/面试题/应用层面试题/应用层面试题（重点）.md",
     "操作系统/面试题/3.内存管理面试题/内存管理面试题（重点）.md",
-    "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md",
-    "操作系统/面试题/1.系统结构面试题/系统结构面试题.md"
+    "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md"
   ]
 }
