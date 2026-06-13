@@ -74,6 +74,7 @@ Kafka优点非常多，我认为最核心的是高吞吐、高可靠、天然支
 
 总结性问题，需要整体学完Kafka，其次可以稍微参考下 [ 消息队列选型](https://ls8sck0zrg.feishu.cn/wiki/NKV2wsYyNiebMykwNaTcnkQSnbe?fromScene=spaceOverview)
 
+
 # 2.服务端
 
 ## 2.1 Kafka的大概框架是怎么样的
@@ -591,6 +592,8 @@ Kafka的消费者使用的拉模式来获取信息，也就是说每次消费者
 
 ## 5.4 如何处理消息积压
 
+分区消费者绑定的，不能解决问题，新建topic，直接划分100的partition，直接迁移新的topic里即100的partition然后就可以启动100个消费者
+
 三板斧：扩容、降级、排查异常：
 
 - 如果分区数大于消费者数量，那么通过扩容消费端的实例数来提升总体的消费能力；如果相等，那么既需要扩容消费者数量同时需要扩容分区数。
@@ -774,29 +777,23 @@ Broker中会选出一个来担任Controller，选Controller负责监测Leader的
 
 # 7.高性能
 
-## 7.1 Kafka为什么这么快/Kafka性能为什么这么高/Kafka吞吐量为什么这么大
+## 7.1 为什么Kafka 的吞吐量大
 
-**分析**
-
-原因很多，有几种回答方式，可以分点回答，但是一定不要说太多废话，说总结性的东西，以及有自己的观点，不然像背书，有些细节面试官感兴趣自然会追问的。
-
-**回答**
-
-我知道有几个点都有提升Kafka处理的速度，包括顺序写、零拷贝、数据压缩、批量操作（说自己比较熟悉的，多一个少一个，无所谓），其中我觉得影响最大或者说最具Kafka特色的，就是顺序写，通过磁盘的顺序写入，非常直接优化了兼顾了性能和复杂度，其次我印象最深的是批量操作和数据压缩，这两个也是业务优化的常见思路。
-
-**参考**
-
-[ 高性能秘诀-顺序写](https://ls8sck0zrg.feishu.cn/wiki/PjjlwLaRXi6w8Mk96ipcxll0nLb)
-
-[ 高性能秘诀-页缓存](https://ls8sck0zrg.feishu.cn/wiki/OKFRwfKPfiXCCtkBXFOctwkuntd)
-
-[ 高性能秘诀-零拷贝](https://ls8sck0zrg.feishu.cn/wiki/JFVLwNuVHie1hWkv1eucWJK8n2h)
-
-[ 高性能秘诀-多层次](https://ls8sck0zrg.feishu.cn/wiki/L3JgwhGfRiQUaxkRUUhcmxU0nDe)
-
-[ 高性能秘诀-批量操作](https://ls8sck0zrg.feishu.cn/wiki/ZTxkwgpJ9ihXdMkHP7BcnDHSnNc)
-
-[ 高性能秘诀-数据压缩](https://ls8sck0zrg.feishu.cn/wiki/Mslawix7giWdNJkvCHXcNQ1Ynae)
+1. **磁盘顺序读写 (Sequential I/O)** Kafka 颠覆了“磁盘慢”的传统认知。它不采用随机读写，而是把消息**单纯地追加（Append）到日志文件末尾**。磁盘顺序写的速度极快，甚至可以媲美内存的随机读写。
+    
+2. **零拷贝技术 (Zero-Copy)** 在消费消息时，Kafka 利用操作系统的 `sendfile` 系统调用，让数据直接从操作系统的页缓存（Page Cache）**复制到**网络驱动器（NIC buffer）发出。
+    
+    - **传统方式：** 磁盘 → 内核 → 用户应用 → 内核 → 网卡（4次复制）。
+        
+    - **零拷贝：** 磁盘 → 内核页缓存 → 网卡（2次复制，完全不经过 Kafka 进程内存），极大地压榨了网络带宽。
+        
+3. **页缓存与内存映射 (Page Cache)** Kafka 自身几乎不管理缓存，而是完全依赖操作系统的 **Page Cache**。即使 Kafka 重启，缓存依然存在。写数据时只要写入内存页就视作成功，由操作系统在后台异步刷盘（Flush）。
+    
+4. **分区分段与批量处理 (Partition & Batching)**
+    
+    - **分区（Partition）：** 一个 Topic 被拆分成多个 Partition 存储在不同的服务器上，实现了**真正的并发横向扩展**。
+        
+    - **批量（Batching）：** 生产者不会单条发送消息，而是攒成一个“批次”后再发起网络请求；同时在传输中进行**高效压缩**，极大减少了网络 I/O 的次数
 
 ## 7.2 聊聊Kafka顺序写机制
 
