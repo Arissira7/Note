@@ -92,7 +92,7 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -165,7 +165,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "计算机网络/面试题/传输层面试题/传输层面试题（重点）.md",
+                "file": "操作系统/面试题/3.内存管理面试题/内存管理面试题（重点）.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -175,7 +175,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "传输层面试题（重点） 的反向链接列表"
+              "title": "内存管理面试题（重点） 的反向链接列表"
             }
           },
           {
@@ -184,12 +184,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "计算机网络/面试题/传输层面试题/传输层面试题（重点）.md",
+                "file": "操作系统/面试题/3.内存管理面试题/内存管理面试题（重点）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "传输层面试题（重点） 的出链列表"
+              "title": "内存管理面试题（重点） 的出链列表"
             }
           },
           {
@@ -227,13 +227,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "计算机网络/面试题/传输层面试题/传输层面试题（重点）.md",
+                "file": "操作系统/面试题/3.内存管理面试题/内存管理面试题（重点）.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "传输层面试题（重点） 的大纲"
+              "title": "内存管理面试题（重点） 的大纲"
             }
           }
         ],
@@ -241,7 +241,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 357.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -254,12 +254,12 @@
       "bases:新建数据库": false
     }
   },
-  "active": "7a921709fbac61d7",
+  "active": "1bc28347a8a3b9b9",
   "lastOpenFiles": [
+    "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md",
     "计算机网络/面试题/传输层面试题/传输层面试题（重点）.md",
     "计算机网络/面试题/应用层面试题/应用层面试题（重点）.md",
     "计算机网络/面试题/网络场景面试题/网络传输场景面试题（重点）.md",
-    "操作系统/面试题/2.进程管理面试题/进程管理面试题（重点）.md",
     "操作系统/面试题/1.系统结构面试题/系统结构面试题.md",
     "操作系统/面试题/3.内存管理面试题/内存管理面试题（重点）.md"
   ]

@@ -35,7 +35,8 @@
               "title": "3. RAG"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -92,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 228.5
   },
   "right": {
     "id": "6ce028c398b364a2",
@@ -108,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2. Agent的调用.md",
+                "file": "3. RAG.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "2. Agent的调用 的反向链接列表"
+              "title": "3. RAG 的反向链接列表"
             }
           },
           {
@@ -127,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2. Agent的调用.md",
+                "file": "3. RAG.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "2. Agent的调用 的出链列表"
+              "title": "3. RAG 的出链列表"
             }
           },
           {
@@ -170,21 +171,21 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2. Agent的调用.md",
+                "file": "3. RAG.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "2. Agent的调用 的大纲"
+              "title": "3. RAG 的大纲"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -197,9 +198,9 @@
       "bases:新建数据库": false
     }
   },
-  "active": "3a42172291b6cd3b",
+  "active": "ec31066178cbd203",
   "lastOpenFiles": [
-    "3. RAG.md",
-    "2. Agent的调用.md"
+    "2. Agent的调用.md",
+    "3. RAG.md"
   ]
 }

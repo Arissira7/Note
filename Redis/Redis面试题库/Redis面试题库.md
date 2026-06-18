@@ -9,8 +9,6 @@ Redis 是一个基于内存、支持多种数据结构的存储系统，可以�
 
 它内置了复制（Replication）、LUA 脚本（Lua scripting）、LRU 驱动事件（LRU eviction）、事务（Transactions）和不同级别的磁盘持久化（persistence）功能，并通过 Redis 哨兵（哨兵）和集群（Cluster）保证缓存的高可用性（High availability）。
 
-<span style="color: inherit; background-color: rgba(255,246,122,0.8)">回答时候简洁明了，不用面面俱到。</span>
-
 **回答**
 
 Redis是一个开源的内存数据结构存储系统，支持多种数据结构（如字符串、哈希、列表、集合等），常用于缓存、分布式锁。它通过将数据存储在内存中实现高速读写，并支持持久化到磁盘，确保数据安全。Redis还提供主从复制、事务和Lua脚本等功能，适用于高并发场景。
@@ -140,10 +138,6 @@ Redis 支持的数据类型有：
 
 ### 7. Set一个已有的数据会发生什么？
 
-**分析**
-
-常用操作考察，答不上来会认为你没用过Redis
-
 **回答**
 
 Set一个已有数据会覆盖原有的值，同时会覆盖或者擦除键的过期时间
@@ -155,10 +149,6 @@ String基本操作命令，重点熟悉[ String](https://ls8sck0zrg.feishu.cn/wi
 更多命令可以从[Redis 字符串(String) ](https://www.runoob.com/redis/redis-strings.html)了解
 
 ### 8. 浮点型在String是用什么表示？
-
-**分析**
-
-基础知识考查，只有三种编码模式，INT只针对与整型，所以浮点型必然是字符串存储。
 
 **回答**
 
