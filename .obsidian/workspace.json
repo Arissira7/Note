@@ -134,7 +134,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -208,7 +208,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MySQL/MySQL 面试题库/MySQL 面试题库.md",
+                "file": "Redis/Redis面试题库/Redis面试题库.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -218,7 +218,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "MySQL 面试题库 的反向链接列表"
+              "title": "Redis面试题库 的反向链接列表"
             }
           },
           {
@@ -227,12 +227,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "MySQL/MySQL 面试题库/MySQL 面试题库.md",
+                "file": "Redis/Redis面试题库/Redis面试题库.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "MySQL 面试题库 的出链列表"
+              "title": "Redis面试题库 的出链列表"
             }
           },
           {
@@ -270,13 +270,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MySQL/MySQL 面试题库/MySQL 面试题库.md",
+                "file": "Redis/Redis面试题库/Redis面试题库.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "MySQL 面试题库 的大纲"
+              "title": "Redis面试题库 的大纲"
             }
           }
         ],
@@ -297,17 +297,17 @@
       "bases:新建数据库": false
     }
   },
-  "active": "4970fffc694c2547",
+  "active": "043c9e0660ad8909",
   "lastOpenFiles": [
+    "Agent/3. RAG.md",
     "Redis/Redis面试题库/Redis面试题库.md",
+    "MySQL/MySQL 面试题库/MySQL 面试题库.md",
     "计算机基础/操作系统/面试题/5.网络 IO面试题/网络 IO面试题（重点）.md",
     "Golang/Golang面试题库/Golang面试题库.md",
     "Project/定时微服务/面试题/定时流程.md",
     "Project/定时微服务/面试题/定时面试.md",
-    "MySQL/MySQL 面试题库/MySQL 面试题库.md",
     "消息队列/面试题库/消息队列Kafka面试题库.md",
     "Agent/2. Agent的调用.md",
-    "Agent/3. RAG.md",
     "gin框架.md",
     "Project/抽奖系统/抽奖面试题/抽奖面试.md",
     "Agent/claudemd.jpg",
