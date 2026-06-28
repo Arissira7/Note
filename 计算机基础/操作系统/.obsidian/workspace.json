@@ -1,0 +1,196 @@
+{
+  "main": {
+    "id": "b89fc2e115b10934",
+    "type": "split",
+    "children": [
+      {
+        "id": "2465e8a615cfdc6d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "36ca9f01a9d296a9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CSAPP/note/第一章：计算机系统之旅.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "第一章：计算机系统之旅"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f80a3315dbae09a0",
+    "type": "split",
+    "children": [
+      {
+        "id": "90928f5f78fac40d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "561e4159e8b00c08",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "61987e83c0892386",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "1b2f8ff8551cb46e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "2969e2f77e3b8ab8",
+    "type": "split",
+    "children": [
+      {
+        "id": "2a791c1599617642",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9dc6a3c00fe6269c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "CSAPP/note/第一章：计算机系统之旅.md",
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": true,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "第一章：计算机系统之旅 的反向链接列表"
+            }
+          },
+          {
+            "id": "766ce99457e494a8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "CSAPP/note/第一章：计算机系统之旅.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "第一章：计算机系统之旅 的出链列表"
+            }
+          },
+          {
+            "id": "22c348a28327d992",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "f3aa6d7f389cf9da",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "757f72eb5156eca9",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "CSAPP/note/第一章：计算机系统之旅.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "第一章：计算机系统之旅 的大纲"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "36ca9f01a9d296a9",
+  "lastOpenFiles": [
+    "CSAPP/知乎笔记overview.md",
+    "CSAPP/note/第一章：计算机系统之旅.md",
+    "CSAPP/note",
+    "CSAPP/hello.c",
+    "CSAPP/hello",
+    "CSAPP"
+  ]
+}
